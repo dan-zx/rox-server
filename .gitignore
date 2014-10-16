@@ -1,0 +1,22 @@
+# Java class files
+*.class
+
+# Generated files
+target/
+build/
+
+# Windows thumbnail db
+Thumbs.db
+
+# OSX files
+.DS_Store
+
+# Eclipse project files
+.classpath
+.project
+.settings/
+
+# NetBeans project files
+nb-configuration.xml
+nbactions.xml
+src/main/webapp/META-INF/context.xml
