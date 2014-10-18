@@ -32,6 +32,7 @@ public class MainConfig {
         return new EmbeddedDatabaseBuilder()
             .setName("gray-fox")
             .addScript("file:src/main/scripts/h2-schema.sql")
+            .addScript("file:src/main/scripts/data-load.sql")
             .setType(EmbeddedDatabaseType.H2)
             .build();
     }

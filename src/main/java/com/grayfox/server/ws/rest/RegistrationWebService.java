@@ -2,7 +2,6 @@ package com.grayfox.server.ws.rest;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.grayfox.server.data.User;
 import com.grayfox.server.service.UserService;
 
 import org.slf4j.Logger;
@@ -31,12 +30,10 @@ public class RegistrationWebService implements Serializable {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/register.json")
     public String register(@QueryParam("authorization_code") String authorizationCode) {
-        LOG.debug("<--authorization_code={}", authorizationCode);
-        User user = new User();
-        user.setAuthorizationCode(authorizationCode);
-        userService.register(user);
+        LOG.debug("register({})", authorizationCode);
+        Long id = userService.register(authorizationCode);
         JsonObject response = new JsonObject();
-        response.addProperty("user_id", user.getId());
+        response.addProperty("user_id", id);
         return new Gson().toJson(response);
     }
 

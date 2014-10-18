@@ -8,7 +8,6 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-    private String authorizationCode;
     private String accessToken;
 
     public Long getId() {
@@ -17,14 +16,6 @@ public class User implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getAuthorizationCode() {
-        return authorizationCode;
-    }
-
-    public void setAuthorizationCode(String authorizationCode) {
-        this.authorizationCode = authorizationCode;
     }
 
     public String getAccessToken() {
@@ -37,7 +28,7 @@ public class User implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, accessToken, authorizationCode);
+        return Objects.hash(id, accessToken);
     }
 
     @Override
@@ -49,9 +40,6 @@ public class User implements Serializable {
         if (accessToken == null) {
             if (other.accessToken != null) return false;
         } else if (!accessToken.equals(other.accessToken)) return false;
-        if (authorizationCode == null) {
-            if (other.authorizationCode != null) return false;
-        } else if (!authorizationCode.equals(other.authorizationCode)) return false;
         if (id == null) {
             if (other.id != null) return false;
         } else if (!id.equals(other.id)) return false;
@@ -60,8 +48,8 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return new StringBuilder().append("User [id=").append(id).append(", authorizationCode=")
-                .append(authorizationCode).append(", accessToken=").append(accessToken).append("]")
+        return new StringBuilder().append("User [id=").append(id).append(", accessToken=")
+                .append(accessToken).append("]")
                 .toString();
     }
 }

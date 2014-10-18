@@ -176,17 +176,11 @@
 			<version>2.3</version>
 		</dependency>
 
-		<!-- FOURSQUARE -->
+		<!-- HTTP CLIENT -->
 		<dependency>
-			<groupId>fi.foyt</groupId>
-			<artifactId>foursquare-api</artifactId>
-			<version>1.0.2</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.appengine</groupId>
-					<artifactId>appengine-api-1.0-sdk</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.3.5</version>
 		</dependency>
 
 		<!-- TEST -->
