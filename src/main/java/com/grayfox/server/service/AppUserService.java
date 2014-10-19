@@ -1,7 +1,6 @@
 package com.grayfox.server.service;
 
-
-public interface UserService {
+public interface AppUserService {
 
     Long register(String authorizationCode);
 }

@@ -3,7 +3,7 @@ package com.grayfox.server.data;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class User implements Serializable {
+public class AppUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,7 +36,7 @@ public class User implements Serializable {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        User other = (User) obj;
+        AppUser other = (AppUser) obj;
         if (accessToken == null) {
             if (other.accessToken != null) return false;
         } else if (!accessToken.equals(other.accessToken)) return false;
