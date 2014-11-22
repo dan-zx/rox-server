@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
                 "com.grayfox.server.service.impl",
                 "com.grayfox.server.ws.rest" }, 
         includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Named.class))
-public class MainConfig {
+public class TestConfig {
 
     @Bean
     public static PropertyPlaceholderConfigurer propertyPlaceholderConfigurer(ResourceLoader resourceLoader) throws IOException {
@@ -43,7 +43,7 @@ public class MainConfig {
     @Bean
     public static PropertiesFactoryBean configsProperties(ResourceLoader resourceLoader) throws IOException {
         PropertiesFactoryBean props = new PropertiesFactoryBean();
-        props.setLocation(resourceLoader.getResource("/WEB-INF/resources/configs.properties"));
+        props.setLocation(resourceLoader.getResource("file:src/main/webapp/WEB-INF/resources/configs.properties"));
         props.afterPropertiesSet();
         return props;
     }
