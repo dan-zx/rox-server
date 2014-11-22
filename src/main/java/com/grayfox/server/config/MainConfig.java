@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.inject.Named;
 
-import fi.foyt.foursquare.api.FoursquareApi;
+import com.foursquare4j.FoursquareApi;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
@@ -24,7 +24,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(
-        basePackages = { "com.grayfox.server" }, 
+        basePackages = { 
+                "com.grayfox.server.data.dao.impl.jdbc",
+                "com.grayfox.server.service.impl",
+                "com.grayfox.server.ws.rest" }, 
         includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Named.class))
 public class MainConfig {
 
@@ -44,22 +47,13 @@ public class MainConfig {
     }
 
     @Bean
-    public PropertiesFactoryBean urlsProperties(ResourceLoader resourceLoader) throws IOException {
-        PropertiesFactoryBean props = new PropertiesFactoryBean();
-        props.setLocation(resourceLoader.getResource("/WEB-INF/resources/urls.properties"));
-        props.afterPropertiesSet();
-        return props;
-    }
-
-    @Bean
     @Scope("prototype")
     public FoursquareApi foursquareApi(
-            @Value("${foursquare.app.client_id}") String clientId, 
-            @Value("${foursquare.app.client_secret}") String clientSecret) {
-        return new FoursquareApi(clientId, clientSecret, null);
+            @Value("${foursquare.app.client.id}") String clientId, 
+            @Value("${foursquare.app.client.secret}") String clientSecret) {
+        return new FoursquareApi(clientId, clientSecret);
     }
 
-    
     @Bean
     public DataSourceTransactionManager transactionManager() {
         return new DataSourceTransactionManager(dataSource());

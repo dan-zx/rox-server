@@ -9,6 +9,6 @@ public final class Strings {
     }
 
     public static boolean isNullOrBlank(String s) {
-        return (s == null || s.trim().length() == 0);
+        return s == null || s.trim().isEmpty();
     }
 }

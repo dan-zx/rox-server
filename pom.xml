@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.grayfox</groupId>
-	<artifactId>server</artifactId>
+	<artifactId>grayfox-server</artifactId>
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
 
@@ -34,10 +34,9 @@
 
 	<repositories>
 		<repository>
-			<id>project-repo</id>
-			<name>Project Maven Repository</name>
-			<url>file:${project.basedir}/repo</url>
-			<layout>default</layout>
+			<id>dan_zx-repo</id>
+			<name>Dan ZX Repository</name>
+			<url>https://dl.dropboxusercontent.com/u/1995295/m2repository</url>
 		</repository>
 	</repositories>
 
@@ -170,30 +169,11 @@
 			<version>1</version>
 		</dependency>
 
-		<!-- JSON -->
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.3</version>
-		</dependency>
-
-		<!-- HTTP CLIENT -->
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.3.5</version>
-		</dependency>
-
 		<!-- FOURSQUARE API -->
 		<dependency>
-			<groupId>fi.foyt</groupId>
-			<artifactId>foursquare-api</artifactId>
-			<version>1.0.3-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20090211</version>
+			<groupId>com.foursquare</groupId>
+			<artifactId>foursquare4j</artifactId>
+			<version>1.0-20141121.170540-1</version>
 		</dependency>
 
 		<!-- TEST -->

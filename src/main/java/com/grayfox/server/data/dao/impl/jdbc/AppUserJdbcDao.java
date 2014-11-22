@@ -12,19 +12,22 @@ import com.grayfox.server.data.dao.AppUserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 @Named
-public class AppUserJdbcDao implements AppUserDao {
+public class AppUserJdbcDao extends JdbcDaoSupport implements AppUserDao {
 
     private static final Logger LOG = LoggerFactory.getLogger(AppUserJdbcDao.class);
 
-    private JdbcTemplate jdbcTemplate;
+    @Inject
+    public AppUserJdbcDao(DataSource dataSource) {
+        setDataSource(dataSource);
+    }
 
     public Long fetchIdByAccessToken(String accessToken) {
         // FIXME: hardcoded SQL statement
         LOG.debug("fetchIdByAccessToken({})", accessToken);
-        List<Long> results = jdbcTemplate.queryForList("SELECT id FROM app_user WHERE access_token = ?", Long.class, accessToken);
+        List<Long> results = getJdbcTemplate().queryForList("SELECT id FROM app_user WHERE access_token = ?", Long.class, accessToken);
         return results == null || results.isEmpty() ? null : results.get(0);
     }
 
@@ -32,7 +35,7 @@ public class AppUserJdbcDao implements AppUserDao {
     public String fetchAccessTokenById(Long id) {
         // FIXME: hardcoded SQL statement
         LOG.debug("fetchAccessTokenById({})", id);
-        List<String> results = jdbcTemplate.queryForList("SELECT access_token FROM app_user WHERE id = ?", String.class, id);
+        List<String> results = getJdbcTemplate().queryForList("SELECT access_token FROM app_user WHERE id = ?", String.class, id);
         return results == null || results.isEmpty() ? null : results.get(0);
     }
 
@@ -40,13 +43,8 @@ public class AppUserJdbcDao implements AppUserDao {
     public void save(AppUser appUser) {
         // FIXME: hardcoded SQL statement
         LOG.debug("save({})", appUser);
-        jdbcTemplate.update("INSERT INTO app_user (access_token) VALUES(?)", appUser.getAccessToken());
+        getJdbcTemplate().update("INSERT INTO app_user (access_token) VALUES(?)", appUser.getAccessToken());
         long id = fetchIdByAccessToken(appUser.getAccessToken());
         appUser.setId(id);
-    }
-    
-    @Inject
-    public void setDataSource(DataSource dataSource) {
-        jdbcTemplate = new JdbcTemplate(dataSource);
     }
 }

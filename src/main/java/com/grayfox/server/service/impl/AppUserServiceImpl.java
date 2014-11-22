@@ -5,10 +5,11 @@ import java.io.Serializable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.grayfox.server.foursquare.AccessTokenResponse;
+import com.foursquare4j.FoursquareApi;
+import com.foursquare4j.response.AccessTokenResponse;
+
 import com.grayfox.server.data.AppUser;
 import com.grayfox.server.data.dao.AppUserDao;
-import com.grayfox.server.foursquare.FoursquareAuthenticator;
 import com.grayfox.server.service.AppUserService;
 
 import org.slf4j.Logger;
@@ -22,13 +23,19 @@ public class AppUserServiceImpl implements AppUserService, Serializable {
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(AppUserServiceImpl.class);
 
-    private FoursquareAuthenticator foursquareAuthenticator;
-    private AppUserDao appUserDao;
+    private final AppUserDao appUserDao;
+    private final FoursquareApi foursquareApi;
+
+    @Inject
+    public AppUserServiceImpl(AppUserDao appUserDao, FoursquareApi foursquareApi) {
+        this.appUserDao = appUserDao;
+        this.foursquareApi = foursquareApi;
+    }
 
     @Override
     @Transactional(noRollbackFor = ServiceException.class)
     public Long register(String authorizationCode) {
-        AccessTokenResponse response = foursquareAuthenticator.getAccessToken(authorizationCode);
+        AccessTokenResponse response = foursquareApi.getAccessToken(authorizationCode);
         if (response.getException() != null) throw new ServiceException(response.getException().getMessage());
         Long id = appUserDao.fetchIdByAccessToken(response.getAccessToken());
         if (id != null) {
@@ -41,15 +48,5 @@ public class AppUserServiceImpl implements AppUserService, Serializable {
             LOG.debug("New user -> user={}", appUser);
             return appUser.getId();
         }
-    }
-
-    @Inject
-    public void setFoursquareAuthenticator(FoursquareAuthenticator foursquareAuthenticator) {
-        this.foursquareAuthenticator = foursquareAuthenticator;
-    }
-
-    @Inject
-    public void setAppUserDao(AppUserDao appUserDao) {
-        this.appUserDao = appUserDao;
     }
 }
