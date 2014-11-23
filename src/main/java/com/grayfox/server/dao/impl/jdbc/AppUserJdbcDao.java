@@ -8,12 +8,9 @@ import javax.inject.Named;
 import javax.sql.DataSource;
 
 import com.grayfox.server.dao.AppUserDao;
-
 import com.grayfox.server.dao.model.AppUser;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 @Named
@@ -38,6 +35,22 @@ public class AppUserJdbcDao extends JdbcDaoSupport implements AppUserDao {
                 appUser.setFoursquareAccessToken(foursquareAccessToken);
                 return appUser;
             }, foursquareAccessToken);
+
+        return results.isEmpty() ? null : results.get(0);
+    }
+
+    @Override
+    public AppUser fetchByAppAccessToken(String appAccessToken) {
+        // FIXME: hardcoded SQL statement
+        LOGGER.debug("fetchByAppAccessToken({})", appAccessToken);
+        List<AppUser> results = getJdbcTemplate().query("SELECT id, foursquare_access_token FROM app_user WHERE app_access_token = ?",  
+            (ResultSet rs, int i) -> {
+                AppUser appUser = new AppUser();
+                appUser.setId(rs.getLong("id"));
+                appUser.setAppAccessToken(appAccessToken);
+                appUser.setFoursquareAccessToken(rs.getString("foursquare_access_token"));
+                return appUser;
+            }, appAccessToken);
 
         return results.isEmpty() ? null : results.get(0);
     }
