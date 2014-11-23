@@ -1,4 +1,4 @@
-package com.grayfox.server.data;
+package com.grayfox.server.dao.model;
 
 import java.io.Serializable;
 

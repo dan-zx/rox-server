@@ -5,12 +5,15 @@ import javax.inject.Named;
 
 import com.foursquare4j.FoursquareApi;
 import com.foursquare4j.response.AccessTokenResponse;
-import com.grayfox.server.data.AppUser;
-import com.grayfox.server.data.dao.AppUserDao;
+
+import com.grayfox.server.dao.AppUserDao;
+import com.grayfox.server.dao.model.AppUser;
 import com.grayfox.server.service.AccessTokenService;
 import com.grayfox.server.service.AppUserService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.transaction.annotation.Transactional;
 
 @Named

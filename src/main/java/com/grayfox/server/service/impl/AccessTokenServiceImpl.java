@@ -5,7 +5,8 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.grayfox.server.data.dao.AppUserDao;
+import com.grayfox.server.dao.AppUserDao;
+
 import com.grayfox.server.service.AccessTokenService;
 import com.grayfox.server.util.Strings;
 

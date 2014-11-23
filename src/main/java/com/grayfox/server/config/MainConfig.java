@@ -48,7 +48,7 @@ public class MainConfig {
     @EnableTransactionManagement
     @ComponentScan(
             basePackages = { 
-                    "com.grayfox.server.data.dao.impl.jdbc",
+                    "com.grayfox.server.dao.impl.jdbc",
                     "com.grayfox.server.service.impl",
                     "com.grayfox.server.ws.rest" }, 
             includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Named.class))

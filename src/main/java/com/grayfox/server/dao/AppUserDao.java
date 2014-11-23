@@ -1,6 +1,6 @@
-package com.grayfox.server.data.dao;
+package com.grayfox.server.dao;
 
-import com.grayfox.server.data.AppUser;
+import com.grayfox.server.dao.model.AppUser;
 
 public interface AppUserDao {
 

@@ -1,4 +1,4 @@
-package com.grayfox.server.data.dao.impl.jdbc;
+package com.grayfox.server.dao.impl.jdbc;
 
 import java.sql.ResultSet;
 import java.util.List;
@@ -7,10 +7,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.sql.DataSource;
 
-import com.grayfox.server.data.AppUser;
-import com.grayfox.server.data.dao.AppUserDao;
+import com.grayfox.server.dao.AppUserDao;
+
+import com.grayfox.server.dao.model.AppUser;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 @Named
