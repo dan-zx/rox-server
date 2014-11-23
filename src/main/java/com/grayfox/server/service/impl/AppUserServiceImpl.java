@@ -1,7 +1,5 @@
 package com.grayfox.server.service.impl;
 
-import java.io.Serializable;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -18,9 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 @Named
-public class AppUserServiceImpl implements AppUserService, Serializable {
+public class AppUserServiceImpl implements AppUserService {
 
-    private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(AppUserServiceImpl.class);
 
     private final AppUserDao appUserDao;
@@ -44,7 +41,7 @@ public class AppUserServiceImpl implements AppUserService, Serializable {
         } else {
             AppUser appUser = new AppUser();
             appUser.setAccessToken(response.getAccessToken());
-            appUserDao.save(appUser);
+            appUserDao.insert(appUser);
             LOG.debug("New user -> user={}", appUser);
             return appUser.getId();
         }

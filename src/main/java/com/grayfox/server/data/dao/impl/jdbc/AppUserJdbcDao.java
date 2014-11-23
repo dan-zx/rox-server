@@ -40,7 +40,7 @@ public class AppUserJdbcDao extends JdbcDaoSupport implements AppUserDao {
     }
 
     @Override
-    public void save(AppUser appUser) {
+    public void insert(AppUser appUser) {
         // FIXME: hardcoded SQL statement
         LOG.debug("save({})", appUser);
         getJdbcTemplate().update("INSERT INTO app_user (access_token) VALUES(?)", appUser.getAccessToken());

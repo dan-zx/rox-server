@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class AppUser implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -754162508775020641L;
 
     private Long id;
     private String accessToken;

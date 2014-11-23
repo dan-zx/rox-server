@@ -1,36 +1,30 @@
 package com.grayfox.server.config;
 
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.io.IOException;
 
-import javax.inject.Named;
-
-import com.google.maps.GeoApiContext;
+import javax.sql.DataSource;
 
 import com.foursquare4j.FoursquareApi;
+import com.foursquare4j.response.AccessTokenResponse;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.grayfox.server.test.DbReseter;
+
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableTransactionManagement
-@ComponentScan(
-        basePackages = { 
-                "com.grayfox.server.data.dao.impl.jdbc",
-                "com.grayfox.server.service.impl",
-                "com.grayfox.server.ws.rest" }, 
-        includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Named.class))
+@Import(TestConfig.TestBeanConfig.class)
 public class TestConfig {
 
     @Bean
@@ -43,36 +37,32 @@ public class TestConfig {
     @Bean
     public static PropertiesFactoryBean configsProperties(ResourceLoader resourceLoader) throws IOException {
         PropertiesFactoryBean props = new PropertiesFactoryBean();
-        props.setLocation(resourceLoader.getResource("file:src/main/webapp/WEB-INF/resources/configs.properties"));
+        props.setLocation(resourceLoader.getResource("classpath:configs/test-configs.properties"));
         props.afterPropertiesSet();
         return props;
     }
 
     @Bean
-    @Scope("prototype")
-    public FoursquareApi foursquareApi(
-            @Value("${foursquare.app.client.id}") String clientId, 
-            @Value("${foursquare.app.client.secret}") String clientSecret) {
-        return new FoursquareApi(clientId, clientSecret);
-    }
-
-    @Bean
-    public GeoApiContext geoApiContext(@Value("${google.api.key}") String apiKey) {
-        return new GeoApiContext().setApiKey(apiKey);
-    }
-
-    @Bean
-    public DataSourceTransactionManager transactionManager() {
-        return new DataSourceTransactionManager(dataSource());
-    }
-
-    @Bean
     public EmbeddedDatabase dataSource() {
         return new EmbeddedDatabaseBuilder()
-            .setName("gray-fox")
-            .addScript("file:src/main/scripts/h2-schema.sql")
-            .addScript("file:src/main/scripts/data-load.sql")
             .setType(EmbeddedDatabaseType.H2)
+            .addScript("classpath:scripts/schema.sql")
             .build();
+    }
+
+    public static class TestBeanConfig extends MainConfig.BeanConfig {
+
+        @Bean
+        public DbReseter dbReseter(DataSource dataSource) {
+            return new DbReseter(dataSource);
+        }
+
+        @Override
+        public FoursquareApi foursquareApi(String clientId, String clientSecret) {
+            FoursquareApi foursquareApi = mock(FoursquareApi.class);
+            when(foursquareApi.getAccessToken(anyString()))
+                .thenReturn(new AccessTokenResponse("{\"access_token\":\"fakeAccessToken\"}"));
+            return foursquareApi;
+        }
     }
 }

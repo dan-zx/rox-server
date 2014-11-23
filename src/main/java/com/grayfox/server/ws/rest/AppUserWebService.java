@@ -19,27 +19,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Named
-@Path("v1/registration")
-public class RegistrationWebService implements Serializable {
+@Path("v1/users")
+public class AppUserWebService implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = LoggerFactory.getLogger(RegistrationWebService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AppUserWebService.class);
 
     private AppUserService appUserService;
 
+    @Inject
+    public AppUserWebService(AppUserService appUserService) {
+        this.appUserService = appUserService;
+    }
+
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/register")
-    public String register(@QueryParam("authorization_code") String authorizationCode) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public String register(@QueryParam("authorization-code") String authorizationCode) {
         LOG.debug("register({})", authorizationCode);
         Long id = appUserService.register(authorizationCode);
         JsonObject response = new JsonObject();
         response.addProperty("user_id", id);
         return new Gson().toJson(response);
-    }
-
-    @Inject
-    public void setAppUserService(AppUserService appUserService) {
-        this.appUserService = appUserService;
     }
 }

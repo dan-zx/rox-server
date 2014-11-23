@@ -2,12 +2,11 @@ package com.grayfox.server.test;
 
 import javax.inject.Inject;
 
+import com.grayfox.server.config.TestConfig;
+
 import com.google.maps.DirectionsApi;
 import com.google.maps.GeoApiContext;
 import com.google.maps.model.DirectionsRoute;
-
-import com.grayfox.server.config.TestConfig;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;

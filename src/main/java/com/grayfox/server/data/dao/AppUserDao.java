@@ -6,5 +6,5 @@ public interface AppUserDao {
 
     Long fetchIdByAccessToken(String accessToken);
     String fetchAccessTokenById(Long id);
-    void save(AppUser appUser);
+    void insert(AppUser appUser);
 }
