@@ -24,16 +24,17 @@ public class AppUserDaoTest extends BaseDbReseterTest {
     @Test
     @Transactional
     public void insertAndFetch() {
-        AppUser appUser = new AppUser();
-        appUser.setAccessToken("fakeAccessToken");
+        AppUser expectedAppUser = new AppUser();
+        expectedAppUser.setAppAccessToken("fakeAppAccessToken");
+        expectedAppUser.setFoursquareAccessToken("fakeFoursquareAccessToken");
         
-        appUserDao.insert(appUser);
-        assertThat(appUser.getId()).isNotNull();
+        appUserDao.insert(expectedAppUser);
+        assertThat(expectedAppUser.getId()).isNotNull();
         
-        String accessToken = appUserDao.fetchAccessTokenById(appUser.getId());
-        assertThat(accessToken).isNotNull().isNotEmpty().isEqualTo(appUser.getAccessToken());
+        AppUser actualAppUser = appUserDao.fetchByFoursquareAccessToken(expectedAppUser.getFoursquareAccessToken());
+        assertThat(actualAppUser).isNotNull().isEqualTo(expectedAppUser);
         
-        Long id = appUserDao.fetchIdByAccessToken(appUser.getAccessToken());
-        assertThat(id).isNotNull().isEqualTo(appUser.getId());
+        assertThat(appUserDao.isAppAccessTokenUnique("fakeAppAccessToken")).isFalse();
+        assertThat(appUserDao.isAppAccessTokenUnique("otherFakeAppAccessToken")).isTrue();
     }
 }

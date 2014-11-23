@@ -7,7 +7,9 @@ import javax.inject.Inject;
 import com.grayfox.server.data.AppUser;
 import com.grayfox.server.data.dao.AppUserDao;
 import com.grayfox.server.test.BaseDbReseterTest;
+
 import org.junit.Test;
+
 import org.springframework.transaction.annotation.Transactional;
 
 public class AppUserServiceTest extends BaseDbReseterTest {
@@ -23,24 +25,25 @@ public class AppUserServiceTest extends BaseDbReseterTest {
 
     @Test
     public void registerNew() {
-        Long id = appUserService.register("newAuthorizationCode");
+        String appAccessToken = appUserService.register("newAuthorizationCode");
 
-        assertThat(id).isNotNull();
+        assertThat(appAccessToken).isNotNull();
     }
 
     @Test
     public void registerExisting() {
-        Long expectedId = preInsertAppUser();
-        Long id = appUserService.register("fakeAuthorizationCode");
+        String expectedAppAccessToken = preInsertAppUser();
+        String actualAppAccessToken = appUserService.register("fakeAuthorizationCode");
         
-        assertThat(id).isNotNull().isEqualTo(expectedId);
+        assertThat(actualAppAccessToken).isNotNull().isEqualTo(expectedAppAccessToken);
     }
 
     @Transactional
-    private Long preInsertAppUser() {
+    private String preInsertAppUser() {
         AppUser appUser = new AppUser();
-        appUser.setAccessToken("fakeAccessToken");
+        appUser.setAppAccessToken("fakeAppAccessToken");
+        appUser.setFoursquareAccessToken("fakeFourquareAccessToken");
         appUserDao.insert(appUser);
-        return appUser.getId();
+        return appUser.getAppAccessToken();
     }
 }

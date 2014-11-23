@@ -61,7 +61,7 @@ public class TestConfig {
         public FoursquareApi foursquareApi(String clientId, String clientSecret) {
             FoursquareApi foursquareApi = mock(FoursquareApi.class);
             when(foursquareApi.getAccessToken(anyString()))
-                .thenReturn(new AccessTokenResponse("{\"access_token\":\"fakeAccessToken\"}"));
+                .thenReturn(new AccessTokenResponse("{\"access_token\":\"fakeFourquareAccessToken\"}"));
             return foursquareApi;
         }
     }

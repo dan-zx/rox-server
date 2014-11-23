@@ -1,7 +1,5 @@
 package com.grayfox.server.ws.rest;
 
-import java.io.Serializable;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.GET;
@@ -12,7 +10,6 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
 import com.grayfox.server.service.AppUserService;
 
 import org.slf4j.Logger;
@@ -20,10 +17,9 @@ import org.slf4j.LoggerFactory;
 
 @Named
 @Path("v1/users")
-public class AppUserWebService implements Serializable {
+public class AppUserWebService {
 
-    private static final long serialVersionUID = 1L;
-    private static final Logger LOG = LoggerFactory.getLogger(AppUserWebService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AppUserWebService.class);
 
     private AppUserService appUserService;
 
@@ -35,11 +31,11 @@ public class AppUserWebService implements Serializable {
     @GET
     @Path("/register")
     @Produces(MediaType.APPLICATION_JSON)
-    public String register(@QueryParam("authorization-code") String authorizationCode) {
-        LOG.debug("register({})", authorizationCode);
-        Long id = appUserService.register(authorizationCode);
+    public String register(@QueryParam("foursquare-authorization-code") String foursquareAuthorizationCode) {
+        LOGGER.debug("register({})", foursquareAuthorizationCode);
+        String appAccessToken = appUserService.register(foursquareAuthorizationCode);
         JsonObject response = new JsonObject();
-        response.addProperty("user_id", id);
+        response.addProperty("appAccessToken", appAccessToken);
         return new Gson().toJson(response);
     }
 }

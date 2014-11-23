@@ -4,7 +4,7 @@ import com.grayfox.server.data.AppUser;
 
 public interface AppUserDao {
 
-    Long fetchIdByAccessToken(String accessToken);
-    String fetchAccessTokenById(Long id);
+    AppUser fetchByFoursquareAccessToken(String foursquareAccessToken);
+    boolean isAppAccessTokenUnique(String appAccessToken);
     void insert(AppUser appUser);
 }
