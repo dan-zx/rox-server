@@ -50,10 +50,7 @@ public class RecommenderServiceImpl implements RecommenderService {
     @Override
     public List<Poi> search(String appAccessToken, String location, int radius, String category) {
         AppUser appUser = appUserDao.fetchByAppAccessToken(appAccessToken);
-
-        // TODO: Hardcoded exception message
-        if (appUser == null) throw new ServiceException("Invalid user");
-        foursquareApi.setAccessToken(appUser.getFoursquareAccessToken());
+        if (appUser != null) foursquareApi.setAccessToken(appUser.getFoursquareAccessToken());
         Result<ExploreVenueGroups> result = foursquareApi.exploreVenues(location, null, null, null, null, radius, null, category, 4, null, null, null, null, null, null, null, true, null, null, null, null);
         if (result.getMeta().getCode() == 200) {
             List<Poi> pois = new ArrayList<>();

@@ -9,5 +9,5 @@ public interface RouteService {
 
     List<Location> createRoute(List<Poi> pois, Transportation transportation);
 
-    enum Transportation { DRIVING, WALKING, BICYCLING, TRANSIT }
+    enum Transportation { DRIVING, WALKING, BICYCLING }
 }

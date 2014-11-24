@@ -1,8 +1,8 @@
 package com.grayfox.server.config;
 
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 import java.io.IOException;
 
@@ -59,9 +59,9 @@ public class TestConfig {
 
         @Override
         public FoursquareApi foursquareApi(String clientId, String clientSecret) {
-            FoursquareApi foursquareApi = mock(FoursquareApi.class);
-            when(foursquareApi.getAccessToken(anyString()))
-                .thenReturn(new AccessTokenResponse("{\"access_token\":\"fakeFourquareAccessToken\"}"));
+            FoursquareApi foursquareApi = spy(new FoursquareApi(clientId, clientSecret));
+            doReturn(new AccessTokenResponse("{\"access_token\":\"fakeFourquareAccessToken\"}"))
+                .when(foursquareApi).getAccessToken(anyString());
             return foursquareApi;
         }
     }

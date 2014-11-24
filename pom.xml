@@ -35,9 +35,12 @@
 
 	<repositories>
 		<repository>
-			<id>dan_zx-repo</id>
+			<id>dan_zx</id>
 			<name>Dan ZX Repository</name>
 			<url>https://dl.dropboxusercontent.com/u/1995295/m2repository</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 
@@ -189,7 +192,7 @@
 		<dependency>
 			<groupId>com.foursquare</groupId>
 			<artifactId>foursquare4j</artifactId>
-			<version>1.0-20141121.170540-1</version>
+			<version>1.0-SNAPSHOT</version>
 		</dependency>
 
 		<!-- GOOGLE APIS -->

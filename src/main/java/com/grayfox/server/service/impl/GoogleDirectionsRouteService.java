@@ -40,10 +40,11 @@ public class GoogleDirectionsRouteService implements RouteService {
             for (int index = 1; index < pois.size()-1; index++) waypoints[index-1] = pois.get(index).getLocation().stringValues();
     
             try {
-                DirectionsRoute route = directionRequest.waypoints(waypoints).await()[0];
-                return toListOfPoints(route);
+                DirectionsRoute[] routes = directionRequest.waypoints(waypoints).await();
+                if (routes.length > 0) return toListOfPoints(routes[0]);
+                else return new ArrayList<>(0); // TODO: Handle case when route is unavailable
             } catch (Exception ex) {
-                // FIXME: hardcoded exception message
+                // FIXME: Hardcoded exception message
                 throw new ServiceException("Route creation error", ex);
             }
         } else return new ArrayList<>(0);
@@ -55,7 +56,7 @@ public class GoogleDirectionsRouteService implements RouteService {
             case DRIVING: return TravelMode.DRIVING;
             case WALKING: return TravelMode.WALKING;
             case BICYCLING: return TravelMode.BICYCLING;
-            case TRANSIT: return TravelMode.TRANSIT;
+            // case TRANSIT: return TravelMode.TRANSIT;
             default: return TravelMode.UNKNOWN;
         }
     }
