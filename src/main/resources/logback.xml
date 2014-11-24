@@ -8,9 +8,10 @@
     </appender>
 
     <logger name="org.springframework" level="warn" />
+    <logger name="com.foursquare4j" level="all" />
     <logger name="org.apache.http" level="warn" />
     <logger name="com.mchange" level="warn" />
-    
+
     <root level="all">
         <appender-ref ref="console" />
     </root>

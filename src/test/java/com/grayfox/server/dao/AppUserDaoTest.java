@@ -36,6 +36,9 @@ public class AppUserDaoTest extends BaseDbReseterTest {
         AppUser actualAppUser = appUserDao.fetchByFoursquareAccessToken(expectedAppUser.getFoursquareAccessToken());
         assertThat(actualAppUser).isNotNull().isEqualTo(expectedAppUser);
         
+        actualAppUser = appUserDao.fetchByAppAccessToken(expectedAppUser.getAppAccessToken());
+        assertThat(actualAppUser).isNotNull().isEqualTo(expectedAppUser);
+        
         assertThat(appUserDao.isAppAccessTokenUnique("fakeAppAccessToken")).isFalse();
         assertThat(appUserDao.isAppAccessTokenUnique("otherFakeAppAccessToken")).isTrue();
     }

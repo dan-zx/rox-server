@@ -36,6 +36,8 @@ public class AppUserServiceImpl implements AppUserService {
     @Transactional(noRollbackFor = ServiceException.class)
     public String register(String foursquareAuthorizationCode) {
         AccessTokenResponse foursquareResponse = foursquareApi.getAccessToken(foursquareAuthorizationCode);
+
+        // TODO: Detail exception message
         if (foursquareResponse.getException() != null) throw new ServiceException(foursquareResponse.getException().getMessage());
         AppUser appUser = appUserDao.fetchByFoursquareAccessToken(foursquareResponse.getAccessToken());
         if (appUser != null) {
