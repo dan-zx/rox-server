@@ -67,10 +67,10 @@ public class GoogleDirectionsRouteService implements RouteService {
             for (DirectionsStep step : leg.steps) {
                 Location startLocation = new Location();
                 startLocation.setLatitude(step.startLocation.lat);
-                startLocation.setLongitude(step.startLocation.lat);
+                startLocation.setLongitude(step.startLocation.lng);
                 Location endLocation = new Location();
                 endLocation.setLatitude(step.endLocation.lat);
-                endLocation.setLongitude(step.endLocation.lat);
+                endLocation.setLongitude(step.endLocation.lng);
                 routePoints.add(startLocation);
                 routePoints.add(endLocation);
             }
