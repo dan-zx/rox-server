@@ -2,6 +2,8 @@ package com.grayfox.server.config;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.inject.Named;
 import javax.sql.DataSource;
@@ -79,20 +81,17 @@ public class MainConfig {
         @Bean(destroyMethod = "close")
         public ComboPooledDataSource dataSource(
                 @Value("${jdbc.driver.class}") String driverClass,
-                @Value("${jdbc.url}") String url,
-                @Value("${jdbc.user}") String user,
-                @Value("${jdbc.password}") String password,
-                @Value("${jdbc.pool_size.min}") int minPoolSize,
-                @Value("${jdbc.pool_size.max}") int maxPoolSize,
-                @Value("${jdbc.acquire_increment}") int acquireIncrement) throws PropertyVetoException {
+                @Value("${jdbc.url}") String url) throws URISyntaxException, PropertyVetoException {
+            URI databaseUri = new URI(System.getenv("DATABASE_URL"));
+            String[] userInfo = databaseUri.getUserInfo().split(":");
             ComboPooledDataSource dataSource = new ComboPooledDataSource();
             dataSource.setDriverClass(driverClass);
-            dataSource.setJdbcUrl(url);
-            dataSource.setUser(user);
-            dataSource.setPassword(password);
-            dataSource.setMinPoolSize(minPoolSize);
-            dataSource.setMaxPoolSize(maxPoolSize);
-            dataSource.setAcquireIncrement(acquireIncrement);
+            dataSource.setJdbcUrl(String.format(url, databaseUri.getHost(), databaseUri.getPort(), databaseUri.getPath()));
+            dataSource.setUser(userInfo[0]);
+            dataSource.setPassword(userInfo[1]);
+            dataSource.setMinPoolSize(1);
+            dataSource.setMaxPoolSize(50);
+            dataSource.setAcquireIncrement(5);
             return dataSource;
         }
     }
