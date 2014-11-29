@@ -10,14 +10,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.grayfox.server.service.RecommenderService;
 import com.grayfox.server.service.RouteService;
 import com.grayfox.server.service.model.Location;
 import com.grayfox.server.service.model.Poi;
 import com.grayfox.server.ws.model.Recommendation;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Named
 @Path("v1/recommendations")

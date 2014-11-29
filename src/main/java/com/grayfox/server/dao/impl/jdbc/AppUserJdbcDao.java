@@ -9,8 +9,10 @@ import javax.sql.DataSource;
 
 import com.grayfox.server.dao.AppUserDao;
 import com.grayfox.server.dao.model.AppUser;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 @Named
