@@ -9,9 +9,8 @@ import javax.inject.Named;
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
-import com.google.maps.model.DirectionsLeg;
 import com.google.maps.model.DirectionsRoute;
-import com.google.maps.model.DirectionsStep;
+import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
 
 import com.grayfox.server.service.RouteService;
@@ -41,7 +40,7 @@ public class GoogleDirectionsRouteService implements RouteService {
     
             try {
                 DirectionsRoute[] routes = directionRequest.waypoints(waypoints).await();
-                if (routes.length > 0) return toListOfPoints(routes[0]);
+                if (routes.length > 0) return getPath(routes[0]);
                 else return new ArrayList<>(0); // TODO: Handle case when route is unavailable
             } catch (Exception ex) {
                 // FIXME: Hardcoded exception message
@@ -61,20 +60,20 @@ public class GoogleDirectionsRouteService implements RouteService {
         }
     }
     
-    private List<Location> toListOfPoints(DirectionsRoute route) {
-        List<Location> routePoints = new ArrayList<>(); 
-        for (DirectionsLeg leg : route.legs) {
-            for (DirectionsStep step : leg.steps) {
-                Location startLocation = new Location();
-                startLocation.setLatitude(step.startLocation.lat);
-                startLocation.setLongitude(step.startLocation.lng);
-                Location endLocation = new Location();
-                endLocation.setLatitude(step.endLocation.lat);
-                endLocation.setLongitude(step.endLocation.lng);
-                routePoints.add(startLocation);
-                routePoints.add(endLocation);
+    private List<Location> getPath(DirectionsRoute route) {
+        if (route.overviewPolyline != null) {
+            List<LatLng> polyline = route.overviewPolyline.decodePath();
+            if (!polyline.isEmpty()) {
+                List<Location> path = new ArrayList<>(polyline.size()); 
+                polyline.forEach((point) -> {
+                    Location location = new Location();
+                    location.setLatitude(point.lat);
+                    location.setLongitude(point.lng);
+                    path.add(location);
+                });
+                return path;
             }
         }
-        return routePoints;
+        return new ArrayList<>(0);
     }
 }
