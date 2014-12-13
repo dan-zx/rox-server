@@ -7,7 +7,6 @@ import javax.inject.Named;
 
 import com.grayfox.server.dao.AppUserDao;
 import com.grayfox.server.service.AccessTokenService;
-import com.grayfox.server.util.Strings;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +25,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
     public String generate() {
         String accessToken = null;
         do {
-            accessToken = UUID.randomUUID().toString().replaceAll("-", Strings.EMPTY_STRING);
+            accessToken = UUID.randomUUID().toString().replaceAll("-", "");
         } while(!appUserDao.isAppAccessTokenUnique(accessToken));
         return accessToken;  
     }

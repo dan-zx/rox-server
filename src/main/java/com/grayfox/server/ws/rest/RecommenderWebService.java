@@ -14,13 +14,13 @@ import com.grayfox.server.service.RecommenderService;
 import com.grayfox.server.service.RouteService;
 import com.grayfox.server.service.model.Location;
 import com.grayfox.server.service.model.Poi;
-import com.grayfox.server.ws.model.Recommendation;
+import com.grayfox.server.ws.model.RecommendationResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Named
-@Path("v1/recommendations")
+@Path("recommendations")
 public class RecommenderWebService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RecommenderWebService.class);
@@ -30,32 +30,14 @@ public class RecommenderWebService {
 
     @Inject
     public RecommenderWebService(RecommenderService recommenderService, RouteService routeService) {
-        super();
         this.recommenderService = recommenderService;
         this.routeService = routeService;
     }
 
     @GET
-    @Path("/recommend")
+    @Path("search")
     @Produces(MediaType.APPLICATION_JSON)
-    public Recommendation recommend(
-            @QueryParam("app-access-token") String appAccessToken,
-            @QueryParam("location") String location,
-            @QueryParam("radius") int radius,
-            @QueryParam("transportation") RouteService.Transportation transportation) {
-        LOGGER.debug("recommend({}, {}, {}, {})", appAccessToken, location, radius, transportation);
-        List<Poi> pois = recommenderService.recommend(appAccessToken, location, radius);
-        List<Location> routePoints = routeService.createRoute(pois, transportation);
-        Recommendation recommendation = new Recommendation();
-        recommendation.setPois(pois);
-        recommendation.setRoutePoints(routePoints);
-        return recommendation;
-    }
-
-    @GET
-    @Path("/search")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Recommendation search(
+    public RecommendationResponse search(
             @QueryParam("app-access-token") String appAccessToken,
             @QueryParam("location") String location,
             @QueryParam("radius") int radius,
@@ -64,7 +46,7 @@ public class RecommenderWebService {
         LOGGER.debug("search({}, {}, {}, {}, {})", appAccessToken, location, radius, category, transportation);
         List<Poi> pois = recommenderService.search(appAccessToken, location, radius, category);
         List<Location> routePoints = routeService.createRoute(pois, transportation);
-        Recommendation recommendation = new Recommendation();
+        RecommendationResponse recommendation = new RecommendationResponse();
         recommendation.setPois(pois);
         recommendation.setRoutePoints(routePoints);
         return recommendation;

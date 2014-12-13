@@ -6,7 +6,7 @@ import java.util.List;
 import com.grayfox.server.service.model.Location;
 import com.grayfox.server.service.model.Poi;
 
-public class Recommendation implements Serializable {
+public class RecommendationResponse implements Serializable {
 
     private static final long serialVersionUID = 4322497520093419157L;
 
@@ -43,7 +43,7 @@ public class Recommendation implements Serializable {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        Recommendation other = (Recommendation) obj;
+        RecommendationResponse other = (RecommendationResponse) obj;
         if (pois == null) {
             if (other.pois != null) return false;
         } else if (!pois.equals(other.pois)) return false;

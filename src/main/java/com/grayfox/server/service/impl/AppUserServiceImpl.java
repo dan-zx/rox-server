@@ -5,7 +5,8 @@ import javax.inject.Named;
 
 import com.foursquare4j.FoursquareApi;
 import com.foursquare4j.response.AccessTokenResponse;
-
+import com.foursquare4j.response.Result;
+import com.foursquare4j.response.User;
 import com.grayfox.server.dao.AppUserDao;
 import com.grayfox.server.dao.model.AppUser;
 import com.grayfox.server.service.AccessTokenService;
@@ -13,7 +14,6 @@ import com.grayfox.server.service.AppUserService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.transaction.annotation.Transactional;
 
 @Named
@@ -50,6 +50,31 @@ public class AppUserServiceImpl implements AppUserService {
             appUserDao.insert(appUser);
             LOGGER.debug("New user -> {}", appUser);
             return appUser.getAppAccessToken();
+        }
+    }
+
+    @Override
+    @Transactional(noRollbackFor = ServiceException.class)
+    public User getSelf(String appAccessToken) {
+        AppUser appUser = appUserDao.fetchByAppAccessToken(appAccessToken);
+        if (appUser != null) {
+            foursquareApi.setAccessToken(appUser.getFoursquareAccessToken());
+            Result<User> result = foursquareApi.getUser("self");
+            if (result.getMeta().getCode() == 200) return result.getResponse();
+            else {
+                // TODO: Hardcoded exception message
+                String message = new StringBuilder()
+                    .append("Invalid Foursquare request: \"")
+                    .append(result.getMeta().getErrorType())
+                    .append("\":\"")
+                    .append(result.getMeta().getErrorDetail())
+                    .append("\"")
+                    .toString();
+                throw new ServiceException(message);
+            }
+        } else {
+            // TODO: Hardcoded exception message
+            throw new ServiceException("Invalid user");
         }
     }
 }

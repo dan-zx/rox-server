@@ -1,7 +1,6 @@
 package com.grayfox.server.service.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -30,21 +29,6 @@ public class RecommenderServiceImpl implements RecommenderService {
     public RecommenderServiceImpl(AppUserDao appUserDao, FoursquareApi foursquareApi) {
         this.appUserDao = appUserDao;
         this.foursquareApi = foursquareApi;
-    }
-
-    @Override
-    public List<Poi> recommend(String appAccessToken, String location, int radius) {
-        AppUser appUser = appUserDao.fetchByAppAccessToken(appAccessToken);
-
-        // TODO: Hardcoded exception message
-        if (appUser == null) throw new ServiceException("Invalid user");
-        foursquareApi.setAccessToken(appUser.getFoursquareAccessToken());
-        
-        // TODO: Implement a real recommendation
-        return Arrays.asList(toPoi(foursquareApi.getVenue("4e0f9573ae603a50b54e2fc4").getResponse()),
-                toPoi(foursquareApi.getVenue("51edf3fb498e7eebb027f3e6").getResponse()),
-                toPoi(foursquareApi.getVenue("4c95128e72dd224b0131a091").getResponse()), 
-                toPoi(foursquareApi.getVenue("512bb30cf31c08b32ec6861a").getResponse()));
     }
 
     @Override
