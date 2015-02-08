@@ -3,14 +3,17 @@ package com.grayfox.server.service.impl;
 import java.util.UUID;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import com.grayfox.server.dao.AppUserDao;
 import com.grayfox.server.service.AccessTokenService;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Named
+@Service
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AccessTokenServiceImpl implements AccessTokenService {
 
     private final AppUserDao appUserDao;

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
@@ -17,7 +16,12 @@ import com.grayfox.server.service.RouteService;
 import com.grayfox.server.service.model.Location;
 import com.grayfox.server.service.model.Poi;
 
-@Named
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+
+@Service
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class GoogleDirectionsRouteService implements RouteService {
 
     private final GeoApiContext geoApiContext;

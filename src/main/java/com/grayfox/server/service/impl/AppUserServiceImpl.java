@@ -1,12 +1,12 @@
 package com.grayfox.server.service.impl;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import com.foursquare4j.FoursquareApi;
 import com.foursquare4j.response.AccessTokenResponse;
 import com.foursquare4j.response.Result;
 import com.foursquare4j.response.User;
+
 import com.grayfox.server.dao.AppUserDao;
 import com.grayfox.server.dao.model.AppUser;
 import com.grayfox.server.service.AccessTokenService;
@@ -14,9 +14,14 @@ import com.grayfox.server.service.AppUserService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Named
+@Service
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AppUserServiceImpl implements AppUserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppUserServiceImpl.class);

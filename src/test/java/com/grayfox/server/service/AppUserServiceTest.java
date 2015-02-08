@@ -5,10 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import javax.inject.Inject;
 
 import com.grayfox.server.dao.AppUserDao;
-
 import com.grayfox.server.dao.model.AppUser;
 import com.grayfox.server.test.BaseDbReseterTest;
+
 import org.junit.Test;
+
 import org.springframework.transaction.annotation.Transactional;
 
 public class AppUserServiceTest extends BaseDbReseterTest {

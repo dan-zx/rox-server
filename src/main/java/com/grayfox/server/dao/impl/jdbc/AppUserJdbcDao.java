@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.sql.DataSource;
 
 import com.grayfox.server.dao.AppUserDao;
@@ -13,9 +12,13 @@ import com.grayfox.server.dao.model.AppUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.stereotype.Repository;
 
-@Named
+@Repository
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AppUserJdbcDao extends JdbcDaoSupport implements AppUserDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppUserJdbcDao.class);

@@ -8,11 +8,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.grayfox.server.service.RouteService.Transportation;
-
 import com.grayfox.server.service.model.Location;
 import com.grayfox.server.service.model.Poi;
-import org.junit.Test;
 import com.grayfox.server.test.BaseDbReseterTest;
+
+import org.junit.Test;
 
 public class RouteServiceTest extends BaseDbReseterTest {
 

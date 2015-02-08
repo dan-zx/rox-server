@@ -3,7 +3,6 @@ package com.grayfox.server.ws.rest;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -19,7 +18,9 @@ import com.grayfox.server.ws.model.RecommendationResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Named
+import org.springframework.stereotype.Component;
+
+@Component
 @Path("recommendations")
 public class RecommenderWebService {
 
