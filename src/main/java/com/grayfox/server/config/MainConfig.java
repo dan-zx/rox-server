@@ -1,16 +1,13 @@
 package com.grayfox.server.config;
 
-import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import javax.sql.DataSource;
 
+import org.springframework.scheduling.annotation.EnableAsync;
+
 import com.foursquare4j.FoursquareApi;
-
 import com.google.maps.GeoApiContext;
-
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
@@ -22,6 +19,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
@@ -43,12 +41,14 @@ public class MainConfig {
         return props;
     }
 
+    @EnableAsync
     @Configuration
     @EnableTransactionManagement
     @ComponentScan(basePackages = { 
-            "com.grayfox.server.dao.impl.jdbc",
-            "com.grayfox.server.service.impl",
-            "com.grayfox.server.ws.rest" })
+            "com.grayfox.server.dao.jdbc",
+            "com.grayfox.server.datasource",
+            "com.grayfox.server.service",
+            "com.grayfox.server.ws.rest"})
     public static class BeanConfig {
 
         @Bean
@@ -74,23 +74,17 @@ public class MainConfig {
     @Configuration
     public static class DataSourceConfig {
 
-        @Bean(destroyMethod = "close")
-        public DataSource relationalDbDataSource(
+        @Bean
+        public DataSource dataSource(
                 @Value("${jdbc.driver.class}") String driverClass,
                 @Value("${jdbc.url}") String url,
                 @Value("${jdbc.user}") String user,
-                @Value("${jdbc.password}") String password,
-                @Value("${jdbc.pool_size.min}") int minPoolSize,
-                @Value("${jdbc.pool_size.max}") int maxPoolSize,
-                @Value("${jdbc.acquire_increment}") int acquireIncrement) throws PropertyVetoException {
-            ComboPooledDataSource dataSource = new ComboPooledDataSource();
-            dataSource.setDriverClass(driverClass);
-            dataSource.setJdbcUrl(url);
-            dataSource.setUser(user);
+                @Value("${jdbc.password}") String password) {
+            DriverManagerDataSource dataSource = new DriverManagerDataSource();
+            dataSource.setDriverClassName(driverClass);
+            dataSource.setUrl(url);
+            dataSource.setUsername(user);
             dataSource.setPassword(password);
-            dataSource.setMinPoolSize(minPoolSize);
-            dataSource.setMaxPoolSize(maxPoolSize);
-            dataSource.setAcquireIncrement(acquireIncrement);
             return dataSource;
         }
     }

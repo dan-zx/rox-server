@@ -21,6 +21,9 @@ repositories {
     	url 'http://m2.neo4j.org/content/groups/public'
 	}
 }
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
 
 ext.versions = [
     spring: '4.1.4.RELEASE',
@@ -41,10 +44,6 @@ dependencies {
 	compile 'org.slf4j:jcl-over-slf4j:'+versions.slf4j
 	compile 'org.slf4j:log4j-over-slf4j:'+versions.slf4j
 	compile 'ch.qos.logback:logback-classic:1.1.2'
-
-	// DATABASE 
-	compile 'mysql:mysql-connector-java:5.1.34'
-	compile 'c3p0:c3p0:0.9.1.2'
 
 	// SPRING
 	compile ('org.springframework:spring-context:'+versions.spring) {
@@ -73,7 +72,6 @@ dependencies {
 	testCompile 'junit:junit:4.12'
 	testCompile 'org.assertj:assertj-core:1.7.1'
 	testCompile 'org.mockito:mockito-all:1.10.19'
-	testCompile 'com.h2database:h2:1.4.182'
 	testCompile 'org.springframework:spring-test:'+versions.spring
 }
 

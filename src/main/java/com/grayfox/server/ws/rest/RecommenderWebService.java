@@ -9,15 +9,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.grayfox.server.domain.Location;
 import com.grayfox.server.service.RecommenderService;
-import com.grayfox.server.service.RouteService;
-import com.grayfox.server.service.model.Location;
-import com.grayfox.server.service.model.Poi;
-import com.grayfox.server.ws.model.RecommendationResponse;
-
+import com.grayfox.server.service.RecommenderService.Transportation;
+import com.grayfox.server.service.domain.Recommendation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,31 +22,52 @@ import org.springframework.stereotype.Component;
 public class RecommenderWebService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RecommenderWebService.class);
+    
+    @Inject private RecommenderService recommenderService;
 
-    private final RecommenderService recommenderService;
-    private final RouteService routeService;
+    @GET
+    @Path("bylikes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Result<List<Recommendation>> recommendByLikes(
+            @QueryParam("access-token") String accessToken,
+            @QueryParam("location") String locationString,
+            @QueryParam("radius") Integer radius,
+            @QueryParam("transportation") Transportation transportation) {
+        LOGGER.debug("recommendByLikes({}, {}, {}, {})", accessToken, locationString, radius, transportation);
 
-    @Inject
-    public RecommenderWebService(RecommenderService recommenderService, RouteService routeService) {
-        this.recommenderService = recommenderService;
-        this.routeService = routeService;
+        RequiredArgException.Builder requiredArgExceptionBuilder = new RequiredArgException.Builder();
+        if (accessToken == null || accessToken.trim().isEmpty()) requiredArgExceptionBuilder.addRequiredArg("access-token");
+        if (locationString == null || locationString.trim().isEmpty()) requiredArgExceptionBuilder.addRequiredArg("location");
+        if (transportation == null) requiredArgExceptionBuilder.addRequiredArg("transportation");
+        requiredArgExceptionBuilder.throwIfNotEmpty();
+
+        return new Result<>(recommenderService.recommendByLikes(accessToken, parseLocation(locationString), radius, transportation));
     }
 
     @GET
-    @Path("search")
+    @Path("byfriendslikes")
     @Produces(MediaType.APPLICATION_JSON)
-    public RecommendationResponse search(
-            @QueryParam("app-access-token") String appAccessToken,
-            @QueryParam("location") String location,
-            @QueryParam("radius") int radius,
-            @QueryParam("category") String category,
-            @QueryParam("transportation") RouteService.Transportation transportation) {
-        LOGGER.debug("search({}, {}, {}, {}, {})", appAccessToken, location, radius, category, transportation);
-        List<Poi> pois = recommenderService.search(appAccessToken, location, radius, category);
-        List<Location> routePoints = routeService.createRoute(pois, transportation);
-        RecommendationResponse recommendation = new RecommendationResponse();
-        recommendation.setPois(pois);
-        recommendation.setRoutePoints(routePoints);
-        return recommendation;
+    public Result<List<Recommendation>> recommendByFriendsLikes(
+            @QueryParam("access-token") String accessToken,
+            @QueryParam("location") String locationString,
+            @QueryParam("radius") Integer radius,
+            @QueryParam("transportation") Transportation transportation) {
+        LOGGER.debug("recommendByFriendsLikes({}, {}, {}, {})", accessToken, locationString, radius, transportation);
+
+        RequiredArgException.Builder requiredArgExceptionBuilder = new RequiredArgException.Builder();
+        if (accessToken == null || accessToken.trim().isEmpty()) requiredArgExceptionBuilder.addRequiredArg("access-token");
+        if (locationString == null || locationString.trim().isEmpty()) requiredArgExceptionBuilder.addRequiredArg("location");
+        if (transportation == null) requiredArgExceptionBuilder.addRequiredArg("transportation");
+        requiredArgExceptionBuilder.throwIfNotEmpty();
+
+        return new Result<>(recommenderService.recommendByFriendsLikes(accessToken, parseLocation(locationString), radius, transportation));
+    }
+
+    private Location parseLocation(String locationString) {
+        String[] latLngStr = locationString.split(",");
+        if (latLngStr.length == 0 || latLngStr.length > 2) {
+            // TODO: throw exception
+            return null;
+        } else return new Location(Double.parseDouble(latLngStr[0]), Double.parseDouble(latLngStr[1]));
     }
 }
