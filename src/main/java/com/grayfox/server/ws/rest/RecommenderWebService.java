@@ -66,8 +66,19 @@ public class RecommenderWebService {
     private Location parseLocation(String locationString) {
         String[] latLngStr = locationString.split(",");
         if (latLngStr.length == 0 || latLngStr.length > 2) {
-            // TODO: throw exception
-            return null;
-        } else return new Location(Double.parseDouble(latLngStr[0]), Double.parseDouble(latLngStr[1]));
+            LOGGER.error("Incorrect location format [{}]", locationString);
+            throw new InvalidFormatException.Builder("latlng.format.error")
+                .addFormatArg(locationString)
+                .build();
+        } else {
+            try {
+                return new Location(Double.parseDouble(latLngStr[0]), Double.parseDouble(latLngStr[1]));
+            } catch (Exception ex) {
+                LOGGER.error("Incorrect location format [{}]", locationString);
+                throw new InvalidFormatException.Builder("latlng.format.error")
+                    .addFormatArg(locationString)
+                    .build();
+            }
+        }
     }
 }
