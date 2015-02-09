@@ -21,9 +21,6 @@ repositories {
     	url 'http://m2.neo4j.org/content/groups/public'
 	}
 }
-configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
 
 ext.versions = [
     spring: '4.1.4.RELEASE',
@@ -60,7 +57,7 @@ dependencies {
 	compile 'org.glassfish.jersey.ext:jersey-spring3:'+versions.jersey
 
 	// FOURSQUARE
-	compile group: 'com.foursquare4j', name: 'foursquare4j', version: '1.0-SNAPSHOT', changing: true
+	compile 'com.foursquare4j:foursquare4j:1.0-SNAPSHOT'
 
 	// GOOGLE API
 	compile 'com.google.maps:google-maps-services:0.1.5'
