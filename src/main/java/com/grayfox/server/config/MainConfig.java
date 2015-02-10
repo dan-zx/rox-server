@@ -4,10 +4,10 @@ import java.io.IOException;
 
 import javax.sql.DataSource;
 
-import org.springframework.scheduling.annotation.EnableAsync;
-
 import com.foursquare4j.FoursquareApi;
+
 import com.google.maps.GeoApiContext;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration

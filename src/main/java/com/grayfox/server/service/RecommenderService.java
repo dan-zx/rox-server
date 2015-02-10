@@ -7,29 +7,32 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.grayfox.server.dao.CredentialDao;
-import com.grayfox.server.domain.Category;
-import org.springframework.transaction.annotation.Transactional;
-import com.grayfox.server.service.domain.Recommendation;
+import com.foursquare4j.FoursquareApi;
 import com.foursquare4j.response.Group;
 import com.foursquare4j.response.Result;
-import com.foursquare4j.FoursquareApi;
 import com.foursquare4j.response.Venue;
+
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
+
+import com.grayfox.server.dao.CredentialDao;
 import com.grayfox.server.dao.PoiDao;
+import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
+import com.grayfox.server.service.domain.Recommendation;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

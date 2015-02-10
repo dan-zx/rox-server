@@ -15,9 +15,12 @@ import com.grayfox.server.domain.Location;
 import com.grayfox.server.service.RecommenderService;
 import com.grayfox.server.service.RecommenderService.Transportation;
 import com.grayfox.server.service.domain.Recommendation;
+
 import org.hibernate.validator.constraints.NotBlank;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Component;
 
 @Component

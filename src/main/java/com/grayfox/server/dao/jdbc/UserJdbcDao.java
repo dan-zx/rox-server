@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 
 import com.grayfox.server.dao.UserDao;
 import com.grayfox.server.domain.User;
+
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;

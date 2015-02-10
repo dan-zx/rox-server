@@ -4,17 +4,19 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
-import com.grayfox.server.service.domain.CredentialResult;
-
 import com.foursquare4j.FoursquareApi;
 import com.foursquare4j.response.AccessTokenResponse;
+
 import com.grayfox.server.dao.CredentialDao;
 import com.grayfox.server.dao.UserDao;
 import com.grayfox.server.datasource.ProfileFoursquareDataSource;
 import com.grayfox.server.domain.Credential;
 import com.grayfox.server.domain.User;
+import com.grayfox.server.service.domain.CredentialResult;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
