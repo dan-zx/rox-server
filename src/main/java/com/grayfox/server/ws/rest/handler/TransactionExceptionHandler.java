@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.TransactionException;
 
 @Provider
-public class TransactionExceptionHandler extends ExceptionHandler<TransactionException> {
+public class TransactionExceptionHandler extends BaseExceptionHandler<TransactionException> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionExceptionHandler.class);
 

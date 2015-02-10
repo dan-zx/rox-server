@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Provider
-public class GenericExceptionHandler extends ExceptionHandler<Exception> {
+public class GenericExceptionHandler extends BaseExceptionHandler<Exception> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GenericExceptionHandler.class);
 

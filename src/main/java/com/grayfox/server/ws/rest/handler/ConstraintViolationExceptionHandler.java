@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Provider
-public class ConstraintViolationExceptionHandler extends ExceptionHandler<ConstraintViolationException> {
+public class ConstraintViolationExceptionHandler extends BaseExceptionHandler<ConstraintViolationException> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConstraintViolationExceptionHandler.class);
 

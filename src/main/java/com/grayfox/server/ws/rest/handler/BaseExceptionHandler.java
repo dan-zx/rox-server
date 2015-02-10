@@ -7,13 +7,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.ext.ExceptionMapper;
 
-abstract class ExceptionHandler<E extends Throwable> implements ExceptionMapper<E> {
+abstract class BaseExceptionHandler<E extends Throwable> implements ExceptionMapper<E> {
 
     @Context private HttpHeaders headers;
-
-    protected HttpHeaders getHeaders() {
-        return headers;
-    }
 
     protected Locale getClientLocale(Collection<Locale> supportedLocales, Locale defaultLocale) {
         if (headers != null && headers.getAcceptableLanguages() != null && headers.getAcceptableLanguages().size() > 0) {

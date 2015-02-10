@@ -6,19 +6,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import com.grayfox.server.GrayFoxException;
+import com.grayfox.server.BaseApplicationException;
 import com.grayfox.server.Messages;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Provider
-public class GrayFoxExceptionHandler extends ExceptionHandler<GrayFoxException> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(GrayFoxExceptionHandler.class);
+public class ApplicationExceptionHandler extends BaseExceptionHandler<BaseApplicationException> {
 
     @Override
-    public Response toResponse(GrayFoxException exception) {
-        LOGGER.error("Gray Fox failure", exception);
+    public Response toResponse(BaseApplicationException exception) {
         Locale clientLocale = getClientLocale(Messages.SUPPORTED_LOCALES, Messages.DEFAULT_LOCALE);
         String message = Messages.get(exception.getMessageKey(), clientLocale, exception.getFormatArgs());
         switch (exception.getMessageKey()) {

@@ -3,20 +3,20 @@ package com.grayfox.server;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class GrayFoxException extends RuntimeException {
+public abstract class BaseApplicationException extends RuntimeException {
 
     private static final long serialVersionUID = 4065199814273911926L;
 
     private final String messageKey;
     private final Object[] formatArgs;
 
-    protected GrayFoxException(String messageKey, Object[] formatArgs) {
+    protected BaseApplicationException(String messageKey, Object[] formatArgs) {
         super(messageKey);
         this.messageKey = messageKey;
         this.formatArgs = formatArgs;
     }
 
-    protected GrayFoxException(String messageKey, Throwable cause, Object[] formatArgs) {
+    protected BaseApplicationException(String messageKey, Throwable cause, Object[] formatArgs) {
         super(messageKey, cause);
         this.messageKey = messageKey;
         this.formatArgs = formatArgs;
@@ -63,6 +63,6 @@ public abstract class GrayFoxException extends RuntimeException {
             return this;
         }
 
-        public abstract GrayFoxException build();
+        public abstract BaseApplicationException build();
     }
 }

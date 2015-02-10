@@ -1,8 +1,8 @@
 package com.grayfox.server.service;
 
-import com.grayfox.server.GrayFoxException;
+import com.grayfox.server.BaseApplicationException;
 
-public class ServiceException extends GrayFoxException {
+public class ServiceException extends BaseApplicationException {
 
     private static final long serialVersionUID = -6334172687732382276L;
 

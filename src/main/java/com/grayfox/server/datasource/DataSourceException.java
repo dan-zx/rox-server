@@ -1,8 +1,8 @@
 package com.grayfox.server.datasource;
 
-import com.grayfox.server.GrayFoxException;
+import com.grayfox.server.BaseApplicationException;
 
-public class DataSourceException extends GrayFoxException {
+public class DataSourceException extends BaseApplicationException {
 
     private static final long serialVersionUID = -6334172687732382276L;
 

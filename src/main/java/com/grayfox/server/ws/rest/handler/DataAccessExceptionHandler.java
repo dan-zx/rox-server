@@ -14,13 +14,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 
 @Provider
-public class DataAccessExceptionHandler extends ExceptionHandler<DataAccessException> {
+public class DataAccessExceptionHandler extends BaseExceptionHandler<DataAccessException> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DataAccessExceptionHandler.class);
 
     @Override
     public Response toResponse(DataAccessException exception) {
-        LOGGER.error("Data failure", exception);
+        LOGGER.error("Data access failure", exception);
         String messageKey = "data.internal.error";
         Locale clientLocale = getClientLocale(Messages.SUPPORTED_LOCALES, Messages.DEFAULT_LOCALE);
         String message = Messages.get(messageKey, clientLocale);
