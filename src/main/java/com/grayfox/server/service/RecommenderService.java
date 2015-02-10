@@ -1,9 +1,9 @@
 package com.grayfox.server.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -40,6 +40,8 @@ public class RecommenderService {
 
     public static enum Transportation { DRIVING, WALKING, BICYCLING, TRANSIT }
 
+    private static final int DEFAULT_RADIUS = 20_000;
+    private static final int MAX_POIS_PER_ROUTE = 6;
     private static final Logger LOGGER = LoggerFactory.getLogger(RecommenderService.class);
 
     @Inject private PoiDao poiDao;
@@ -53,21 +55,14 @@ public class RecommenderService {
             LOGGER.error("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
-        int trueRadius = radius != null ? radius.intValue() : 20_000;
+        int trueRadius = radius != null ? radius.intValue() : DEFAULT_RADIUS;
         List<Poi> recommendPois = poiDao.fetchNearestByCategoriesLiked(accessToken, location, trueRadius);
         List<Recommendation> recommendations = new ArrayList<>(recommendPois.size());
         for (Poi recommendPoi : recommendPois) {
-            Result<Group<Venue>> nextVenues = foursquareApi.getNextVenues(recommendPoi.getFoursquareId());
-            if (nextVenues.getMeta().getCode() == 200) {
-                List<Poi> pois = new ArrayList<>(nextVenues.getResponse().getItems().length+1);
-                pois.add(recommendPoi);
-                Arrays.stream(nextVenues.getResponse().getItems()).forEach(venue -> pois.add(toPoi(venue)));
-                List<Location> route = createRoute(pois, transportation);
-                recommendations.add(new Recommendation(pois, route));
-            } else {
-                LOGGER.error("Foursquare error while requesting [venues/{}/nextvenues] [code={}, errorType={}, errorDetail={}]", recommendPoi.getFoursquareId(), nextVenues.getMeta().getCode(), nextVenues.getMeta().getErrorType(), nextVenues.getMeta().getErrorDetail());
-                throw new ServiceException.Builder("foursquare.request.error").build();
-            }
+            List<Poi> pois = new ArrayList<>();
+            pois.addAll(nextPois(recommendPoi));
+            List<Location> route = createRoute(location, pois, transportation);
+            recommendations.add(new Recommendation(pois, route));
         }
         return recommendations;
     }
@@ -78,21 +73,14 @@ public class RecommenderService {
             LOGGER.error("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
-        int trueRadius = radius != null ? radius.intValue() : 20_000;
+        int trueRadius = radius != null ? radius.intValue() : DEFAULT_RADIUS;
         List<Poi> recommendPois = poiDao.fetchNearestByCategoriesLikedByFriends(accessToken, location, trueRadius);
         List<Recommendation> recommendations = new ArrayList<>(recommendPois.size());
         for (Poi recommendPoi : recommendPois) {
-            Result<Group<Venue>> nextVenues = foursquareApi.getNextVenues(recommendPoi.getFoursquareId());
-            if (nextVenues.getMeta().getCode() == 200) {
-                List<Poi> pois = new ArrayList<>(nextVenues.getResponse().getItems().length+1);
-                pois.add(recommendPoi);
-                Arrays.stream(nextVenues.getResponse().getItems()).forEach(venue -> pois.add(toPoi(venue)));
-                List<Location> route = createRoute(pois, transportation);
-                recommendations.add(new Recommendation(pois, route));
-            } else {
-                LOGGER.error("Foursquare error while requesting [venues/{}/nextvenues] [code={}, errorType={}, errorDetail={}]", recommendPoi.getFoursquareId(), nextVenues.getMeta().getCode(), nextVenues.getMeta().getErrorType(), nextVenues.getMeta().getErrorDetail());
-                throw new ServiceException.Builder("foursquare.request.error").build();
-            }
+            List<Poi> pois = new ArrayList<>();
+            pois.addAll(nextPois(recommendPoi));
+            List<Location> route = createRoute(location, pois, transportation);
+            recommendations.add(new Recommendation(pois, route));
         }
         return recommendations;
     }
@@ -112,15 +100,39 @@ public class RecommenderService {
         return poi;
     }
 
-    private List<Location> createRoute(List<Poi> pois, Transportation transportation) {
-        if (pois.size() > 1) {
+    private List<Poi> nextPois(Poi originPoi) {
+        List<Poi> pois = new ArrayList<>(MAX_POIS_PER_ROUTE);
+        pois.add(originPoi);
+        Poi currentPoi = originPoi;
+        for (int numberOfPois = 0; numberOfPois < MAX_POIS_PER_ROUTE-1; numberOfPois++) {
+            Result<Group<Venue>> nextVenues = foursquareApi.getNextVenues(currentPoi.getFoursquareId());
+            if (nextVenues.getMeta().getCode() == 200) {
+                for (Venue venue : nextVenues.getResponse().getItems()) {
+                    currentPoi = toPoi(venue);
+                    final String currentFoursquarId = venue.getId();
+                    List<Poi> matchingPois = pois.stream().filter(poi -> poi.getFoursquareId().equals(currentFoursquarId)).collect(Collectors.toList());
+                    if (matchingPois.isEmpty()) {
+                        pois.add(currentPoi);
+                        break;
+                    }
+                }
+            } else {
+                LOGGER.error("Foursquare error while requesting [venues/{}/nextvenues] [code={}, errorType={}, errorDetail={}]", currentPoi.getFoursquareId(), nextVenues.getMeta().getCode(), nextVenues.getMeta().getErrorType(), nextVenues.getMeta().getErrorDetail());
+                throw new ServiceException.Builder("foursquare.request.error").build();
+            }
+        }
+        return pois;
+    }
+
+    private List<Location> createRoute(Location origin, List<Poi> pois, Transportation transportation) {
+        if (pois.size() > 0) {
             DirectionsApiRequest directionRequest = DirectionsApi.newRequest(geoApiContext)
-                .origin(toDirectionsPointString(pois.get(0).getLocation()))
+                .origin(toDirectionsPointString(origin))
                 .destination(toDirectionsPointString(pois.get(pois.size()-1).getLocation()))
                 .mode(toTravelMode(transportation));
     
-            String[] waypoints = new String[pois.size()-2]; 
-            for (int index = 1; index < pois.size()-1; index++) waypoints[index-1] = toDirectionsPointString(pois.get(index).getLocation());
+            String[] waypoints = new String[pois.size()-1]; 
+            for (int index = 0; index < pois.size()-1; index++) waypoints[index] = toDirectionsPointString(pois.get(index).getLocation());
     
             try {
                 DirectionsRoute[] routes = directionRequest.waypoints(waypoints).await();
