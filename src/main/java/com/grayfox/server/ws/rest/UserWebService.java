@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import com.grayfox.server.domain.User;
 import com.grayfox.server.service.UserService;
 import com.grayfox.server.service.domain.CredentialResult;
+import org.hibernate.validator.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -27,13 +28,8 @@ public class UserWebService {
     @GET
     @Path("register/foursquare")
     @Produces(MediaType.APPLICATION_JSON)
-    public String registerUsingFoursquare(@QueryParam("foursquare-authorization-code") String foursquareAuthorizationCode) {
+    public String registerUsingFoursquare(@NotBlank(message = "foursquare_authorization_code.required.error") @QueryParam("foursquare-authorization-code") String foursquareAuthorizationCode) {
         LOGGER.debug("registerUsingFoursquare({})", foursquareAuthorizationCode);
-        
-        RequiredArgException.Builder requiredArgExceptionBuilder = new RequiredArgException.Builder();
-        if (foursquareAuthorizationCode == null || foursquareAuthorizationCode.trim().isEmpty()) requiredArgExceptionBuilder.addRequiredArg("foursquare-authorization-code");
-        requiredArgExceptionBuilder.throwIfNotEmpty();
-        
         CredentialResult credentialResult = userService.registerUsingFoursquare(foursquareAuthorizationCode);
         if (credentialResult.isNewUser()) userService.generateProfileUsingFoursquare(credentialResult.getCredential());
         JsonObject response = new JsonObject();
@@ -46,12 +42,8 @@ public class UserWebService {
     @GET
     @Path("self")
     @Produces(MediaType.APPLICATION_JSON)
-    public Result<User> getSelf(@QueryParam("access-token") String accessToken) {
+    public Result<User> getSelf(@NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken) {
         LOGGER.debug("getSelf({})", accessToken);
-        
-        RequiredArgException.Builder requiredArgExceptionBuilder = new RequiredArgException.Builder();
-        if (accessToken == null || accessToken.trim().isEmpty()) requiredArgExceptionBuilder.addRequiredArg("access-token");
-        requiredArgExceptionBuilder.throwIfNotEmpty();
         return new Result<>(userService.getCompactSelf(accessToken));
     }
 }
