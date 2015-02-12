@@ -1,4 +1,4 @@
-package com.grayfox.server.service.model;
+package com.grayfox.server.domain;
 
 import java.io.Serializable;
 
@@ -6,27 +6,20 @@ public class Location implements Serializable {
 
     private static final long serialVersionUID = 665032830432086830L;
 
-    private double latitude;
-    private double longitude;
+    private final double latitude;
+    private final double longitude;
+
+    public Location(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 
     public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
     public double getLongitude() {
         return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public String stringValues() {
-        return new StringBuilder().append(latitude).append(',').append(longitude).toString();
     }
 
     @Override
@@ -54,7 +47,6 @@ public class Location implements Serializable {
 
     @Override
     public String toString() {
-        return new StringBuilder().append("LatLng [latitude=").append(latitude)
-                .append(", longitude=").append(longitude).append("]").toString();
+        return new StringBuilder().append("Location [latitude=").append(latitude).append(", longitude=").append(longitude).append("]").toString();
     }
 }

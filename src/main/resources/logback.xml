@@ -7,11 +7,13 @@
         </encoder>
     </appender>
 
-    <logger name="org.springframework" level="warn" />
     <logger name="com.foursquare4j" level="warn" />
     <logger name="org.apache.http" level="warn" />
-    <logger name="com.mchange" level="warn" />
-
+    <logger name="org.hibernate.validator" level="warn" />
+    <logger name="org.jboss.logging" level="warn" />
+    <logger name="org.neo4j" level="warn" />
+    <logger name="org.springframework" level="warn" />
+    
     <root level="warn">
         <appender-ref ref="console" />
     </root>

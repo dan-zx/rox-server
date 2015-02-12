@@ -1,30 +1,28 @@
 package com.grayfox.server.config;
 
-import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.inject.Named;
 import javax.sql.DataSource;
 
 import com.foursquare4j.FoursquareApi;
 
 import com.google.maps.GeoApiContext;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
@@ -46,18 +44,18 @@ public class MainConfig {
         return props;
     }
 
+    @EnableAsync
     @Configuration
     @EnableTransactionManagement
-    @ComponentScan(
-            basePackages = { 
-                    "com.grayfox.server.dao.impl.jdbc",
-                    "com.grayfox.server.service.impl",
-                    "com.grayfox.server.ws.rest" }, 
-            includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Named.class))
+    @ComponentScan(basePackages = { 
+            "com.grayfox.server.dao.jdbc",
+            "com.grayfox.server.datasource",
+            "com.grayfox.server.service",
+            "com.grayfox.server.ws.rest"})
     public static class BeanConfig {
 
         @Bean
-        @Scope("prototype")
+        @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
         public FoursquareApi foursquareApi(
                 @Value("${foursquare.app.client.id}") String clientId, 
                 @Value("${foursquare.app.client.secret}") String clientSecret) {
@@ -65,34 +63,32 @@ public class MainConfig {
         }
 
         @Bean
+        @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
         public GeoApiContext geoApiContext(@Value("${google.api.key}") String apiKey) {
             return new GeoApiContext().setApiKey(apiKey);
-        }
-
-        @Bean
-        public DataSourceTransactionManager transactionManager(DataSource dataSource) {
-            return new DataSourceTransactionManager(dataSource);
         }
     }
 
     @Configuration
     public static class DataSourceConfig {
 
-        @Bean(destroyMethod = "close")
-        public ComboPooledDataSource dataSource(
+        @Bean
+        public DataSource dataSource(
                 @Value("${jdbc.driver.class}") String driverClass,
-                @Value("${jdbc.url}") String url) throws URISyntaxException, PropertyVetoException {
-            URI databaseUri = new URI(System.getenv("DATABASE_URL"));
+                @Value("${jdbc.url_format}") String urlFormat) throws URISyntaxException {
+            URI databaseUri = new URI(System.getenv("GRAPHENEDB_URL"));
             String[] userInfo = databaseUri.getUserInfo().split(":");
-            ComboPooledDataSource dataSource = new ComboPooledDataSource();
-            dataSource.setDriverClass(driverClass);
-            dataSource.setJdbcUrl(String.format(url, databaseUri.getHost(), databaseUri.getPort(), databaseUri.getPath()));
-            dataSource.setUser(userInfo[0]);
+            DriverManagerDataSource dataSource = new DriverManagerDataSource();
+            dataSource.setDriverClassName(driverClass);
+            dataSource.setUrl(String.format(urlFormat, databaseUri.getHost(), databaseUri.getPort(), databaseUri.getPath()));
+            dataSource.setUsername(userInfo[0]);
             dataSource.setPassword(userInfo[1]);
-            dataSource.setMinPoolSize(1);
-            dataSource.setMaxPoolSize(50);
-            dataSource.setAcquireIncrement(5);
             return dataSource;
+        }
+
+        @Bean
+        public DataSourceTransactionManager transactionManager(DataSource dataSource) {
+            return new DataSourceTransactionManager(dataSource);
         }
     }
 }
