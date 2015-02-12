@@ -21,10 +21,11 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@Import({MainConfig.DataSourceConfig.class, MainConfig.BeanConfig.class})
+@Import({MainConfig.DataConfig.class, MainConfig.BeanConfig.class})
 public class MainConfig {
 
     @Bean
@@ -65,15 +66,10 @@ public class MainConfig {
         public GeoApiContext geoApiContext(@Value("${google.api.key}") String apiKey) {
             return new GeoApiContext().setApiKey(apiKey);
         }
-
-        @Bean
-        public DataSourceTransactionManager transactionManager(DataSource dataSource) {
-            return new DataSourceTransactionManager(dataSource);
-        }
     }
 
     @Configuration
-    public static class DataSourceConfig {
+    public static class DataConfig {
 
         @Bean
         public DataSource dataSource(
@@ -87,6 +83,11 @@ public class MainConfig {
             dataSource.setUsername(user);
             dataSource.setPassword(password);
             return dataSource;
+        }
+
+        @Bean
+        public PlatformTransactionManager transactionManager(DataSource dataSource) {
+            return new DataSourceTransactionManager(dataSource);
         }
     }
 }
