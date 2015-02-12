@@ -63,10 +63,10 @@ dependencies {
 	// FOURSQUARE
 	compile 'com.foursquare4j:foursquare4j:1.0-SNAPSHOT'
 
-	// GOOGLE API
+	// GOOGLE MAPS
 	compile 'com.google.maps:google-maps-services:0.1.5'
 
-	// NEO4J
+	// DATABASE
 	compile 'org.neo4j:neo4j-jdbc:2.1.4'
 
 	// TEST
