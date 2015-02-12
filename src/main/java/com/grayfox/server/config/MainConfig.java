@@ -23,10 +23,11 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@Import({MainConfig.DataSourceConfig.class, MainConfig.BeanConfig.class})
+@Import({MainConfig.DataConfig.class, MainConfig.BeanConfig.class})
 public class MainConfig {
 
     @Bean
@@ -70,7 +71,7 @@ public class MainConfig {
     }
 
     @Configuration
-    public static class DataSourceConfig {
+    public static class DataConfig {
 
         @Bean
         public DataSource dataSource(
@@ -87,7 +88,7 @@ public class MainConfig {
         }
 
         @Bean
-        public DataSourceTransactionManager transactionManager(DataSource dataSource) {
+        public PlatformTransactionManager transactionManager(DataSource dataSource) {
             return new DataSourceTransactionManager(dataSource);
         }
     }
