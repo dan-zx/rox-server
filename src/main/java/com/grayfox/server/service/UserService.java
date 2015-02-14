@@ -12,7 +12,6 @@ import com.grayfox.server.dao.UserDao;
 import com.grayfox.server.datasource.ProfileFoursquareDataSource;
 import com.grayfox.server.domain.Credential;
 import com.grayfox.server.domain.User;
-import com.grayfox.server.service.domain.CredentialResult;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +34,7 @@ public class UserService {
     @Inject private FoursquareApi foursquareApi;
 
     @Transactional
-    public CredentialResult registerUsingFoursquare(String foursquareAuthorizationCode) {
+    public Credential registerUsingFoursquare(String foursquareAuthorizationCode) {
         AccessTokenResponse foursquareResponse = foursquareApi.getAccessToken(foursquareAuthorizationCode);
         if (foursquareResponse.getException() != null) {
             LOGGER.error("Foursquare authentication error", foursquareResponse.getException());
@@ -44,14 +43,15 @@ public class UserService {
         Credential credential = credentialDao.fetchByFoursquareAccessToken(foursquareResponse.getAccessToken());
         if (credential != null) {
             LOGGER.debug("Credential already exists");
-            return new CredentialResult(credential, false);
+            return credential;
         } else {
             credential = new Credential();
             credential.setFoursquareAccessToken(foursquareResponse.getAccessToken());
             credential.setAccessToken(generateAccessToken());
+            credential.setNew(true);
             credentialDao.create(credential);
             LOGGER.debug("New credential created");
-            return new CredentialResult(credential, true);
+            return credential;
         }
     }
 
