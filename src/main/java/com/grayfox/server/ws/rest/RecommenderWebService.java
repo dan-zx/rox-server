@@ -11,16 +11,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.grayfox.server.domain.Recommendation;
+
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.service.RecommenderService;
 import com.grayfox.server.service.RecommenderService.Transportation;
-import com.grayfox.server.service.domain.Recommendation;
-
 import org.hibernate.validator.constraints.NotBlank;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Component;
 
 @Component
@@ -57,6 +55,9 @@ public class RecommenderWebService {
 
     private Location parseLocation(String locationString) {
         String[] latLngStr = locationString.split(",");
-        return new Location(Double.parseDouble(latLngStr[0]), Double.parseDouble(latLngStr[1]));
+        Location location = new Location();
+        location.setLatitude(Double.parseDouble(latLngStr[0]));
+        location.setLongitude(Double.parseDouble(latLngStr[1]));
+        return location;
     }
 }

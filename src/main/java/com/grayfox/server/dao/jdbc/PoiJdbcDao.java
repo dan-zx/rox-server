@@ -37,7 +37,9 @@ public class PoiJdbcDao implements PoiDao {
                 (ResultSet rs, int i) -> {
                     Poi poi = new Poi();
                     poi.setName(rs.getString(1));
-                    poi.setLocation(new Location(rs.getDouble(2), rs.getDouble(3)));
+                    poi.setLocation(new Location());
+                    poi.getLocation().setLatitude(rs.getDouble(2));
+                    poi.getLocation().setLongitude(rs.getDouble(3));
                     poi.setFoursquareId(rs.getString(4));
                     return poi;
                 }, accessToken, location.getLatitude(), location.getLongitude(), radius);
@@ -51,7 +53,9 @@ public class PoiJdbcDao implements PoiDao {
                 (ResultSet rs, int i) -> {
                     Poi poi = new Poi();
                     poi.setName(rs.getString(1));
-                    poi.setLocation(new Location(rs.getDouble(2), rs.getDouble(3)));
+                    poi.setLocation(new Location());
+                    poi.getLocation().setLatitude(rs.getDouble(2));
+                    poi.getLocation().setLongitude(rs.getDouble(3));
                     poi.setFoursquareId(rs.getString(4));
                     return poi;
                 }, accessToken, location.getLatitude(), location.getLongitude(), radius);

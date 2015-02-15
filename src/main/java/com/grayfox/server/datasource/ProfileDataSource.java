@@ -18,19 +18,18 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Component
+@Repository
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ProfileFoursquareDataSource {
+public class ProfileDataSource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProfileFoursquareDataSource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProfileDataSource.class);
 
     @Inject private FoursquareApi foursquareApi;
 
-    public User collectUserData(String foursquareAccessToken) {
+    public User collectUserData() {
         LOGGER.trace("Collecting user data...");
-        foursquareApi.setAccessToken(foursquareAccessToken);
         Result<com.foursquare4j.response.User> foursquareUser = foursquareApi.getUser("self");
         if (foursquareUser.getMeta().getCode() == 200) {
             User user = new User();
@@ -49,13 +48,12 @@ public class ProfileFoursquareDataSource {
         }
     }
 
-    public Set<Category> collectLikes(String serviceAccessToken) {
+    public Set<Category> collectLikes() {
         LOGGER.trace("Collecting user venue likes...");
-        foursquareApi.setAccessToken(serviceAccessToken);
         return collectLikesFrom("self");
     }
 
-    public Set<User> collectFriendsAndLikes(String serviceAccessToken) {
+    public Set<User> collectFriendsAndLikes() {
         LOGGER.trace("Collecting user friends...");
         Result<Group<com.foursquare4j.response.User>> foursquareFriends = foursquareApi.getUserFriends("self", 6, null);
         if (foursquareFriends.getMeta().getCode() == 200) {
@@ -103,5 +101,9 @@ public class ProfileFoursquareDataSource {
             LOGGER.error("Foursquare error while requesting [user/venuelikes] [code={}, errorType={}, errorDetail={}]", venueLikes.getMeta().getCode(), venueLikes.getMeta().getErrorType(), venueLikes.getMeta().getErrorDetail());
             throw new DataSourceException.Builder("foursquare.request.error").build();
         }
+    }
+
+    public void setAccessToken(String accessToken) {
+        foursquareApi.setAccessToken(accessToken);
     }
 }

@@ -9,7 +9,7 @@ import com.foursquare4j.response.AccessTokenResponse;
 
 import com.grayfox.server.dao.CredentialDao;
 import com.grayfox.server.dao.UserDao;
-import com.grayfox.server.datasource.ProfileFoursquareDataSource;
+import com.grayfox.server.datasource.ProfileDataSource;
 import com.grayfox.server.domain.Credential;
 import com.grayfox.server.domain.User;
 
@@ -30,7 +30,7 @@ public class UserService {
 
     @Inject private UserDao userDao;
     @Inject private CredentialDao credentialDao;
-    @Inject private ProfileFoursquareDataSource profileFoursquareDataSource;
+    @Inject private ProfileDataSource profileDataSource;
     @Inject private FoursquareApi foursquareApi;
 
     @Transactional
@@ -58,9 +58,10 @@ public class UserService {
     @Async
     @Transactional
     public void generateProfileUsingFoursquare(Credential credential) {
-        User user = profileFoursquareDataSource.collectUserData(credential.getFoursquareAccessToken());
-        user.setLikes(profileFoursquareDataSource.collectLikes(credential.getFoursquareAccessToken()));
-        user.setFriends(profileFoursquareDataSource.collectFriendsAndLikes(credential.getFoursquareAccessToken()));
+        profileDataSource.setAccessToken(credential.getFoursquareAccessToken());
+        User user = profileDataSource.collectUserData();
+        user.setLikes(profileDataSource.collectLikes());
+        user.setFriends(profileDataSource.collectFriendsAndLikes());
         user.setCredential(credential);
         userDao.create(user);
     }

@@ -6,20 +6,23 @@ public class Location implements Serializable {
 
     private static final long serialVersionUID = 665032830432086830L;
 
-    private final double latitude;
-    private final double longitude;
-
-    public Location(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
+    private double latitude;
+    private double longitude;
 
     public double getLatitude() {
         return latitude;
     }
 
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
     public double getLongitude() {
         return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     @Override
@@ -47,6 +50,8 @@ public class Location implements Serializable {
 
     @Override
     public String toString() {
-        return new StringBuilder().append("Location [latitude=").append(latitude).append(", longitude=").append(longitude).append("]").toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append("Location [latitude=").append(latitude).append(", longitude=").append(longitude).append("]");
+        return builder.toString();
     }
 }

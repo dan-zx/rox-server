@@ -7,28 +7,25 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import com.grayfox.server.domain.Recommendation;
+
 import com.foursquare4j.FoursquareApi;
 import com.foursquare4j.response.Group;
 import com.foursquare4j.response.Result;
 import com.foursquare4j.response.Venue;
-
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
-
 import com.grayfox.server.dao.CredentialDao;
 import com.grayfox.server.dao.PoiDao;
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
-import com.grayfox.server.service.domain.Recommendation;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -62,7 +59,10 @@ public class RecommenderService {
             List<Poi> pois = new ArrayList<>();
             pois.addAll(nextPois(recommendPoi));
             List<Location> route = createRoute(location, pois, transportation);
-            recommendations.add(new Recommendation(pois, route));
+            Recommendation recommendation = new Recommendation();
+            recommendation.setPoiSequence(pois);
+            recommendation.setRoutePoints(route);
+            recommendations.add(recommendation);
         }
         return recommendations;
     }
@@ -80,7 +80,10 @@ public class RecommenderService {
             List<Poi> pois = new ArrayList<>();
             pois.addAll(nextPois(recommendPoi));
             List<Location> route = createRoute(location, pois, transportation);
-            recommendations.add(new Recommendation(pois, route));
+            Recommendation recommendation = new Recommendation();
+            recommendation.setPoiSequence(pois);
+            recommendation.setRoutePoints(route);
+            recommendations.add(recommendation);
         }
         return recommendations;
     }
@@ -88,7 +91,9 @@ public class RecommenderService {
     private Poi toPoi(Venue venue) {
         Poi poi = new Poi();
         poi.setName(venue.getName());
-        poi.setLocation(new Location(venue.getLocation().getLat(), venue.getLocation().getLng()));
+        poi.setLocation(new Location());
+        poi.getLocation().setLatitude(venue.getLocation().getLat());
+        poi.getLocation().setLongitude(venue.getLocation().getLng());
         poi.setFoursquareId(venue.getId());
         poi.setCategories(new HashSet<>());
         for (com.foursquare4j.response.Category foursquareCategory : venue.getCategories()) {
@@ -164,7 +169,12 @@ public class RecommenderService {
             List<LatLng> polyline = route.overviewPolyline.decodePath();
             if (!polyline.isEmpty()) {
                 List<Location> path = new ArrayList<>(polyline.size()); 
-                polyline.forEach((point) -> path.add(new Location(point.lat, point.lng)));
+                polyline.forEach((point) -> {
+                    Location location = new Location();
+                    location.setLatitude(point.lat);
+                    location.setLongitude(point.lng);
+                    path.add(location);
+                });
                 return path;
             }
         }
