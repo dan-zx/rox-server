@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Recommendation;
 import com.grayfox.server.service.RecommenderService;
-import com.grayfox.server.service.RecommenderService.Transportation;
+import com.grayfox.server.ws.rest.constraints.CheckTransportation;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -37,10 +37,11 @@ public class RecommenderWebService {
     public Result<List<Recommendation>> recommendByLikes(
             @NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken,
             @NotBlank(message = "location.required.error") @Pattern(message = "location.format.error", regexp = "(\\-?\\d+(\\.\\d+)?),(\\-?\\d+(\\.\\d+)?)") @QueryParam("location") String locationString,
-            @QueryParam("radius") Integer radius,
-            @NotNull(message = "transportation.required.error") @QueryParam("transportation") Transportation transportation) {
-        LOGGER.debug("recommendByLikes({}, {}, {}, {})", accessToken, locationString, radius, transportation);
-        return new Result<>(recommenderService.recommendByLikes(accessToken, parseLocation(locationString), radius, transportation));
+            @Pattern(message = "radius.format.error", regexp = "[1-9]\\d*") @QueryParam("radius") String radiusStr,
+            @NotNull(message = "transportation.required.error") @CheckTransportation @QueryParam("transportation") String transportationStr) {
+        LOGGER.debug("recommendByLikes({}, {}, {}, {})", accessToken, locationString, radiusStr, transportationStr);
+        Integer radius = radiusStr == null || radiusStr.trim().isEmpty() ? null : Integer.parseInt(radiusStr);
+        return new Result<>(recommenderService.recommendByLikes(accessToken, parseLocation(locationString), radius, RecommenderService.Transportation.valueOf(transportationStr)));
     }
 
     @GET
@@ -49,10 +50,11 @@ public class RecommenderWebService {
     public Result<List<Recommendation>> recommendByFriendsLikes(
             @NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken,
             @NotBlank(message = "location.required.error") @Pattern(message = "location.format.error", regexp = "(\\-?\\d+(\\.\\d+)?),(\\-?\\d+(\\.\\d+)?)") @QueryParam("location") String locationString,
-            @QueryParam("radius") Integer radius,
-            @NotNull(message = "transportation.required.error") @QueryParam("transportation") Transportation transportation) {
-        LOGGER.debug("recommendByFriendsLikes({}, {}, {}, {})", accessToken, locationString, radius, transportation);
-        return new Result<>(recommenderService.recommendByFriendsLikes(accessToken, parseLocation(locationString), radius, transportation));
+            @Pattern(message = "radius.format.error", regexp = "[1-9]\\d*") @QueryParam("radius") String radiusStr,
+            @NotNull(message = "transportation.required.error") @CheckTransportation @QueryParam("transportation") String transportationStr) {
+        LOGGER.debug("recommendByFriendsLikes({}, {}, {}, {})", accessToken, locationString, radiusStr, transportationStr);
+        Integer radius = radiusStr == null || radiusStr.trim().isEmpty() ? null : Integer.parseInt(radiusStr);
+        return new Result<>(recommenderService.recommendByFriendsLikes(accessToken, parseLocation(locationString), radius, RecommenderService.Transportation.valueOf(transportationStr)));
     }
 
     private Location parseLocation(String locationString) {

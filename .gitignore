@@ -24,3 +24,6 @@ src/main/webapp/META-INF/context.xml
 
 # Gradle files
 .gradle/
+
+# Log files
+log.txt
