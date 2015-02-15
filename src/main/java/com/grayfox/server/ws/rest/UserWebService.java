@@ -23,7 +23,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 @Path("users")
-public class UserWebService {
+public class UserWebService extends BaseRestComponent {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserWebService.class);
 

@@ -6,21 +6,23 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import com.grayfox.server.util.Messages;
+import com.grayfox.server.ws.rest.BaseRestComponent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Provider
-public class ConstraintViolationExceptionHandler extends BaseExceptionHandler<ConstraintViolationException> {
+public class ConstraintViolationExceptionHandler extends BaseRestComponent implements ExceptionMapper<ConstraintViolationException> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConstraintViolationExceptionHandler.class);
 
     @Override
     public Response toResponse(ConstraintViolationException exception) {
-        Locale clientLocale = getClientLocale(Messages.SUPPORTED_LOCALES, Messages.DEFAULT_LOCALE);
+        Locale clientLocale = getClientLocale();
         StringBuilder messageBuilder = new StringBuilder();
         StringBuilder logMessageBuilder = new StringBuilder();
         for (ConstraintViolation<?> constraintViolation : exception.getConstraintViolations()) {
