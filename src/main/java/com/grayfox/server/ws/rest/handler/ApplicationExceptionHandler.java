@@ -7,7 +7,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.grayfox.server.BaseApplicationException;
-import com.grayfox.server.Messages;
+import com.grayfox.server.util.Messages;
 
 @Provider
 public class ApplicationExceptionHandler extends BaseExceptionHandler<BaseApplicationException> {

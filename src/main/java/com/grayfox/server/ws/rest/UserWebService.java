@@ -9,15 +9,19 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
 import com.grayfox.server.domain.Credential;
 import com.grayfox.server.domain.User;
 import com.grayfox.server.service.UserService;
+
 import org.hibernate.validator.constraints.NotBlank;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
-@Component
+import org.springframework.stereotype.Controller;
+
+@Controller
 @Path("users")
 public class UserWebService {
 

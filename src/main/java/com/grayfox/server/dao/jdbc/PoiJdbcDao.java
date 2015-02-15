@@ -4,36 +4,19 @@ import java.sql.ResultSet;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.sql.DataSource;
-
 import com.grayfox.server.dao.PoiDao;
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
 
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class PoiJdbcDao implements PoiDao {
-
-    @Inject private DataSource dataSource;
-
-    private JdbcTemplate jdbcTemplate;
-
-    @PostConstruct
-    private void onPostConstruct() {
-        jdbcTemplate = new JdbcTemplate(dataSource);
-    }
+public class PoiJdbcDao extends JdbcDao implements PoiDao {
 
     @Override
     public List<Poi> fetchNearestByCategoriesLiked(String accessToken, Location location, Integer radius) {
-        List<Poi> pois = jdbcTemplate.query(CypherQueries.NEAREAST_POIS_BY_CATEGORIES_LIKED, 
+        List<Poi> pois = getJdbcTemplate().query(CypherQueries.NEAREAST_POIS_BY_CATEGORIES_LIKED, 
                 (ResultSet rs, int i) -> {
                     Poi poi = new Poi();
                     poi.setName(rs.getString(1));
@@ -49,7 +32,7 @@ public class PoiJdbcDao implements PoiDao {
 
     @Override
     public List<Poi> fetchNearestByCategoriesLikedByFriends(String accessToken, Location location, Integer radius) {
-        List<Poi> pois = jdbcTemplate.query(CypherQueries.NEAREAST_POIS_BY_CATEGORIES_LIKED_BY_FRIENDS, 
+        List<Poi> pois = getJdbcTemplate().query(CypherQueries.NEAREAST_POIS_BY_CATEGORIES_LIKED_BY_FRIENDS, 
                 (ResultSet rs, int i) -> {
                     Poi poi = new Poi();
                     poi.setName(rs.getString(1));
@@ -64,7 +47,7 @@ public class PoiJdbcDao implements PoiDao {
     }
 
     private List<Category> fetchCategoriesByPoiFoursquareId(String foursquareId) {
-        return jdbcTemplate.query(CypherQueries.CATEGORIES_BY_POI_FOURSQUARE_ID, 
+        return getJdbcTemplate().query(CypherQueries.CATEGORIES_BY_POI_FOURSQUARE_ID, 
                 (ResultSet rs, int i) -> {
                     Category category = new Category();
                     category.setName(rs.getString(1));

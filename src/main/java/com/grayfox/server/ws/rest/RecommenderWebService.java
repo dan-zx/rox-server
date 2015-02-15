@@ -11,17 +11,19 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.grayfox.server.domain.Recommendation;
-
 import com.grayfox.server.domain.Location;
+import com.grayfox.server.domain.Recommendation;
 import com.grayfox.server.service.RecommenderService;
 import com.grayfox.server.service.RecommenderService.Transportation;
+
 import org.hibernate.validator.constraints.NotBlank;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
-@Component
+import org.springframework.stereotype.Controller;
+
+@Controller
 @Path("recommendations")
 public class RecommenderWebService {
 

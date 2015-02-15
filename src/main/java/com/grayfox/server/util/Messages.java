@@ -1,4 +1,4 @@
-package com.grayfox.server;
+package com.grayfox.server.util;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -38,14 +38,11 @@ public final class Messages {
         String unformattedMessage = get(key, locale);
         if (formatArgs != null && formatArgs.length > 0) {
             try {
-                MessageFormat formatter = SUPPORTED_LOCALES.contains(locale) ? new MessageFormat("", locale) : new MessageFormat("", DEFAULT_LOCALE);
-                formatter.applyPattern(unformattedMessage);
-                return formatter.format(formatArgs);
+                return MessageFormat.format(unformattedMessage, formatArgs);
             } catch (IllegalArgumentException ex) {
                 LOGGER.warn("Can't format message: [{}] with args: {}", unformattedMessage, Arrays.deepToString(formatArgs), ex);
             }
         }
-
         return unformattedMessage;
     }
 }
