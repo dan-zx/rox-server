@@ -12,9 +12,9 @@ public class CheckTransportationValidator implements ConstraintValidator<CheckTr
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (value == null || value.trim().isEmpty()) return true;
+        if (value == null) return true;
         try {
-            RecommenderService.Transportation.valueOf(value.toUpperCase());
+            RecommenderService.Transportation.valueOf(value.trim().toUpperCase());
             return true;
         } catch (IllegalArgumentException ex) {
             return false;
