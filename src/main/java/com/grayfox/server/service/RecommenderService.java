@@ -43,7 +43,7 @@ public class RecommenderService {
     @Inject private FoursquareApi foursquareApi;
     @Inject private GeoApiContext geoApiContext;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Recommendation> recommendByLikes(String accessToken, Location location, Integer radius, Transportation transportation) {
         if (!credentialDao.existsAccessToken(accessToken)) {
             LOGGER.error("Not existing user attempting to retrive information");
@@ -58,7 +58,7 @@ public class RecommenderService {
         return recommendations;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Recommendation> recommendByFriendsLikes(String accessToken, Location location, Integer radius, Transportation transportation) {
         if (!credentialDao.existsAccessToken(accessToken)) {
             LOGGER.error("Not existing user attempting to retrive information");

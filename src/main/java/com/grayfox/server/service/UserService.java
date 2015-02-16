@@ -63,7 +63,7 @@ public class UserService {
         userDao.create(user);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public User getCompactSelf(String accessToken) {
         if (!credentialDao.existsAccessToken(accessToken)) {
             LOGGER.error("Not existing user attempting to retrive information");
