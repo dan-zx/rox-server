@@ -3,10 +3,6 @@ package com.grayfox.server.domain;
 import java.io.Serializable;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-@JsonInclude(Include.NON_NULL)
 public class Poi implements Serializable {
 
     private static final long serialVersionUID = 7058036287180141517L;
