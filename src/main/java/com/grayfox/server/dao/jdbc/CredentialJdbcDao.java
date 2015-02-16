@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.util.List;
 
 import com.grayfox.server.dao.CredentialDao;
+import com.grayfox.server.dao.DaoException;
 import com.grayfox.server.domain.Credential;
 
 import org.springframework.stereotype.Repository;
@@ -21,6 +22,7 @@ public class CredentialJdbcDao extends JdbcDao implements CredentialDao {
                     return credential;
                 }, 
                 foursquareAccessToken);
+        if (credentials.size() > 1) throw new DaoException.Builder("data.internal.error").build();
         return credentials.isEmpty() ? null : credentials.get(0);
     }
 
