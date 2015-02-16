@@ -8,7 +8,8 @@ final class CypherQueries {
     static final String CREATE_FRIEND = "MATCH (me:User {foursquareId:{1}}) CREATE (:User {name:{2}, lastName:{3}, photoUrl:{4}, foursquareId:{5}})<-[:FRIENDS]-(me)";
     static final String CREATE_LIKES_RELATION = "MATCH (u:User {foursquareId:{1}}), (c:Category {foursquareId:{2}}) CREATE (u)-[:LIKES]->(c)";
     static final String CREATE_FRIENDS_RELATION = "MATCH (me:User {foursquareId:{1}}), (friend:User {foursquareId:{2}}) CREATE (me)-[:FRIENDS]->(friend)";
-    static final String EXISTS_FRIEND = "MATCH (:User {foursquareId:{1}}) RETURN true";
+    static final String UPDATE_USER = "MATCH (u:User {foursquareId:{1}}) SET u.name = {2}, u.lastName = {3}, u.photoUrl = {4}";
+    static final String EXISTS_USER = "MATCH (:User {foursquareId:{1}}) RETURN true";
 
     // Credential queries
     static final String CREATE_CREDENTIAL = "CREATE (:Credential {accessToken:{1}, foursquareAccessToken:{2}})";

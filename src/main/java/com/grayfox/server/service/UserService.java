@@ -60,7 +60,7 @@ public class UserService {
         user.setLikes(profileDataSource.collectLikes());
         user.setFriends(profileDataSource.collectFriendsAndLikes());
         user.setCredential(credential);
-        userDao.save(user);
+        userDao.saveOrUpdate(user);
     }
 
     @Transactional(readOnly = true)

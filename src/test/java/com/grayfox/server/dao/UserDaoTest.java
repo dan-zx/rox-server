@@ -47,7 +47,7 @@ public class UserDaoTest {
         expectedUser.setFoursquareId("id");
         expectedUser.setCredential(credential);
 
-        userDao.save(expectedUser);
+        userDao.saveOrUpdate(expectedUser);
 
         expectedUser.setCredential(null);
         assertThat(userDao.fetchCompactByAccessToken(credential.getAccessToken())).isNotNull().isEqualTo(expectedUser);

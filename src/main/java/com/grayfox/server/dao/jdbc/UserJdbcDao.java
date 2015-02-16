@@ -29,15 +29,19 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
     }
 
     @Override
-    public void save(User user) {
-        getJdbcTemplate().update(CypherQueries.CREATE_USER, user.getCredential().getAccessToken(), user.getName(), user.getLastName(), user.getPhotoUrl(), user.getFoursquareId());
+    public void saveOrUpdate(User user) {
+        if (!exists(user)) getJdbcTemplate().update(CypherQueries.CREATE_USER, user.getCredential().getAccessToken(), user.getName(), user.getLastName(), user.getPhotoUrl(), user.getFoursquareId());
+        else getJdbcTemplate().update(CypherQueries.UPDATE_USER, user.getFoursquareId(), user.getName(), user.getLastName(), user.getPhotoUrl());
         if (user.getLikes() != null) user.getLikes().forEach(category -> getJdbcTemplate().update(CypherQueries.CREATE_LIKES_RELATION, user.getFoursquareId(), category.getFoursquareId()));
         if (user.getFriends() != null) for (User friend : user.getFriends()) {
-            List<Boolean> exists = getJdbcTemplate().queryForList(CypherQueries.EXISTS_FRIEND, Boolean.class, friend.getFoursquareId());
-            if (exists.isEmpty()) {
-                getJdbcTemplate().update(CypherQueries.CREATE_FRIEND, user.getFoursquareId(), friend.getName(), friend.getLastName(), friend.getPhotoUrl(), friend.getFoursquareId());
-                if (friend.getLikes() != null) friend.getLikes().forEach(category -> getJdbcTemplate().update(CypherQueries.CREATE_LIKES_RELATION, friend.getFoursquareId(), category.getFoursquareId()));
-            } else getJdbcTemplate().update(CypherQueries.CREATE_FRIENDS_RELATION, user.getFoursquareId(), friend.getFoursquareId());
+            if (!exists(friend)) getJdbcTemplate().update(CypherQueries.CREATE_FRIEND, user.getFoursquareId(), friend.getName(), friend.getLastName(), friend.getPhotoUrl(), friend.getFoursquareId());
+            else getJdbcTemplate().update(CypherQueries.CREATE_FRIENDS_RELATION, user.getFoursquareId(), friend.getFoursquareId());
+            if (friend.getLikes() != null) friend.getLikes().forEach(category -> getJdbcTemplate().update(CypherQueries.CREATE_LIKES_RELATION, friend.getFoursquareId(), category.getFoursquareId()));
         }
+    }
+
+    private boolean exists(User user) {
+        List<Boolean> exists = getJdbcTemplate().queryForList(CypherQueries.EXISTS_USER, Boolean.class, user.getFoursquareId());
+        return !exists.isEmpty();
     }
 }
