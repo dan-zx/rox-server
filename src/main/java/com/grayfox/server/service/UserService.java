@@ -46,7 +46,7 @@ public class UserService {
             credential.setFoursquareAccessToken(foursquareResponse.getAccessToken());
             credential.setAccessToken(generateAccessToken());
             credential.setNew(true);
-            credentialDao.create(credential);
+            credentialDao.save(credential);
             LOGGER.debug("New credential created");
             return credential;
         }
@@ -60,7 +60,7 @@ public class UserService {
         user.setLikes(profileDataSource.collectLikes());
         user.setFriends(profileDataSource.collectFriendsAndLikes());
         user.setCredential(credential);
-        userDao.create(user);
+        userDao.save(user);
     }
 
     @Transactional(readOnly = true)

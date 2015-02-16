@@ -27,7 +27,7 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
     }
 
     @Override
-    public void create(User user) {
+    public void save(User user) {
         getJdbcTemplate().update(CypherQueries.CREATE_USER, user.getCredential().getAccessToken(), user.getName(), user.getLastName(), user.getPhotoUrl(), user.getFoursquareId());
         user.getLikes().forEach(category -> getJdbcTemplate().update(CypherQueries.CREATE_LIKES_RELATION, user.getFoursquareId(), category.getFoursquareId()));
         for (User friend : user.getFriends()) {

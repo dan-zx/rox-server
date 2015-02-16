@@ -31,7 +31,7 @@ public class CredentialJdbcDao extends JdbcDao implements CredentialDao {
     }
 
     @Override
-    public void create(Credential credential) {
+    public void save(Credential credential) {
         getJdbcTemplate().update(CypherQueries.CREATE_CREDENTIAL, credential.getAccessToken(), credential.getFoursquareAccessToken());
     }
 }
