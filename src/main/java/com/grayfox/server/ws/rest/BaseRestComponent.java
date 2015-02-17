@@ -17,7 +17,7 @@ public abstract class BaseRestComponent {
     protected Locale getClientLocale() {
         if (headers != null && headers.getAcceptableLanguages() != null && headers.getAcceptableLanguages().size() > 0) {
             for (Locale locale : headers.getAcceptableLanguages()) {
-                LOGGER.debug("Client primary language:{}", locale.getLanguage());
+                LOGGER.debug("Client primary language: '{}'", locale.getLanguage());
                 return locale;
             }
         }
