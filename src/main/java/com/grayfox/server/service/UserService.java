@@ -30,8 +30,8 @@ public class UserService {
     @Inject @Named("profileFoursquareDataSource") private ProfileDataSource profileFoursquareDataSource;
 
     @Transactional
-    public Credential registerUsingFoursquare(String code) {
-        String accessToken = foursquareAuthenticator.exchangeAccessToken(code);
+    public Credential registerUsingFoursquare(String authorizationCode) {
+        String accessToken = foursquareAuthenticator.exchangeAccessToken(authorizationCode);
         Credential credential = credentialDao.fetchByFoursquareAccessToken(accessToken);
         if (credential != null) {
             LOGGER.debug("Credential already exists");

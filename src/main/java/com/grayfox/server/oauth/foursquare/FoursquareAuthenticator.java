@@ -21,11 +21,11 @@ public class FoursquareAuthenticator implements SocialNetworkAuthenticator {
     @Inject private FoursquareApi foursquareApi;
 
     @Override
-    public String exchangeAccessToken(String code) {
-        AccessTokenResponse foursquareResponse = foursquareApi.getAccessToken(code);
+    public String exchangeAccessToken(String authorizationCode) {
+        AccessTokenResponse foursquareResponse = foursquareApi.getAccessToken(authorizationCode);
         if (foursquareResponse.getException() != null) {
             LOGGER.error("Foursquare authentication error", foursquareResponse.getException());
-            throw new OAuthException.Builder("foursquare.authentication.error").setCause(foursquareResponse.getException()).build();
+            throw new OAuthException.Builder("foursquare.authentication.error").addFormatArg(foursquareResponse.getException().getMessage()).build();
         }
         return foursquareResponse.getAccessToken();
     }

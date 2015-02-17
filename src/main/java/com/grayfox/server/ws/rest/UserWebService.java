@@ -32,9 +32,9 @@ public class UserWebService extends BaseRestComponent {
     @GET
     @Path("register/foursquare")
     @Produces(MediaType.APPLICATION_JSON)
-    public String registerUsingFoursquare(@NotBlank(message = "foursquare_authorization_code.required.error") @QueryParam("foursquare-authorization-code") String foursquareAuthorizationCode) {
-        LOGGER.debug("registerUsingFoursquare({})", foursquareAuthorizationCode);
-        Credential credential = userService.registerUsingFoursquare(foursquareAuthorizationCode);
+    public String registerUsingFoursquare(@NotBlank(message = "authorization_code.required.error") @QueryParam("authorization-code") String authorizationCode) {
+        LOGGER.debug("registerUsingFoursquare({})", authorizationCode);
+        Credential credential = userService.registerUsingFoursquare(authorizationCode);
         if (credential.isNew()) userService.generateProfileUsingFoursquare(credential);
         JsonObject response = new JsonObject();
         JsonObject accessTokenElement = new JsonObject();
