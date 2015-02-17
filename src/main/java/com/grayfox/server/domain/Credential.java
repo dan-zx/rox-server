@@ -8,6 +8,7 @@ public class Credential implements Serializable {
 
     private String accessToken;
     private String foursquareAccessToken;
+    private boolean isNew;
 
     public String getAccessToken() {
         return accessToken;
@@ -25,12 +26,21 @@ public class Credential implements Serializable {
         this.foursquareAccessToken = foursquareAccessToken;
     }
 
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean isNew) {
+        this.isNew = isNew;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((accessToken == null) ? 0 : accessToken.hashCode());
         result = prime * result + ((foursquareAccessToken == null) ? 0 : foursquareAccessToken.hashCode());
+        result = prime * result + (isNew ? 1231 : 1237);
         return result;
     }
 
@@ -46,13 +56,14 @@ public class Credential implements Serializable {
         if (foursquareAccessToken == null) {
             if (other.foursquareAccessToken != null) return false;
         } else if (!foursquareAccessToken.equals(other.foursquareAccessToken)) return false;
+        if (isNew != other.isNew) return false;
         return true;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Credential [accessToken=").append(accessToken).append(", foursquareAccessToken=").append(foursquareAccessToken).append("]");
+        builder.append("Credential [accessToken=").append(accessToken).append(", foursquareAccessToken=").append(foursquareAccessToken).append(", isNew=").append(isNew).append("]");
         return builder.toString();
     }
 }

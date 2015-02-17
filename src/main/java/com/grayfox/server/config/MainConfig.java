@@ -1,6 +1,5 @@
 package com.grayfox.server.config;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -11,15 +10,14 @@ import com.foursquare4j.FoursquareApi;
 import com.google.maps.GeoApiContext;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.io.ResourceLoader;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -27,22 +25,13 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
+@PropertySource("/WEB-INF/resources/configs.properties")
 @Import({MainConfig.DataConfig.class, MainConfig.BeanConfig.class})
 public class MainConfig {
 
     @Bean
-    public static PropertyPlaceholderConfigurer propertyPlaceholderConfigurer(ResourceLoader resourceLoader) throws IOException {
-        PropertyPlaceholderConfigurer ppc = new PropertyPlaceholderConfigurer();
-        ppc.setProperties(configsProperties(resourceLoader).getObject());
-        return ppc;
-    }
-
-    @Bean
-    public static PropertiesFactoryBean configsProperties(ResourceLoader resourceLoader) throws IOException {
-        PropertiesFactoryBean props = new PropertiesFactoryBean();
-        props.setLocation(resourceLoader.getResource("/WEB-INF/resources/configs.properties"));
-        props.afterPropertiesSet();
-        return props;
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
 
     @EnableAsync
@@ -56,7 +45,7 @@ public class MainConfig {
     public static class BeanConfig {
 
         @Bean
-        @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+        @Scope(BeanDefinition.SCOPE_PROTOTYPE)
         public FoursquareApi foursquareApi(
                 @Value("${foursquare.app.client.id}") String clientId, 
                 @Value("${foursquare.app.client.secret}") String clientSecret) {
@@ -64,7 +53,6 @@ public class MainConfig {
         }
 
         @Bean
-        @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
         public GeoApiContext geoApiContext(@Value("${google.api.key}") String apiKey) {
             return new GeoApiContext().setApiKey(apiKey);
         }
@@ -76,7 +64,7 @@ public class MainConfig {
         @Bean
         public DataSource dataSource(
                 @Value("${jdbc.driver.class}") String driverClass,
-                @Value("${jdbc.url_format}") String urlFormat) throws URISyntaxException {
+                @Value("${jdbc.url.format}") String urlFormat) throws URISyntaxException {
             URI databaseUri = new URI(System.getenv("GRAPHENEDB_URL"));
             String[] userInfo = databaseUri.getUserInfo().split(":");
             DriverManagerDataSource dataSource = new DriverManagerDataSource();

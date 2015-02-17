@@ -1,15 +1,30 @@
 package com.grayfox.server.config;
 
+import javax.ws.rs.ext.ContextResolver;
+import javax.ws.rs.ext.Provider;
+
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.ServerProperties;
 
 public class WebServiceConfig extends ResourceConfig {
 
     public WebServiceConfig() {
         packages("com.grayfox.server.ws.rest");
         register(JacksonFeature.class);
-        property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
-        property(ServerProperties.BV_DISABLE_VALIDATE_ON_EXECUTABLE_OVERRIDE_CHECK, true);
+        register(ObjectMapperProvider.class);
+    }
+
+    @Provider
+    private static class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
+
+        @Override
+        public ObjectMapper getContext(Class<?> type) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.setSerializationInclusion(Include.NON_NULL);
+            return objectMapper;
+        }
     }
 }

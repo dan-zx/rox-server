@@ -3,6 +3,7 @@ package com.grayfox.server.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -11,31 +12,24 @@ import com.foursquare4j.FoursquareApi;
 import com.foursquare4j.response.Group;
 import com.foursquare4j.response.Result;
 import com.foursquare4j.response.Venue;
-
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
-
 import com.grayfox.server.dao.CredentialDao;
-import com.grayfox.server.dao.PoiDao;
+import com.grayfox.server.dao.RecommendationDao;
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
-import com.grayfox.server.service.domain.Recommendation;
-
+import com.grayfox.server.domain.Recommendation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class RecommenderService {
 
     public static enum Transportation { DRIVING, WALKING, BICYCLING, TRANSIT }
@@ -44,43 +38,37 @@ public class RecommenderService {
     private static final int MAX_POIS_PER_ROUTE = 6;
     private static final Logger LOGGER = LoggerFactory.getLogger(RecommenderService.class);
 
-    @Inject private PoiDao poiDao;
+    @Inject private RecommendationDao recommendationDao;
     @Inject private CredentialDao credentialDao;
     @Inject private FoursquareApi foursquareApi;
     @Inject private GeoApiContext geoApiContext;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Recommendation> recommendByLikes(String accessToken, Location location, Integer radius, Transportation transportation) {
         if (!credentialDao.existsAccessToken(accessToken)) {
-            LOGGER.error("Not existing user attempting to retrive information");
+            LOGGER.warn("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
         int trueRadius = radius != null ? radius.intValue() : DEFAULT_RADIUS;
-        List<Poi> recommendPois = poiDao.fetchNearestByCategoriesLiked(accessToken, location, trueRadius);
-        List<Recommendation> recommendations = new ArrayList<>(recommendPois.size());
-        for (Poi recommendPoi : recommendPois) {
-            List<Poi> pois = new ArrayList<>();
-            pois.addAll(nextPois(recommendPoi));
-            List<Location> route = createRoute(location, pois, transportation);
-            recommendations.add(new Recommendation(pois, route));
+        List<Recommendation> recommendations = recommendationDao.fetchNearestByCategoriesLiked(accessToken, location, trueRadius);        
+        for (Recommendation recommendation : recommendations) {
+            recommendation.getPoiSequence().addAll(nextPois(recommendation.getPoiSequence().get(0)));
+            recommendation.setRoutePoints(createRoute(location, recommendation.getPoiSequence(), transportation));
         }
         return recommendations;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Recommendation> recommendByFriendsLikes(String accessToken, Location location, Integer radius, Transportation transportation) {
         if (!credentialDao.existsAccessToken(accessToken)) {
-            LOGGER.error("Not existing user attempting to retrive information");
+            LOGGER.warn("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
         int trueRadius = radius != null ? radius.intValue() : DEFAULT_RADIUS;
-        List<Poi> recommendPois = poiDao.fetchNearestByCategoriesLikedByFriends(accessToken, location, trueRadius);
-        List<Recommendation> recommendations = new ArrayList<>(recommendPois.size());
-        for (Poi recommendPoi : recommendPois) {
-            List<Poi> pois = new ArrayList<>();
-            pois.addAll(nextPois(recommendPoi));
-            List<Location> route = createRoute(location, pois, transportation);
-            recommendations.add(new Recommendation(pois, route));
+        List<Recommendation> recommendations = recommendationDao.fetchNearestByCategoriesLikedByFriends(accessToken, location, trueRadius);        
+        for (Recommendation recommendation : recommendations) {
+            recommendation.getPoiSequence().addAll(nextPois(recommendation.getPoiSequence().get(0)));
+            recommendation.setRoutePoints(createRoute(location, recommendation.getPoiSequence(), transportation));
         }
         return recommendations;
     }
@@ -88,7 +76,9 @@ public class RecommenderService {
     private Poi toPoi(Venue venue) {
         Poi poi = new Poi();
         poi.setName(venue.getName());
-        poi.setLocation(new Location(venue.getLocation().getLat(), venue.getLocation().getLng()));
+        poi.setLocation(new Location());
+        poi.getLocation().setLatitude(venue.getLocation().getLat());
+        poi.getLocation().setLongitude(venue.getLocation().getLng());
         poi.setFoursquareId(venue.getId());
         poi.setCategories(new HashSet<>());
         for (com.foursquare4j.response.Category foursquareCategory : venue.getCategories()) {
@@ -102,7 +92,6 @@ public class RecommenderService {
 
     private List<Poi> nextPois(Poi originPoi) {
         List<Poi> pois = new ArrayList<>(MAX_POIS_PER_ROUTE);
-        pois.add(originPoi);
         Poi currentPoi = originPoi;
         for (int numberOfPois = 0; numberOfPois < MAX_POIS_PER_ROUTE-1; numberOfPois++) {
             Result<Group<Venue>> nextVenues = foursquareApi.getNextVenues(currentPoi.getFoursquareId());
@@ -138,7 +127,7 @@ public class RecommenderService {
                 DirectionsRoute[] routes = directionRequest.waypoints(waypoints).await();
                 if (routes.length > 0) return getPath(routes[0]);
                 else {
-                    LOGGER.error("Google failed to create a vaild route");
+                    LOGGER.warn("Google failed to create a vaild route");
                     throw new ServiceException.Builder("route.unavailable.error").build();
                 }
             } catch (Exception ex) {
@@ -164,7 +153,12 @@ public class RecommenderService {
             List<LatLng> polyline = route.overviewPolyline.decodePath();
             if (!polyline.isEmpty()) {
                 List<Location> path = new ArrayList<>(polyline.size()); 
-                polyline.forEach((point) -> path.add(new Location(point.lat, point.lng)));
+                polyline.forEach((point) -> {
+                    Location location = new Location();
+                    location.setLatitude(point.lat);
+                    location.setLongitude(point.lng);
+                    path.add(location);
+                });
                 return path;
             }
         }
@@ -174,5 +168,10 @@ public class RecommenderService {
     private String toDirectionsPointString(Location location) {
         return new StringBuilder().append(location.getLatitude()).append(',')
                 .append(location.getLongitude()).toString();
+    }
+
+    public void setLocale(Locale locale) {
+        recommendationDao.setLocale(locale);
+        foursquareApi.setLocale(locale);
     }
 }

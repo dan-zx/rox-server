@@ -3,10 +3,6 @@ package com.grayfox.server.domain;
 import java.io.Serializable;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-@JsonInclude(Include.NON_NULL)
 public class User implements Serializable {
 
     private static final long serialVersionUID = -8778694523067866298L;

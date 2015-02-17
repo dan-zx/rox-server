@@ -3,8 +3,8 @@
 
 # Generated files
 bin/
-target/
 build/
+target/
 
 # Windows thumbnail db
 Thumbs.db
@@ -18,9 +18,12 @@ Thumbs.db
 .settings/
 
 # NetBeans project files
-nb-configuration.xml
 nbactions.xml
+nb-configuration.xml
 src/main/webapp/META-INF/context.xml
 
 # Gradle files
 .gradle/
+
+# Log files
+log.txt

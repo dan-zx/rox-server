@@ -10,20 +10,20 @@ import javax.ws.rs.core.MediaType;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import com.grayfox.server.domain.Credential;
 import com.grayfox.server.domain.User;
 import com.grayfox.server.service.UserService;
-import com.grayfox.server.service.domain.CredentialResult;
 
 import org.hibernate.validator.constraints.NotBlank;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
-@Component
+@Controller
 @Path("users")
-public class UserWebService {
+public class UserWebService extends BaseRestComponent {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserWebService.class);
 
@@ -34,11 +34,11 @@ public class UserWebService {
     @Produces(MediaType.APPLICATION_JSON)
     public String registerUsingFoursquare(@NotBlank(message = "foursquare_authorization_code.required.error") @QueryParam("foursquare-authorization-code") String foursquareAuthorizationCode) {
         LOGGER.debug("registerUsingFoursquare({})", foursquareAuthorizationCode);
-        CredentialResult credentialResult = userService.registerUsingFoursquare(foursquareAuthorizationCode);
-        if (credentialResult.isNewUser()) userService.generateProfileUsingFoursquare(credentialResult.getCredential());
+        Credential credential = userService.registerUsingFoursquare(foursquareAuthorizationCode);
+        if (credential.isNew()) userService.generateProfileUsingFoursquare(credential);
         JsonObject response = new JsonObject();
         JsonObject accessTokenElement = new JsonObject();
-        accessTokenElement.addProperty("accessToken", credentialResult.getCredential().getAccessToken());
+        accessTokenElement.addProperty("accessToken", credential.getAccessToken());
         response.add("response", accessTokenElement);
         return new Gson().toJson(response);
     }

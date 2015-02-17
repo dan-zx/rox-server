@@ -4,17 +4,19 @@ import java.util.Locale;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import com.grayfox.server.BaseApplicationException;
-import com.grayfox.server.Messages;
+import com.grayfox.server.util.Messages;
+import com.grayfox.server.ws.rest.BaseRestComponent;
 
 @Provider
-public class ApplicationExceptionHandler extends BaseExceptionHandler<BaseApplicationException> {
+public class ApplicationExceptionHandler extends BaseRestComponent implements ExceptionMapper<BaseApplicationException> {
 
     @Override
     public Response toResponse(BaseApplicationException exception) {
-        Locale clientLocale = getClientLocale(Messages.SUPPORTED_LOCALES, Messages.DEFAULT_LOCALE);
+        Locale clientLocale = getClientLocale();
         String message = Messages.get(exception.getMessageKey(), clientLocale, exception.getFormatArgs());
         switch (exception.getMessageKey()) {
             case "route.unavailable.error": 

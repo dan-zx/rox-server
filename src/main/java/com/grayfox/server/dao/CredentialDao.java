@@ -6,5 +6,5 @@ public interface CredentialDao {
 
     Credential fetchByFoursquareAccessToken(String foursquareAccessToken);
     boolean existsAccessToken(String accessToken);
-    void create(Credential credential);
+    void save(Credential credential);
 }
