@@ -3,15 +3,14 @@ package com.grayfox.server.service;
 import java.util.UUID;
 
 import javax.inject.Inject;
-
-import com.foursquare4j.FoursquareApi;
-import com.foursquare4j.response.AccessTokenResponse;
+import javax.inject.Named;
 
 import com.grayfox.server.dao.CredentialDao;
 import com.grayfox.server.dao.UserDao;
 import com.grayfox.server.datasource.ProfileDataSource;
 import com.grayfox.server.domain.Credential;
 import com.grayfox.server.domain.User;
+import com.grayfox.server.oauth.SocialNetworkAuthenticator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,23 +26,19 @@ public class UserService {
 
     @Inject private UserDao userDao;
     @Inject private CredentialDao credentialDao;
-    @Inject private ProfileDataSource profileDataSource;
-    @Inject private FoursquareApi foursquareApi;
+    @Inject @Named("foursquareAuthenticator") private SocialNetworkAuthenticator foursquareAuthenticator;
+    @Inject @Named("profileFoursquareDataSource") private ProfileDataSource profileFoursquareDataSource;
 
     @Transactional
-    public Credential registerUsingFoursquare(String foursquareAuthorizationCode) {
-        AccessTokenResponse foursquareResponse = foursquareApi.getAccessToken(foursquareAuthorizationCode);
-        if (foursquareResponse.getException() != null) {
-            LOGGER.error("Foursquare authentication error", foursquareResponse.getException());
-            throw new ServiceException.Builder("foursquare.authentication.error").setCause(foursquareResponse.getException()).build();
-        }
-        Credential credential = credentialDao.fetchByFoursquareAccessToken(foursquareResponse.getAccessToken());
+    public Credential registerUsingFoursquare(String authorizationCode) {
+        String accessToken = foursquareAuthenticator.exchangeAccessToken(authorizationCode);
+        Credential credential = credentialDao.fetchByFoursquareAccessToken(accessToken);
         if (credential != null) {
             LOGGER.debug("Credential already exists");
             return credential;
         } else {
             credential = new Credential();
-            credential.setFoursquareAccessToken(foursquareResponse.getAccessToken());
+            credential.setFoursquareAccessToken(accessToken);
             credential.setAccessToken(generateAccessToken());
             credential.setNew(true);
             credentialDao.save(credential);
@@ -55,10 +50,10 @@ public class UserService {
     @Async
     @Transactional
     public void generateProfileUsingFoursquare(Credential credential) {
-        profileDataSource.setAccessToken(credential.getFoursquareAccessToken());
-        User user = profileDataSource.collectUserData();
-        user.setLikes(profileDataSource.collectLikes());
-        user.setFriends(profileDataSource.collectFriendsAndLikes());
+        profileFoursquareDataSource.setAccessToken(credential.getFoursquareAccessToken());
+        User user = profileFoursquareDataSource.collectUserData();
+        user.setLikes(profileFoursquareDataSource.collectLikes());
+        user.setFriends(profileFoursquareDataSource.collectFriendsAndLikes());
         user.setCredential(credential);
         userDao.saveOrUpdate(user);
     }
