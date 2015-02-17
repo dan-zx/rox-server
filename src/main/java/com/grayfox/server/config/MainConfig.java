@@ -36,7 +36,8 @@ public class MainConfig {
     @EnableTransactionManagement
     @ComponentScan(basePackages = { 
             "com.grayfox.server.dao.jdbc",
-            "com.grayfox.server.datasource",
+            "com.grayfox.server.datasource.foursquare",
+            "com.grayfox.server.oauth.foursquare",
             "com.grayfox.server.service",
             "com.grayfox.server.ws.rest"})
     public static class BeanConfig {
