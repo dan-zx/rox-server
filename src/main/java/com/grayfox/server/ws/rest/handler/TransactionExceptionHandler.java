@@ -1,7 +1,5 @@
 package com.grayfox.server.ws.rest.handler;
 
-import java.util.Locale;
-
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -24,8 +22,7 @@ public class TransactionExceptionHandler extends BaseRestComponent implements Ex
     public Response toResponse(TransactionException exception) {
         LOGGER.error("Transaction failure", exception);
         String messageKey = "transaction.internal.error";
-        Locale clientLocale = getClientLocale();
-        String message = Messages.get(messageKey, clientLocale);
+        String message = Messages.get(messageKey, getClientLocale());
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .type(MediaType.APPLICATION_JSON)
                 .entity(new ErrorResult(messageKey, message).toJson())

@@ -12,20 +12,24 @@ import com.foursquare4j.FoursquareApi;
 import com.foursquare4j.response.Group;
 import com.foursquare4j.response.Result;
 import com.foursquare4j.response.Venue;
+
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
+
 import com.grayfox.server.dao.CredentialDao;
 import com.grayfox.server.dao.RecommendationDao;
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
 import com.grayfox.server.domain.Recommendation;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

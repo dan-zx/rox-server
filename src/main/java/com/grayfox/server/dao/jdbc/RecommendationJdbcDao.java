@@ -12,6 +12,7 @@ import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
 import com.grayfox.server.domain.Recommendation;
 import com.grayfox.server.util.Messages;
+
 import org.springframework.stereotype.Repository;
 
 @Repository

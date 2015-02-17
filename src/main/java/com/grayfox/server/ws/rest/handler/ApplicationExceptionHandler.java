@@ -1,7 +1,5 @@
 package com.grayfox.server.ws.rest.handler;
 
-import java.util.Locale;
-
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -16,8 +14,7 @@ public class ApplicationExceptionHandler extends BaseRestComponent implements Ex
 
     @Override
     public Response toResponse(BaseApplicationException exception) {
-        Locale clientLocale = getClientLocale();
-        String message = Messages.get(exception.getMessageKey(), clientLocale, exception.getFormatArgs());
+        String message = Messages.get(exception.getMessageKey(), getClientLocale(), exception.getFormatArgs());
         switch (exception.getMessageKey()) {
             case "route.unavailable.error": 
                 return Response.status(Response.Status.BAD_REQUEST)
