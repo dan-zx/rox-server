@@ -18,6 +18,7 @@ Thumbs.db
 .settings/
 
 # NetBeans project files
+.nb-gradle/
 nbactions.xml
 nb-configuration.xml
 src/main/webapp/META-INF/context.xml
