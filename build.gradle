@@ -13,11 +13,9 @@ jettyRun.contextPath = '/gray-fox-server'
 repositories {
     mavenCentral()
     maven {
-        name 'dan_zx-public'
         url 'https://dl.dropboxusercontent.com/u/1995295/m2repository'
     }
     maven {
-        name 'neo4j-public'
         url 'http://m2.neo4j.org/content/groups/public'
     }
 }
@@ -38,10 +36,9 @@ dependencies {
     providedCompile 'javax.servlet.jsp:javax.servlet.jsp-api:2.3.1'
 
     // LOGGING
-    compile "org.slf4j:slf4j-api:${slf4jVersion}"
-    compile "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
     compile 'ch.qos.logback:logback-classic:1.1.2'
     runtime 'org.codehaus.groovy:groovy:2.4.0'
+    compile "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
 
     // SPRING
     compile ("org.springframework:spring-context:${springVersion}") {

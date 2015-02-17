@@ -46,7 +46,7 @@ public class RecommenderService {
     @Transactional(readOnly = true)
     public List<Recommendation> recommendByLikes(String accessToken, Location location, Integer radius, Transportation transportation) {
         if (!credentialDao.existsAccessToken(accessToken)) {
-            LOGGER.error("Not existing user attempting to retrive information");
+            LOGGER.warn("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
         int trueRadius = radius != null ? radius.intValue() : DEFAULT_RADIUS;
@@ -61,7 +61,7 @@ public class RecommenderService {
     @Transactional(readOnly = true)
     public List<Recommendation> recommendByFriendsLikes(String accessToken, Location location, Integer radius, Transportation transportation) {
         if (!credentialDao.existsAccessToken(accessToken)) {
-            LOGGER.error("Not existing user attempting to retrive information");
+            LOGGER.warn("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
         int trueRadius = radius != null ? radius.intValue() : DEFAULT_RADIUS;
@@ -127,7 +127,7 @@ public class RecommenderService {
                 DirectionsRoute[] routes = directionRequest.waypoints(waypoints).await();
                 if (routes.length > 0) return getPath(routes[0]);
                 else {
-                    LOGGER.error("Google failed to create a vaild route");
+                    LOGGER.warn("Google failed to create a vaild route");
                     throw new ServiceException.Builder("route.unavailable.error").build();
                 }
             } catch (Exception ex) {

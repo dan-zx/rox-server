@@ -66,7 +66,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getCompactSelf(String accessToken) {
         if (!credentialDao.existsAccessToken(accessToken)) {
-            LOGGER.error("Not existing user attempting to retrive information");
+            LOGGER.warn("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
         return userDao.fetchCompactByAccessToken(accessToken);
