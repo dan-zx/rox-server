@@ -13,9 +13,8 @@ import org.slf4j.LoggerFactory;
 
 public final class Messages {
 
-    public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
-    public static final Collection<Locale> SUPPORTED_LOCALES = Collections.unmodifiableCollection(Arrays.asList(DEFAULT_LOCALE, new Locale("es")));
-
+    private static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
+    private static final Collection<Locale> SUPPORTED_LOCALES = Collections.unmodifiableCollection(Arrays.asList(DEFAULT_LOCALE, new Locale("es")));
     private static final String RESOURCE_BUNDLE_BASE_NAME = "com.grayfox.server.messages";
     private static final String MISSING_RESOURCE_KEY_FORMAT = "???%s???";
     private static final Logger LOGGER = LoggerFactory.getLogger(Messages.class);
