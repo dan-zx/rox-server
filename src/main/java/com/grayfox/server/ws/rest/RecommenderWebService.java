@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Recommendation;
+import com.grayfox.server.route.RouteProvider;
 import com.grayfox.server.service.RecommenderService;
 import com.grayfox.server.ws.rest.constraints.CheckTransportation;
 
@@ -42,7 +43,7 @@ public class RecommenderWebService extends BaseRestComponent {
         LOGGER.debug("recommendByLikes({}, {}, {}, {})", accessToken, locationString, radiusStr, transportationStr);
         Integer radius = radiusStr == null || radiusStr.trim().isEmpty() ? null : Integer.parseInt(radiusStr);
         recommenderService.setLocale(getClientLocale());
-        return new Result<>(recommenderService.recommendByLikes(accessToken, parseLocation(locationString), radius, RecommenderService.Transportation.valueOf(transportationStr)));
+        return new Result<>(recommenderService.recommendByLikes(accessToken, parseLocation(locationString), radius, RouteProvider.Transportation.valueOf(transportationStr)));
     }
 
     @GET
@@ -56,7 +57,7 @@ public class RecommenderWebService extends BaseRestComponent {
         LOGGER.debug("recommendByFriendsLikes({}, {}, {}, {})", accessToken, locationString, radiusStr, transportationStr);
         Integer radius = radiusStr == null || radiusStr.trim().isEmpty() ? null : Integer.parseInt(radiusStr);
         recommenderService.setLocale(getClientLocale());
-        return new Result<>(recommenderService.recommendByFriendsLikes(accessToken, parseLocation(locationString), radius, RecommenderService.Transportation.valueOf(transportationStr)));
+        return new Result<>(recommenderService.recommendByFriendsLikes(accessToken, parseLocation(locationString), radius, RouteProvider.Transportation.valueOf(transportationStr)));
     }
 
     private Location parseLocation(String locationString) {

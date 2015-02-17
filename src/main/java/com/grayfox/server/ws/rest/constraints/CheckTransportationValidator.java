@@ -3,7 +3,7 @@ package com.grayfox.server.ws.rest.constraints;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import com.grayfox.server.service.RecommenderService;
+import com.grayfox.server.route.RouteProvider;
 
 public class CheckTransportationValidator implements ConstraintValidator<CheckTransportation, String> {
 
@@ -14,7 +14,7 @@ public class CheckTransportationValidator implements ConstraintValidator<CheckTr
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (value == null) return true;
         try {
-            RecommenderService.Transportation.valueOf(value.trim().toUpperCase());
+            RouteProvider.Transportation.valueOf(value.trim().toUpperCase());
             return true;
         } catch (IllegalArgumentException ex) {
             return false;
