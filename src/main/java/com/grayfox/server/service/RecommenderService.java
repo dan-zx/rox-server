@@ -32,15 +32,15 @@ public class RecommenderService {
     @Inject private RouteProvider routeProvider;
 
     @Transactional(readOnly = true)
-    public List<Recommendation> recommendByLikes(String accessToken, Location location, Integer radius, RouteProvider.Transportation transportation) {
+    public List<Recommendation> recommendByLikes(String accessToken, Location location, Integer radius, RouteProvider.Transportation transportation, Locale locale) {
         if (!credentialDao.existsAccessToken(accessToken)) {
             LOGGER.warn("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
         int trueRadius = radius != null ? radius.intValue() : DEFAULT_RADIUS;
-        List<Recommendation> recommendations = recommendationDao.fetchNearestByCategoriesLiked(accessToken, location, trueRadius);        
+        List<Recommendation> recommendations = recommendationDao.fetchNearestByCategoriesLiked(accessToken, location, trueRadius, locale);        
         for (Recommendation recommendation : recommendations) {
-            recommendation.getPoiSequence().addAll(poiDataSource.nextPois(recommendation.getPoiSequence().get(0), MAX_POIS_PER_ROUTE));
+            recommendation.getPoiSequence().addAll(poiDataSource.nextPois(recommendation.getPoiSequence().get(0), MAX_POIS_PER_ROUTE, locale));
             Location destination = recommendation.getPoiSequence().get(recommendation.getPoiSequence().size()-1).getLocation();
             Location[] waypoints = toWaypoints(recommendation.getPoiSequence());
             recommendation.setRoutePoints(routeProvider.createRoute(location, destination, transportation, waypoints));
@@ -49,25 +49,20 @@ public class RecommenderService {
     }
 
     @Transactional(readOnly = true)
-    public List<Recommendation> recommendByFriendsLikes(String accessToken, Location location, Integer radius, RouteProvider.Transportation transportation) {
+    public List<Recommendation> recommendByFriendsLikes(String accessToken, Location location, Integer radius, RouteProvider.Transportation transportation, Locale locale) {
         if (!credentialDao.existsAccessToken(accessToken)) {
             LOGGER.warn("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
         int trueRadius = radius != null ? radius.intValue() : DEFAULT_RADIUS;
-        List<Recommendation> recommendations = recommendationDao.fetchNearestByCategoriesLikedByFriends(accessToken, location, trueRadius);        
+        List<Recommendation> recommendations = recommendationDao.fetchNearestByCategoriesLikedByFriends(accessToken, location, trueRadius, locale);        
         for (Recommendation recommendation : recommendations) {
-            recommendation.getPoiSequence().addAll(poiDataSource.nextPois(recommendation.getPoiSequence().get(0), MAX_POIS_PER_ROUTE));
+            recommendation.getPoiSequence().addAll(poiDataSource.nextPois(recommendation.getPoiSequence().get(0), MAX_POIS_PER_ROUTE, locale));
             Location destination = recommendation.getPoiSequence().get(recommendation.getPoiSequence().size()-1).getLocation();
             Location[] waypoints = toWaypoints(recommendation.getPoiSequence());
             recommendation.setRoutePoints(routeProvider.createRoute(location, destination, transportation, waypoints));
         }
         return recommendations;
-    }
-
-    public void setLocale(Locale locale) {
-        recommendationDao.setLocale(locale);
-        poiDataSource.setLocale(locale);
     }
 
     private Location[] toWaypoints(List<Poi> pois) {

@@ -8,7 +8,6 @@ import com.grayfox.server.domain.Recommendation;
 
 public interface RecommendationDao {
 
-    List<Recommendation> fetchNearestByCategoriesLiked(String accessToken, Location location, Integer radius);
-    List<Recommendation> fetchNearestByCategoriesLikedByFriends(String accessToken, Location location, Integer radius);
-    void setLocale(Locale locale);
+    List<Recommendation> fetchNearestByCategoriesLiked(String accessToken, Location location, Integer radius, Locale locale);
+    List<Recommendation> fetchNearestByCategoriesLikedByFriends(String accessToken, Location location, Integer radius, Locale locale);
 }

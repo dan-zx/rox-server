@@ -6,19 +6,21 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-
 import com.foursquare4j.FoursquareApi;
 import com.foursquare4j.response.Group;
 import com.foursquare4j.response.Result;
 import com.foursquare4j.response.Venue;
+
 import com.grayfox.server.datasource.DataSourceException;
 import com.grayfox.server.datasource.PoiDataSource;
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -26,14 +28,17 @@ public class PoiFoursquareDataSource implements PoiDataSource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PoiFoursquareDataSource.class);
 
-    @Inject
-    private FoursquareApi foursquareApi;
+    @Value("${foursquare.app.client.id}")     private String clientId; 
+    @Value("${foursquare.app.client.secret}") private String clientSecret;
 
     @Override
-    public List<Poi> nextPois(Poi originPoi, int limit) {
+    public List<Poi> nextPois(Poi originPoi, int limit, Locale locale) {
+        FoursquareApi foursquareApi = new FoursquareApi(clientId, clientSecret);
+        foursquareApi.setLocale(locale);
+        LOGGER.debug("Locale={}", locale.getLanguage());
         List<Poi> pois = new ArrayList<>(limit);
         Poi currentPoi = originPoi;
-        for (int numberOfPois = 0; numberOfPois < limit - 1; numberOfPois++) {
+        for (int numberOfPois = 0; numberOfPois < limit-1; numberOfPois++) {
             Result<Group<Venue>> nextVenues = foursquareApi.getNextVenues(currentPoi.getFoursquareId());
             if (nextVenues.getMeta().getCode() == 200) {
                 for (Venue venue : nextVenues.getResponse().getItems()) {
@@ -51,11 +56,6 @@ public class PoiFoursquareDataSource implements PoiDataSource {
             }
         }
         return pois;
-    }
-
-    @Override
-    public void setLocale(Locale locale) {
-        foursquareApi.setLocale(locale);
     }
 
     private Poi toPoi(Venue venue) {

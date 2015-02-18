@@ -18,10 +18,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao {
 
-    private Locale locale;
-    
     @Override
-    public List<Recommendation> fetchNearestByCategoriesLiked(String accessToken, Location location, Integer radius) {
+    public List<Recommendation> fetchNearestByCategoriesLiked(String accessToken, Location location, Integer radius, Locale locale) {
         List<Recommendation> recommendations = getJdbcTemplate().query(CypherQueries.NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED, 
                 (ResultSet rs, int i) -> {
                     Recommendation recommendation = new Recommendation();
@@ -42,7 +40,7 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
     }
 
     @Override
-    public List<Recommendation> fetchNearestByCategoriesLikedByFriends(String accessToken, Location location, Integer radius) {
+    public List<Recommendation> fetchNearestByCategoriesLikedByFriends(String accessToken, Location location, Integer radius, Locale locale) {
         List<Recommendation> recommendations = getJdbcTemplate().query(CypherQueries.NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_BY_FRIENDS, 
                 (ResultSet rs, int i) -> {
                     Recommendation recommendation = new Recommendation();
@@ -72,10 +70,5 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                     category.setFoursquareId(rs.getString(2));
                     return category;
                 }, foursquareId);
-    }
-
-    @Override
-    public void setLocale(Locale locale) {
-        this.locale = locale;
     }
 }

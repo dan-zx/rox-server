@@ -7,6 +7,5 @@ import com.grayfox.server.domain.Poi;
 
 public interface PoiDataSource {
 
-    List<Poi> nextPois(Poi originPoi, int limit);
-    void setLocale(Locale locale);
+    List<Poi> nextPois(Poi originPoi, int limit, Locale locale);
 }

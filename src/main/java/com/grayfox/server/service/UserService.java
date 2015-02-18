@@ -50,10 +50,7 @@ public class UserService {
     @Async
     @Transactional
     public void generateProfileUsingFoursquare(Credential credential) {
-        profileFoursquareDataSource.setAccessToken(credential.getFoursquareAccessToken());
-        User user = profileFoursquareDataSource.collectUserData();
-        user.setLikes(profileFoursquareDataSource.collectLikes());
-        user.setFriends(profileFoursquareDataSource.collectFriendsAndLikes());
+        User user = profileFoursquareDataSource.collectUserData(credential.getFoursquareAccessToken());
         user.setCredential(credential);
         userDao.saveOrUpdate(user);
     }

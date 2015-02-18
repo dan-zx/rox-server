@@ -42,8 +42,7 @@ public class RecommenderWebService extends BaseRestComponent {
             @NotNull(message = "transportation.required.error") @CheckTransportation @QueryParam("transportation") String transportationStr) {
         LOGGER.debug("recommendByLikes({}, {}, {}, {})", accessToken, locationString, radiusStr, transportationStr);
         Integer radius = radiusStr == null || radiusStr.trim().isEmpty() ? null : Integer.parseInt(radiusStr);
-        recommenderService.setLocale(getClientLocale());
-        return new Result<>(recommenderService.recommendByLikes(accessToken, parseLocation(locationString), radius, RouteProvider.Transportation.valueOf(transportationStr)));
+        return new Result<>(recommenderService.recommendByLikes(accessToken, parseLocation(locationString), radius, RouteProvider.Transportation.valueOf(transportationStr), getClientLocale()));
     }
 
     @GET
@@ -56,8 +55,7 @@ public class RecommenderWebService extends BaseRestComponent {
             @NotNull(message = "transportation.required.error") @CheckTransportation @QueryParam("transportation") String transportationStr) {
         LOGGER.debug("recommendByFriendsLikes({}, {}, {}, {})", accessToken, locationString, radiusStr, transportationStr);
         Integer radius = radiusStr == null || radiusStr.trim().isEmpty() ? null : Integer.parseInt(radiusStr);
-        recommenderService.setLocale(getClientLocale());
-        return new Result<>(recommenderService.recommendByFriendsLikes(accessToken, parseLocation(locationString), radius, RouteProvider.Transportation.valueOf(transportationStr)));
+        return new Result<>(recommenderService.recommendByFriendsLikes(accessToken, parseLocation(locationString), radius, RouteProvider.Transportation.valueOf(transportationStr), getClientLocale()));
     }
 
     private Location parseLocation(String locationString) {
