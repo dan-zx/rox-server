@@ -35,7 +35,6 @@ public class PoiFoursquareDataSource implements PoiDataSource {
     public List<Poi> nextPois(Poi originPoi, int limit, Locale locale) {
         FoursquareApi foursquareApi = new FoursquareApi(clientId, clientSecret);
         foursquareApi.setLocale(locale);
-        LOGGER.debug("Locale={}", locale.getLanguage());
         List<Poi> pois = new ArrayList<>(limit);
         Poi currentPoi = originPoi;
         for (int numberOfPois = 0; numberOfPois < limit-1; numberOfPois++) {

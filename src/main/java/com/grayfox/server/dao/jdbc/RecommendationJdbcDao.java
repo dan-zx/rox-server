@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.grayfox.server.dao.RecommendationDao;
 import com.grayfox.server.domain.Category;
@@ -18,46 +21,60 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao {
 
+    private static final int RECOMMENDATION_SIZE_LIMIT = 5;
+
     @Override
     public List<Recommendation> fetchNearestByCategoriesLiked(String accessToken, Location location, Integer radius, Locale locale) {
+        Set<String> categories = new HashSet<>();
         List<Recommendation> recommendations = getJdbcTemplate().query(CypherQueries.NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED, 
                 (ResultSet rs, int i) -> {
-                    Recommendation recommendation = new Recommendation();
-                    Poi poi = new Poi();
-                    poi.setName(rs.getString(1));
-                    poi.setLocation(new Location());
-                    poi.getLocation().setLatitude(rs.getDouble(2));
-                    poi.getLocation().setLongitude(rs.getDouble(3));
-                    poi.setFoursquareId(rs.getString(4));
-                    recommendation.setPoiSequence(new ArrayList<>());
-                    recommendation.getPoiSequence().add(poi);
-                    recommendation.setType(Recommendation.Type.SELF);
-                    recommendation.setReason(Messages.get("recommendation.self.reason", locale, new Object[] {rs.getString(5)}));
-                    return recommendation;
+                    String category = rs.getString(5);
+                    if (categories.add(category)) {
+                        Recommendation recommendation = new Recommendation();
+                        Poi poi = new Poi();
+                        poi.setName(rs.getString(1));
+                        poi.setLocation(new Location());
+                        poi.getLocation().setLatitude(rs.getDouble(2));
+                        poi.getLocation().setLongitude(rs.getDouble(3));
+                        poi.setFoursquareId(rs.getString(4));
+                        recommendation.setPoiSequence(new ArrayList<>());
+                        recommendation.getPoiSequence().add(poi);
+                        recommendation.setType(Recommendation.Type.SELF);
+                        recommendation.setReason(Messages.get("recommendation.self.reason", locale, new Object[] {category}));
+                        return recommendation;
+                    } else return null;
                 }, accessToken, location.getLatitude(), location.getLongitude(), radius);
+        recommendations = recommendations.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        if (recommendations.size() > RECOMMENDATION_SIZE_LIMIT) recommendations = recommendations.subList(0, RECOMMENDATION_SIZE_LIMIT-1);
         recommendations.forEach(recommendation -> recommendation.getPoiSequence().get(0).setCategories(new HashSet<>(fetchCategoriesByPoiFoursquareId(recommendation.getPoiSequence().get(0).getFoursquareId()))));
         return recommendations;
     }
 
     @Override
     public List<Recommendation> fetchNearestByCategoriesLikedByFriends(String accessToken, Location location, Integer radius, Locale locale) {
+        Set<String> categories = new HashSet<>();
         List<Recommendation> recommendations = getJdbcTemplate().query(CypherQueries.NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_BY_FRIENDS, 
                 (ResultSet rs, int i) -> {
-                    Recommendation recommendation = new Recommendation();
-                    Poi poi = new Poi();
-                    poi.setName(rs.getString(1));
-                    poi.setLocation(new Location());
-                    poi.getLocation().setLatitude(rs.getDouble(2));
-                    poi.getLocation().setLongitude(rs.getDouble(3));
-                    poi.setFoursquareId(rs.getString(4));
-                    recommendation.setPoiSequence(new ArrayList<>());
-                    recommendation.getPoiSequence().add(poi);
-                    recommendation.setType(Recommendation.Type.SOCIAL);
-                    String lastName = rs.getString(6);
-                    String friendName = lastName == null || lastName.trim().isEmpty() ? rs.getString(5) : new StringBuilder().append(rs.getString(5)).append(" ").append(lastName).toString();
-                    recommendation.setReason(Messages.get("recommendation.social.reason", locale, new Object[] {friendName, rs.getString(7)}));
-                    return recommendation;
+                    String category = rs.getString(7);
+                    if (categories.add(category)) {
+                        Recommendation recommendation = new Recommendation();
+                        Poi poi = new Poi();
+                        poi.setName(rs.getString(1));
+                        poi.setLocation(new Location());
+                        poi.getLocation().setLatitude(rs.getDouble(2));
+                        poi.getLocation().setLongitude(rs.getDouble(3));
+                        poi.setFoursquareId(rs.getString(4));
+                        recommendation.setPoiSequence(new ArrayList<>());
+                        recommendation.getPoiSequence().add(poi);
+                        recommendation.setType(Recommendation.Type.SOCIAL);
+                        String lastName = rs.getString(6);
+                        String friendName = lastName == null || lastName.trim().isEmpty() ? rs.getString(5) : new StringBuilder().append(rs.getString(5)).append(" ").append(lastName).toString();
+                        recommendation.setReason(Messages.get("recommendation.social.reason", locale, new Object[] {friendName, category}));
+                        return recommendation;
+                    } else return null;
                 }, accessToken, location.getLatitude(), location.getLongitude(), radius);
+        recommendations = recommendations.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        if (recommendations.size() > RECOMMENDATION_SIZE_LIMIT) recommendations = recommendations.subList(0, RECOMMENDATION_SIZE_LIMIT-1); 
         recommendations.forEach(recommendation -> recommendation.getPoiSequence().get(0).setCategories(new HashSet<>(fetchCategoriesByPoiFoursquareId(recommendation.getPoiSequence().get(0).getFoursquareId()))));
         return recommendations;
     }

@@ -22,7 +22,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ProfileFoursquareDataSource implements ProfileDataSource {
 
-    private static final int FRIENDS_LIMIT = 6;
     private static final Logger LOGGER = LoggerFactory.getLogger(ProfileFoursquareDataSource.class);
 
     @Value("${foursquare.app.client.id}")     private String clientId; 
@@ -37,7 +36,7 @@ public class ProfileFoursquareDataSource implements ProfileDataSource {
         if (foursquareUser.getMeta().getCode() == 200) {
             User user = toUser(foursquareUser.getResponse());
             user.setLikes(collectLikesFrom("self", foursquareApi));
-            Result<Group<com.foursquare4j.response.User>> foursquareFriends = foursquareApi.getUserFriends("self", FRIENDS_LIMIT, null);
+            Result<Group<com.foursquare4j.response.User>> foursquareFriends = foursquareApi.getUserFriends("self", 500, null);
             if (foursquareFriends.getMeta().getCode() == 200) {
                 Set<User> friends = new HashSet<>();
                 for (com.foursquare4j.response.User foursquareFriend : foursquareFriends.getResponse().getItems()) {
