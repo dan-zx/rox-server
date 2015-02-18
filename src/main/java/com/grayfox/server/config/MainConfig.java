@@ -10,13 +10,11 @@ import com.foursquare4j.FoursquareApi;
 import com.google.maps.GeoApiContext;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -47,7 +45,6 @@ public class MainConfig {
     public static class BeanConfig {
 
         @Bean
-        @Scope(BeanDefinition.SCOPE_PROTOTYPE)
         public FoursquareApi foursquareApi(
                 @Value("${foursquare.app.client.id}") String clientId, 
                 @Value("${foursquare.app.client.secret}") String clientSecret) {
