@@ -4,14 +4,10 @@ import com.grayfox.server.BaseApplicationException;
 
 public class DaoException extends BaseApplicationException {
 
-    private static final long serialVersionUID = -6334172687732382276L;
+    private static final long serialVersionUID = 6442324698959192799L;
 
-    private DaoException(String messageKey, Object[] formatArgs) {
-        super(messageKey, formatArgs);
-    }
-
-    private DaoException(String messageKey, Throwable cause, Object[] formatArgs) {
-        super(messageKey, cause, formatArgs);
+    private DaoException(Builder builder) {
+        super(builder);
     }
 
     public static class Builder extends BaseBuilder {
@@ -32,8 +28,7 @@ public class DaoException extends BaseApplicationException {
 
         @Override
         public DaoException build() {
-            if (getCause() == null) return new DaoException(getMessageKey(), getFormatArgs());
-            else return new DaoException(getMessageKey(), getCause(), getFormatArgs());
+            return new DaoException(this);
         }
     }
 }

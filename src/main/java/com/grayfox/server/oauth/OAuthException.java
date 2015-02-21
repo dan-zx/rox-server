@@ -4,14 +4,10 @@ import com.grayfox.server.BaseApplicationException;
 
 public class OAuthException extends BaseApplicationException {
 
-    private static final long serialVersionUID = -6334172687732382276L;
+    private static final long serialVersionUID = 1301884314371840181L;
 
-    private OAuthException(String messageKey, Object[] formatArgs) {
-        super(messageKey, formatArgs);
-    }
-
-    private OAuthException(String messageKey, Throwable cause, Object[] formatArgs) {
-        super(messageKey, cause, formatArgs);
+    private OAuthException(Builder builder) {
+        super(builder);
     }
 
     public static class Builder extends BaseBuilder {
@@ -32,8 +28,7 @@ public class OAuthException extends BaseApplicationException {
 
         @Override
         public OAuthException build() {
-            if (getCause() == null) return new OAuthException(getMessageKey(), getFormatArgs());
-            else return new OAuthException(getMessageKey(), getCause(), getFormatArgs());
+            return new OAuthException(this);
         }
     }
 }

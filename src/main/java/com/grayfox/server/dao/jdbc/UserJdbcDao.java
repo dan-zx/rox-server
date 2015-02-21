@@ -24,7 +24,7 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
                     return user;
                 },
                 accessToken);
-        if (users.size() > 1) throw new DaoException.Builder("data.internal.error").build();
+        if (users.size() > 1) throw new DaoException.Builder("data.integrity.error").build();
         return users.isEmpty() ? null : users.get(0);
     }
 

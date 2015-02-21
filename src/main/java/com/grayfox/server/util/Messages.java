@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 public final class Messages {
 
-    private static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
+    private static final Locale DEFAULT_LOCALE = new Locale("en");
     private static final Collection<Locale> SUPPORTED_LOCALES = Collections.unmodifiableCollection(Arrays.asList(DEFAULT_LOCALE, new Locale("es")));
     private static final String RESOURCE_BUNDLE_BASE_NAME = "com.grayfox.server.messages";
     private static final String MISSING_RESOURCE_KEY_FORMAT = "???%s???";
@@ -21,6 +21,15 @@ public final class Messages {
 
     private Messages() {
         throw new IllegalAccessError("This class cannot be instantiated nor extended");
+    }
+
+    public static String get(String key) {
+        try {
+            return ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME, DEFAULT_LOCALE).getString(key);
+        } catch (MissingResourceException ex) {
+            LOGGER.warn("Can't find message for key: [{}]", key, ex);
+            return String.format(MISSING_RESOURCE_KEY_FORMAT, key);
+        }
     }
 
     public static String get(String key, Locale locale) {
@@ -31,6 +40,18 @@ public final class Messages {
             LOGGER.warn("Can't find message for key: [{}]", key, ex);
             return String.format(MISSING_RESOURCE_KEY_FORMAT, key);
         }
+    }
+
+    public static String get(String key, Object[] formatArgs) {
+        String unformattedMessage = get(key);
+        if (formatArgs != null && formatArgs.length > 0) {
+            try {
+                return MessageFormat.format(unformattedMessage, formatArgs);
+            } catch (IllegalArgumentException ex) {
+                LOGGER.warn("Can't format message: [{}] with args: {}", unformattedMessage, Arrays.deepToString(formatArgs), ex);
+            }
+        }
+        return unformattedMessage;
     }
 
     public static String get(String key, Locale locale, Object[] formatArgs) {

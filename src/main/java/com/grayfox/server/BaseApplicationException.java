@@ -3,31 +3,25 @@ package com.grayfox.server;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.grayfox.server.util.Messages;
+
 public abstract class BaseApplicationException extends RuntimeException {
 
     private static final long serialVersionUID = 4065199814273911926L;
 
-    private final String messageKey;
-    private final Object[] formatArgs;
+    private final BaseBuilder builder;
 
-    protected BaseApplicationException(String messageKey, Object[] formatArgs) {
-        super(messageKey);
-        this.messageKey = messageKey;
-        this.formatArgs = formatArgs;
-    }
-
-    protected BaseApplicationException(String messageKey, Throwable cause, Object[] formatArgs) {
-        super(messageKey, cause);
-        this.messageKey = messageKey;
-        this.formatArgs = formatArgs;
+    protected BaseApplicationException(BaseBuilder builder) {
+        super(Messages.get(builder.messageKey, builder.formatArgs.toArray()), builder.cause);
+        this.builder = builder;
     }
 
     public String getMessageKey() {
-        return messageKey;
+        return builder.messageKey;
     }
 
     public Object[] getFormatArgs() {
-        return formatArgs;
+        return builder.formatArgs.toArray();
     }
 
     protected static abstract class BaseBuilder {
@@ -41,21 +35,9 @@ public abstract class BaseApplicationException extends RuntimeException {
             formatArgs = new ArrayList<>();
         }
 
-        protected String getMessageKey() {
-            return messageKey;
-        }
-
-        protected Object[] getFormatArgs() {
-            return formatArgs.toArray();
-        }
-
         public BaseBuilder addFormatArg(Object formatArg) {
             formatArgs.add(formatArg);
             return this;
-        }
-
-        protected Throwable getCause() {
-            return cause;
         }
 
         public BaseBuilder setCause(Throwable cause) {

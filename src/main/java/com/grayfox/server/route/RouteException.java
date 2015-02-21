@@ -4,14 +4,10 @@ import com.grayfox.server.BaseApplicationException;
 
 public class RouteException extends BaseApplicationException {
 
-    private static final long serialVersionUID = -6334172687732382276L;
+    private static final long serialVersionUID = -4028153845430353925L;
 
-    private RouteException(String messageKey, Object[] formatArgs) {
-        super(messageKey, formatArgs);
-    }
-
-    private RouteException(String messageKey, Throwable cause, Object[] formatArgs) {
-        super(messageKey, cause, formatArgs);
+    private RouteException(Builder builder) {
+        super(builder);
     }
 
     public static class Builder extends BaseBuilder {
@@ -24,7 +20,7 @@ public class RouteException extends BaseApplicationException {
         public Builder addFormatArg(Object formatArg) {
             return (Builder) super.addFormatArg(formatArg);
         }
-        
+
         @Override
         public Builder setCause(Throwable cause) {
             return (Builder) super.setCause(cause);
@@ -32,8 +28,7 @@ public class RouteException extends BaseApplicationException {
 
         @Override
         public RouteException build() {
-            if (getCause() == null) return new RouteException(getMessageKey(), getFormatArgs());
-            else return new RouteException(getMessageKey(), getCause(), getFormatArgs());
+            return new RouteException(this);
         }
     }
 }
