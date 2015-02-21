@@ -4,14 +4,10 @@ import com.grayfox.server.BaseApplicationException;
 
 public class DataSourceException extends BaseApplicationException {
 
-    private static final long serialVersionUID = -6334172687732382276L;
+    private static final long serialVersionUID = 1496010188766789298L;
 
-    private DataSourceException(String messageKey, Object[] formatArgs) {
-        super(messageKey, formatArgs);
-    }
-
-    private DataSourceException(String messageKey, Throwable cause, Object[] formatArgs) {
-        super(messageKey, cause, formatArgs);
+    private DataSourceException(Builder builder) {
+        super(builder);
     }
 
     public static class Builder extends BaseBuilder {
@@ -32,8 +28,7 @@ public class DataSourceException extends BaseApplicationException {
 
         @Override
         public DataSourceException build() {
-            if (getCause() == null) return new DataSourceException(getMessageKey(), getFormatArgs());
-            else return new DataSourceException(getMessageKey(), getCause(), getFormatArgs());
+            return new DataSourceException(this);
         }
     }
 }
