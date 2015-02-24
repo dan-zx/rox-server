@@ -68,6 +68,7 @@ public class PoiFoursquareDataSource implements PoiDataSource {
         for (com.foursquare4j.response.Category foursquareCategory : venue.getCategories()) {
             Category myCategory = new Category();
             myCategory.setName(foursquareCategory.getName());
+            myCategory.setIconUrl(new StringBuilder().append(foursquareCategory.getIcon().getPrefix()).append("88").append(foursquareCategory.getIcon().getSuffix()).toString());
             myCategory.setFoursquareId(foursquareCategory.getId());
             poi.getCategories().add(myCategory);
         }

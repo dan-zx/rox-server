@@ -25,8 +25,15 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
 
     @Override
     public List<Recommendation> fetchNearestByCategoriesLiked(String accessToken, Location location, Integer radius, Locale locale) {
+        String query;
+        switch(locale.getLanguage()) {
+            case "es": 
+                query = CypherQueries.NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_SPANISH;
+                break;
+            default: query = CypherQueries.NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED;
+        }
         Set<String> categories = new HashSet<>();
-        List<Recommendation> recommendations = getJdbcTemplate().query(CypherQueries.NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED, 
+        List<Recommendation> recommendations = getJdbcTemplate().query(query, 
                 (ResultSet rs, int i) -> {
                     String category = rs.getString(5);
                     if (categories.add(category)) {
@@ -46,14 +53,21 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                 }, accessToken, location.getLatitude(), location.getLongitude(), radius);
         recommendations = recommendations.stream().filter(Objects::nonNull).collect(Collectors.toList());
         if (recommendations.size() > RECOMMENDATION_SIZE_LIMIT) recommendations = recommendations.subList(0, RECOMMENDATION_SIZE_LIMIT-1);
-        recommendations.forEach(recommendation -> recommendation.getPoiSequence().get(0).setCategories(new HashSet<>(fetchCategoriesByPoiFoursquareId(recommendation.getPoiSequence().get(0).getFoursquareId()))));
+        recommendations.forEach(recommendation -> recommendation.getPoiSequence().get(0).setCategories(new HashSet<>(fetchCategoriesByPoiFoursquareId(recommendation.getPoiSequence().get(0).getFoursquareId(), locale))));
         return recommendations;
     }
 
     @Override
     public List<Recommendation> fetchNearestByCategoriesLikedByFriends(String accessToken, Location location, Integer radius, Locale locale) {
+        String query;
+        switch(locale.getLanguage()) {
+            case "es": 
+                query = CypherQueries.NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_BY_FRIENDS_SPANISH;
+                break;
+            default: query = CypherQueries.NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_BY_FRIENDS;
+        }
         Set<String> categories = new HashSet<>();
-        List<Recommendation> recommendations = getJdbcTemplate().query(CypherQueries.NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_BY_FRIENDS, 
+        List<Recommendation> recommendations = getJdbcTemplate().query(query, 
                 (ResultSet rs, int i) -> {
                     String category = rs.getString(7);
                     if (categories.add(category)) {
@@ -75,16 +89,24 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                 }, accessToken, location.getLatitude(), location.getLongitude(), radius);
         recommendations = recommendations.stream().filter(Objects::nonNull).collect(Collectors.toList());
         if (recommendations.size() > RECOMMENDATION_SIZE_LIMIT) recommendations = recommendations.subList(0, RECOMMENDATION_SIZE_LIMIT-1); 
-        recommendations.forEach(recommendation -> recommendation.getPoiSequence().get(0).setCategories(new HashSet<>(fetchCategoriesByPoiFoursquareId(recommendation.getPoiSequence().get(0).getFoursquareId()))));
+        recommendations.forEach(recommendation -> recommendation.getPoiSequence().get(0).setCategories(new HashSet<>(fetchCategoriesByPoiFoursquareId(recommendation.getPoiSequence().get(0).getFoursquareId(), locale))));
         return recommendations;
     }
 
-    private List<Category> fetchCategoriesByPoiFoursquareId(String foursquareId) {
-        return getJdbcTemplate().query(CypherQueries.CATEGORIES_BY_POI_FOURSQUARE_ID, 
+    private List<Category> fetchCategoriesByPoiFoursquareId(String foursquareId, Locale locale) {
+        String query;
+        switch(locale.getLanguage()) {
+            case "es": 
+                query = CypherQueries.CATEGORIES_BY_POI_FOURSQUARE_ID_SPANISH;
+                break;
+            default: query = CypherQueries.CATEGORIES_BY_POI_FOURSQUARE_ID;
+        }
+        return getJdbcTemplate().query(query, 
                 (ResultSet rs, int i) -> {
                     Category category = new Category();
                     category.setName(rs.getString(1));
-                    category.setFoursquareId(rs.getString(2));
+                    category.setIconUrl(rs.getString(2));
+                    category.setFoursquareId(rs.getString(3));
                     return category;
                 }, foursquareId);
     }
