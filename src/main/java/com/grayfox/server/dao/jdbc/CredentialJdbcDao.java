@@ -6,7 +6,6 @@ import java.util.List;
 import com.grayfox.server.dao.CredentialDao;
 import com.grayfox.server.dao.DaoException;
 import com.grayfox.server.domain.Credential;
-
 import org.springframework.stereotype.Repository;
 
 @Repository

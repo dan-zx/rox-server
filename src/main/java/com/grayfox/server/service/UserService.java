@@ -1,5 +1,7 @@
 package com.grayfox.server.service;
 
+import java.util.Collection;
+import java.util.Locale;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -11,10 +13,8 @@ import com.grayfox.server.datasource.ProfileDataSource;
 import com.grayfox.server.domain.Credential;
 import com.grayfox.server.domain.User;
 import com.grayfox.server.oauth.SocialNetworkAuthenticator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,8 +26,8 @@ public class UserService {
 
     @Inject private UserDao userDao;
     @Inject private CredentialDao credentialDao;
-    @Inject @Named("foursquareAuthenticator") private SocialNetworkAuthenticator foursquareAuthenticator;
     @Inject @Named("profileFoursquareDataSource") private ProfileDataSource profileFoursquareDataSource;
+    @Inject @Named("foursquareAuthenticator")     private SocialNetworkAuthenticator foursquareAuthenticator;
 
     @Transactional
     public Credential registerUsingFoursquare(String authorizationCode) {
@@ -62,6 +62,24 @@ public class UserService {
             throw new ServiceException.Builder("user.invalid.error").build();
         }
         return userDao.fetchCompactByAccessToken(accessToken);
+    }
+
+    @Transactional(readOnly = true)
+    public User getCompleteSelf(String accessToken, Locale locale) {
+        if (!credentialDao.existsAccessToken(accessToken)) {
+            LOGGER.warn("Not existing user attempting to retrive information");
+            throw new ServiceException.Builder("user.invalid.error").build();
+        }
+        return userDao.fetchCompleteByAccessToken(accessToken, locale);
+    }
+
+    @Transactional
+    public void saveOrUpdateLikes(String accessToken, Collection<String> newLikes) {
+        if (!credentialDao.existsAccessToken(accessToken)) {
+            LOGGER.warn("Not existing user attempting to update information");
+            throw new ServiceException.Builder("user.invalid.error").build();
+        }
+        userDao.saveOrUpdateLikes(accessToken, newLikes);
     }
 
     private String generateAccessToken() {
