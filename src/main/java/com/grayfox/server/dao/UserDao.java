@@ -1,9 +1,18 @@
 package com.grayfox.server.dao;
 
+import java.util.List;
+import java.util.Locale;
+
+import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.User;
 
 public interface UserDao {
 
-    User fetchCompactByAccessToken(String accessToken);
-    void saveOrUpdate(User user);
+    User fetchByAccessToken(String accessToken);
+    String fetchFoursquareIdByAccessToken(String accessToken);
+    List<User> fetchFriendsByFoursquareId(String foursquareId);
+    List<Category> fetchLikesByFoursquareId(String foursquareId, Locale locale);
+    boolean existsUser(String foursquareId);
+    void save(User user);
+    void update(User user);
 }

@@ -1,5 +1,7 @@
 package com.grayfox.server.ws.rest;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -10,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Credential;
 import com.grayfox.server.domain.User;
 import com.grayfox.server.service.UserService;
@@ -48,6 +51,22 @@ public class UserWebService extends BaseRestComponent {
     @Produces(MediaType.APPLICATION_JSON)
     public Result<User> getSelf(@NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken) {
         LOGGER.debug("getSelf({})", accessToken);
-        return new Result<>(userService.getCompactSelf(accessToken));
+        return new Result<>(userService.getSelf(accessToken));
+    }
+
+    @GET
+    @Path("self/friends")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Result<List<User>> getSelfFriends(@NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken) {
+        LOGGER.debug("getSelfFriends({})", accessToken);
+        return new Result<>(userService.getSelfFriends(accessToken));
+    }
+
+    @GET
+    @Path("self/likes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Result<List<Category>> getSelfLikes(@NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken) {
+        LOGGER.debug("getSelfLikes({})", accessToken);
+        return new Result<>(userService.getSelfLikes(accessToken, getClientLocale()));
     }
 }
