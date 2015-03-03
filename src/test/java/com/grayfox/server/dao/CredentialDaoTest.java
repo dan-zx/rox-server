@@ -30,7 +30,7 @@ public class CredentialDaoTest {
 
     @Test
     @Transactional
-    public void testSaveAndFetch() {
+    public void testCrud() {
         Credential expectedCredential = new Credential();
         expectedCredential.setAccessToken("fakeAccessToken");
         expectedCredential.setFoursquareAccessToken("fakeFoursquareAccessToken");

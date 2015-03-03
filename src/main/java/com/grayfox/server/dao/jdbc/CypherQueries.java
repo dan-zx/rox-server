@@ -3,26 +3,27 @@ package com.grayfox.server.dao.jdbc;
 final class CypherQueries {
 
     // User queries
-    static final String COMPACT_USER_BY_ACCESS_TOKEN = "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(u:User) RETURN u.name, u.lastName, u.photoUrl, u.foursquareId";
-    static final String USER_FOURSQUARE_ID_BY_ACCESS_TOKEN = "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(u:User) RETURN u.foursquareId";
-    static final String USER_FRIENDS_BY_FOURSQUARE_ID = "MATCH (:User {foursquareId:{1}})-[:FRIENDS]-(friends:User) RETURN friends.name, friends.lastName, friends.photoUrl, friends.foursquareId";
-    static final String USER_FRIENDS_IDS_BY_FOURSQUARE_ID = "MATCH (:User {foursquareId:{1}})-[:FRIENDS]-(friends:User) RETURN friends.foursquareId";
-    static final String USER_LIKES ="MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category) RETURN c.defaultName, c.iconUrl, c.foursquareId";
-    static final String USER_LIKES_IDS ="MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category) RETURN c.foursquareId";
-    static final String USER_LIKES_SPANISH ="MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category) RETURN c.spanishName, c.iconUrl, c.foursquareId";
+    static final String USER = "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(u:User) RETURN u.name, u.lastName, u.photoUrl, u.foursquareId";
+    static final String USER_FOURSQUARE_ID = "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(u:User) RETURN u.foursquareId";
+    static final String USER_FRIENDS = "MATCH (:User {foursquareId:{1}})-[:FRIENDS]-(friends:User) RETURN friends.name, friends.lastName, friends.photoUrl, friends.foursquareId";
+    static final String USER_FRIENDS_FOURSQUARE_IDS = "MATCH (:User {foursquareId:{1}})-[:FRIENDS]-(friends:User) RETURN friends.foursquareId";
+    static final String USER_LIKES = "MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category) RETURN c.defaultName, c.iconUrl, c.foursquareId";
+    static final String USER_LIKES_SPANISH = "MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category) RETURN c.spanishName, c.iconUrl, c.foursquareId";
+    static final String USER_LIKES_FOURSQUARE_IDS = "MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category) RETURN c.foursquareId";
+    static final String EXISTS_USER = "MATCH (:User {foursquareId:{1}}) RETURN true";
     static final String CREATE_USER = "MATCH (c:Credential {accessToken:{1}}) CREATE (:User {name:{2}, lastName:{3}, photoUrl:{4}, foursquareId:{5}})-[:HAS]->(c)";
     static final String CREATE_FRIEND = "MATCH (me:User {foursquareId:{1}}) CREATE (:User {name:{2}, lastName:{3}, photoUrl:{4}, foursquareId:{5}})<-[:FRIENDS]-(me)";
+    static final String CREATE_HAS_CREDENTIAL_RELATION = "MATCH (u:User {foursquareId:{1}}), (c:Credential {accessToken:{2}}) CREATE (u)-[:HAS]->(c)";
     static final String CREATE_LIKES_RELATION = "MATCH (u:User {foursquareId:{1}}), (c:Category {foursquareId:{2}}) CREATE (u)-[:LIKES]->(c)";
     static final String DELETE_LIKES_RELATION = "MATCH (:User {foursquareId:{1}})-[r:LIKES]->(:Category {foursquareId:{2}}) DELETE r";
     static final String CREATE_FRIENDS_RELATION = "MATCH (me:User {foursquareId:{1}}), (friend:User {foursquareId:{2}}) CREATE (me)-[:FRIENDS]->(friend)";
     static final String DELETE_FRIENDS_RELATION = "MATCH (:User {foursquareId:{1}})-[r:FRIENDS]-(:User {foursquareId:{2}}) DELETE r";
     static final String UPDATE_USER = "MATCH (u:User {foursquareId:{1}}) SET u.name = {2}, u.lastName = {3}, u.photoUrl = {4}";
-    static final String EXISTS_USER = "MATCH (:User {foursquareId:{1}}) RETURN true";
 
     // Credential queries
-    static final String CREATE_CREDENTIAL = "CREATE (:Credential {accessToken:{1}, foursquareAccessToken:{2}})";
+    static final String CREDENTIAL = "MATCH (c:Credential {foursquareAccessToken:{1}}) RETURN c.accessToken";
     static final String EXISTS_ACCESS_TOKEN = "MATCH (:Credential {accessToken:{1}}) RETURN true";
-    static final String CREDENTIAL_BY_FOURSQUARE_ACCESS_TOKEN = "MATCH (c:Credential {foursquareAccessToken:{1}}) RETURN c.accessToken";
+    static final String CREATE_CREDENTIAL = "CREATE (:Credential {accessToken:{1}, foursquareAccessToken:{2}})";
 
     // Recommendations queries
     static final String NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED = "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi) WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4} RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, c.defaultName";

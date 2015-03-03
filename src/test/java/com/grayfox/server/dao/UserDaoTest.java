@@ -2,6 +2,9 @@ package com.grayfox.server.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import javax.inject.Inject;
 
 import com.grayfox.server.config.TestConfig;
@@ -33,25 +36,65 @@ public class UserDaoTest {
 
     @Test
     @Transactional
-    public void testSaveAndFetch() {
+    public void testCrud() {
         Credential credential = new Credential();
         credential.setAccessToken("fakeAccessToken");
         credential.setFoursquareAccessToken("fakeFoursquareAccessToken");
 
         credentialDao.save(credential);
 
-        assertThat(userDao.fetchCompactByAccessToken(credential.getAccessToken())).isNull();
+        assertThat(userDao.fetchByAccessToken(credential.getAccessToken())).isNull();
 
         User expectedUser = new User();
         expectedUser.setName("name");
         expectedUser.setLastName("lastName");
         expectedUser.setPhotoUrl("url");
-        expectedUser.setFoursquareId("id");
+        expectedUser.setFoursquareId("1");
         expectedUser.setCredential(credential);
+        User friend1 = new User();
+        friend1.setName("friend1");
+        friend1.setLastName("lastName");
+        friend1.setPhotoUrl("url");
+        friend1.setFoursquareId("2");
+        User friend2 = new User();
+        friend2.setName("friend2");
+        friend2.setLastName("lastName");
+        friend2.setPhotoUrl("url");
+        friend2.setFoursquareId("3");
+        expectedUser.setFriends(new HashSet<>(Arrays.asList(friend1, friend2)));
+        expectedUser.setLikes(new HashSet<>());
 
-        userDao.saveOrUpdate(expectedUser);
+        userDao.save(expectedUser);
 
         expectedUser.setCredential(null);
-        assertThat(userDao.fetchCompactByAccessToken(credential.getAccessToken())).isNotNull().isEqualTo(expectedUser);
+        
+        User actualUser = userDao.fetchByAccessToken(credential.getAccessToken());
+        assertThat(actualUser).isNotNull();
+        
+        actualUser.setFriends(new HashSet<>(userDao.fetchFriendsByFoursquareId(actualUser.getFoursquareId())));
+        actualUser.setLikes(new HashSet<>(userDao.fetchLikesByFoursquareId(actualUser.getFoursquareId(), null)));
+
+        assertThat(actualUser).isEqualTo(expectedUser);
+
+        expectedUser.setName("othername");
+        expectedUser.setLastName("otherlastName");
+        expectedUser.setPhotoUrl("otherurl");
+        expectedUser.getFriends().remove(friend1);
+        User friend3 = new User();
+        friend3.setName("friend3");
+        friend3.setLastName("lastName");
+        friend3.setPhotoUrl("url");
+        friend3.setFoursquareId("4");
+        expectedUser.getFriends().add(friend3);
+        
+        userDao.update(expectedUser);
+        
+        actualUser = userDao.fetchByAccessToken(credential.getAccessToken());
+        assertThat(actualUser).isNotNull();
+        
+        actualUser.setFriends(new HashSet<>(userDao.fetchFriendsByFoursquareId(actualUser.getFoursquareId())));
+        actualUser.setLikes(new HashSet<>(userDao.fetchLikesByFoursquareId(actualUser.getFoursquareId(), null)));
+
+        assertThat(actualUser).isEqualTo(expectedUser);
     }
 }

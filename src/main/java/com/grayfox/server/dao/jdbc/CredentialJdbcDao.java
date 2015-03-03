@@ -13,7 +13,7 @@ public class CredentialJdbcDao extends JdbcDao implements CredentialDao {
 
     @Override
     public Credential fetchByFoursquareAccessToken(String foursquareAccessToken) {
-        List<Credential> credentials = getJdbcTemplate().query(CypherQueries.CREDENTIAL_BY_FOURSQUARE_ACCESS_TOKEN, 
+        List<Credential> credentials = getJdbcTemplate().query(CypherQueries.CREDENTIAL, 
                 (ResultSet rs, int i) -> {
                     Credential credential = new Credential();
                     credential.setAccessToken(rs.getString(1));

@@ -1,6 +1,6 @@
 package com.grayfox.server.service;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -10,11 +10,14 @@ import javax.inject.Named;
 import com.grayfox.server.dao.CredentialDao;
 import com.grayfox.server.dao.UserDao;
 import com.grayfox.server.datasource.ProfileDataSource;
+import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Credential;
 import com.grayfox.server.domain.User;
 import com.grayfox.server.oauth.SocialNetworkAuthenticator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,34 +55,35 @@ public class UserService {
     public void generateProfileUsingFoursquare(Credential credential) {
         User user = profileFoursquareDataSource.collectUserData(credential.getFoursquareAccessToken());
         user.setCredential(credential);
-        userDao.saveOrUpdate(user);
+        if (userDao.existsUser(user.getFoursquareId())) userDao.update(user);
+        else userDao.save(user);
     }
 
     @Transactional(readOnly = true)
-    public User getCompactSelf(String accessToken) {
+    public User getSelf(String accessToken) {
         if (!credentialDao.existsAccessToken(accessToken)) {
             LOGGER.warn("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
-        return userDao.fetchCompactByAccessToken(accessToken);
+        return userDao.fetchByAccessToken(accessToken);
     }
 
     @Transactional(readOnly = true)
-    public User getCompleteSelf(String accessToken, Locale locale) {
+    public List<User> getSelfFriends(String accessToken) {
         if (!credentialDao.existsAccessToken(accessToken)) {
             LOGGER.warn("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
-        return userDao.fetchCompleteByAccessToken(accessToken, locale);
+        return userDao.fetchFriendsByFoursquareId(userDao.fetchFoursquareIdByAccessToken(accessToken));
     }
 
-    @Transactional
-    public void saveOrUpdateLikes(String accessToken, Collection<String> newLikes) {
+    @Transactional(readOnly = true)
+    public List<Category> getSelfLikes(String accessToken, Locale locale) {
         if (!credentialDao.existsAccessToken(accessToken)) {
-            LOGGER.warn("Not existing user attempting to update information");
+            LOGGER.warn("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
-        userDao.saveOrUpdateLikes(accessToken, newLikes);
+        return userDao.fetchLikesByFoursquareId(userDao.fetchFoursquareIdByAccessToken(accessToken), locale);
     }
 
     private String generateAccessToken() {
