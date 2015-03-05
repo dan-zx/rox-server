@@ -10,6 +10,7 @@ final class CypherQueries {
     static final String USER_LIKES = "MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category) RETURN c.defaultName, c.iconUrl, c.foursquareId";
     static final String USER_LIKES_SPANISH = "MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category) RETURN c.spanishName, c.iconUrl, c.foursquareId";
     static final String USER_LIKES_FOURSQUARE_IDS = "MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category) RETURN c.foursquareId";
+    static final String FRIEND = "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:FRIENDS]-(friend:User {foursquareId:{2}}) RETURN friend.name, friend.lastName, friend.photoUrl";
     static final String EXISTS_USER = "MATCH (:User {foursquareId:{1}}) RETURN true";
     static final String CREATE_USER = "MATCH (c:Credential {accessToken:{1}}) CREATE (:User {name:{2}, lastName:{3}, photoUrl:{4}, foursquareId:{5}})-[:HAS]->(c)";
     static final String CREATE_FRIEND = "MATCH (me:User {foursquareId:{1}}) CREATE (:User {name:{2}, lastName:{3}, photoUrl:{4}, foursquareId:{5}})<-[:FRIENDS]-(me)";

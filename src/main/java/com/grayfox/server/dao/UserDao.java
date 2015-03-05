@@ -9,6 +9,7 @@ import com.grayfox.server.domain.User;
 public interface UserDao {
 
     User fetchByAccessToken(String accessToken);
+    User fetchFriendByFoursquareId(String accessToken, String foursquareId);
     String fetchFoursquareIdByAccessToken(String accessToken);
     List<User> fetchFriendsByFoursquareId(String foursquareId);
     List<Category> fetchLikesByFoursquareId(String foursquareId, Locale locale);

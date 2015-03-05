@@ -1,5 +1,6 @@
 package com.grayfox.server.service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -84,6 +85,17 @@ public class UserService {
             throw new ServiceException.Builder("user.invalid.error").build();
         }
         return userDao.fetchLikesByFoursquareId(userDao.fetchFoursquareIdByAccessToken(accessToken), locale);
+    }
+
+    @Transactional(readOnly = true)
+    public User getFriend(String accessToken, String foursquareId, Locale locale) {
+        if (!credentialDao.existsAccessToken(accessToken)) {
+            LOGGER.warn("Not existing user attempting to retrive information");
+            throw new ServiceException.Builder("user.invalid.error").build();
+        }
+        User friend = userDao.fetchFriendByFoursquareId(accessToken, foursquareId);
+        if (friend != null) friend.setLikes(new HashSet<>(userDao.fetchLikesByFoursquareId(foursquareId, locale)));
+        return friend;
     }
 
     private String generateAccessToken() {

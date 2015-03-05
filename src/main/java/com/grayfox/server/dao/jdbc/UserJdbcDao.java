@@ -32,6 +32,22 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
     }
 
     @Override
+    public User fetchFriendByFoursquareId(String accessToken, String foursquareId) {
+        List<User> users = getJdbcTemplate().query(CypherQueries.FRIEND, 
+                (ResultSet rs, int i) -> {
+                    User user = new User();
+                    user.setName(rs.getString(1));
+                    user.setLastName(rs.getString(2));
+                    user.setPhotoUrl(rs.getString(3));
+                    user.setFoursquareId(foursquareId);
+                    return user;
+                },
+                accessToken, foursquareId);
+        if (users.size() > 1) throw new DaoException.Builder("data.integrity.error").build();
+        return users.isEmpty() ? null : users.get(0);
+    }
+
+    @Override
     public String fetchFoursquareIdByAccessToken(String accessToken) {
         List<String> foursquareIds = getJdbcTemplate().queryForList(CypherQueries.USER_FOURSQUARE_ID, String.class, accessToken);
         if (foursquareIds.size() > 1) throw new DaoException.Builder("data.integrity.error").build();
