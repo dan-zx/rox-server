@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -68,5 +69,15 @@ public class UserWebService extends BaseRestComponent {
     public Result<List<Category>> getSelfLikes(@NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken) {
         LOGGER.debug("getSelfLikes({})", accessToken);
         return new Result<>(userService.getSelfLikes(accessToken, getClientLocale()));
+    }
+
+    @GET
+    @Path("self/friend/{foursquareId}/likes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Result<List<Category>> getFriend(
+            @QueryParam("access-token") @NotBlank(message = "access_token.required.error") String accessToken,
+            @PathParam("foursquareId") @NotBlank(message = "foursquare_id.required.error") String foursquareId) {
+        LOGGER.debug("getFriend({}, {})", accessToken, foursquareId);
+        return new Result<>(userService.getFriendLikes(accessToken, foursquareId, getClientLocale()));
     }
 }

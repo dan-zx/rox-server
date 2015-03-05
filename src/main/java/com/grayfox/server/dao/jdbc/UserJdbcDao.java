@@ -9,7 +9,6 @@ import com.grayfox.server.dao.DaoException;
 import com.grayfox.server.dao.UserDao;
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.User;
-
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -70,6 +69,12 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
                     category.setFoursquareId(rs.getString(3));
                     return category;
                 }, foursquareId);
+    }
+
+    @Override
+    public boolean isFriend(String accessToken, String foursquareId) {
+        List<Boolean> exists = getJdbcTemplate().queryForList(CypherQueries.IS_FRIEND, Boolean.class, accessToken, foursquareId);
+        return !exists.isEmpty();
     }
 
     @Override
