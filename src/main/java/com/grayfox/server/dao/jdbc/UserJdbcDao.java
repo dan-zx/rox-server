@@ -9,7 +9,6 @@ import com.grayfox.server.dao.DaoException;
 import com.grayfox.server.dao.UserDao;
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.User;
-
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -27,22 +26,6 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
                     return user;
                 },
                 accessToken);
-        if (users.size() > 1) throw new DaoException.Builder("data.integrity.error").build();
-        return users.isEmpty() ? null : users.get(0);
-    }
-
-    @Override
-    public User fetchFriendByFoursquareId(String accessToken, String foursquareId) {
-        List<User> users = getJdbcTemplate().query(CypherQueries.FRIEND, 
-                (ResultSet rs, int i) -> {
-                    User user = new User();
-                    user.setName(rs.getString(1));
-                    user.setLastName(rs.getString(2));
-                    user.setPhotoUrl(rs.getString(3));
-                    user.setFoursquareId(foursquareId);
-                    return user;
-                },
-                accessToken, foursquareId);
         if (users.size() > 1) throw new DaoException.Builder("data.integrity.error").build();
         return users.isEmpty() ? null : users.get(0);
     }
@@ -86,6 +69,12 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
                     category.setFoursquareId(rs.getString(3));
                     return category;
                 }, foursquareId);
+    }
+
+    @Override
+    public boolean isFriend(String accessToken, String foursquareId) {
+        List<Boolean> exists = getJdbcTemplate().queryForList(CypherQueries.IS_FRIEND, Boolean.class, accessToken, foursquareId);
+        return !exists.isEmpty();
     }
 
     @Override

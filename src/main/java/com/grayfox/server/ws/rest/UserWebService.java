@@ -72,12 +72,12 @@ public class UserWebService extends BaseRestComponent {
     }
 
     @GET
-    @Path("friend/{foursquareId}")
+    @Path("self/friend/{foursquareId}/likes")
     @Produces(MediaType.APPLICATION_JSON)
-    public Result<User> getFriend(
+    public Result<List<Category>> getFriend(
             @QueryParam("access-token") @NotBlank(message = "access_token.required.error") String accessToken,
             @PathParam("foursquareId") @NotBlank(message = "foursquare_id.required.error") String foursquareId) {
         LOGGER.debug("getFriend({}, {})", accessToken, foursquareId);
-        return new Result<>(userService.getFriend(accessToken, foursquareId, getClientLocale()));
+        return new Result<>(userService.getFriendLikes(accessToken, foursquareId, getClientLocale()));
     }
 }
