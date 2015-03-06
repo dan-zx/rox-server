@@ -87,18 +87,21 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<Category> getFriendLikes(String accessToken, String foursquareId, Locale locale) {
+    public List<Category> getUserLikes(String accessToken, String foursquareId, Locale locale) {
         if (!credentialDao.existsAccessToken(accessToken)) {
             LOGGER.warn("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
         if (!userDao.existsUser(foursquareId)) {
-            LOGGER.warn("Friend with foursquareId={} doesn't exist", foursquareId);
+            LOGGER.warn("User with Foursquare Id [{}] does not exist", foursquareId);
             throw new ServiceException.Builder("user.not_exist.error").addFormatArg(foursquareId).build();
         }
         if (!userDao.isFriend(accessToken, foursquareId)) {
-            LOGGER.warn("Requested user is not a friend", foursquareId);
-            throw new ServiceException.Builder("not_friends.error").addFormatArg(foursquareId).build();
+            String selfFourquareId = userDao.fetchFoursquareIdByAccessToken(accessToken);
+            if (!selfFourquareId.equals(foursquareId)) {
+                LOGGER.warn("Requested user with Foursquare id [{}] is not a friend", foursquareId);
+                throw new ServiceException.Builder("not_friends.error").addFormatArg(foursquareId).build();
+            }
         }
         return userDao.fetchLikesByFoursquareId(foursquareId, locale);
     }
