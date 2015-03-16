@@ -26,8 +26,8 @@ repositories {
 }
 
 ext {
-    springVersion = '4.1.4.RELEASE'
-    jerseyVersion = '2.15'
+    springVersion = '4.1.5.RELEASE'
+    jerseyVersion = '2.16'
     slf4jVersion  = '1.7.10'
     neo4jVersion  = '2.1.7'
 }
@@ -42,7 +42,7 @@ dependencies {
 
     // LOGGING
     compile 'ch.qos.logback:logback-classic:1.1.2'
-    runtime 'org.codehaus.groovy:groovy:2.4.0'
+    runtime 'org.codehaus.groovy:groovy:2.4.1'
     compile "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
 
     // SPRING
@@ -67,7 +67,7 @@ dependencies {
     compile 'com.foursquare4j:foursquare4j:1.0-SNAPSHOT'
 
     // GOOGLE MAPS
-    compile 'com.google.maps:google-maps-services:0.1.5'
+    compile 'com.google.maps:google-maps-services:0.1.6'
 
     // DATABASE
     compile 'org.neo4j:neo4j-jdbc:2.1.4'
@@ -75,7 +75,7 @@ dependencies {
     // TEST
     testCompile fileTree(dir: 'libs/test', include: '*.jar')
     testCompile 'junit:junit:4.12'
-    testCompile 'org.assertj:assertj-core:1.7.1'
+    testCompile 'org.assertj:assertj-core:2.0.0'
     testCompile 'org.mockito:mockito-core:1.10.19'
     testCompile "org.neo4j:neo4j:${neo4jVersion}"
     testCompile group: 'org.neo4j', name: 'neo4j-kernel', version: "${neo4jVersion}", classifier: 'tests'

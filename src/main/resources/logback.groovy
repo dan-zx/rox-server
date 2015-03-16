@@ -1,4 +1,4 @@
-def logPattern = "[%d{yyyy/MM/dd HH:mm:ss.SSS}] {%thread} %-5level in %logger: %msg%n"
+def logPattern = '[%d{yyyy/MM/dd HH:mm:ss.SSS}] {%thread} %-5level in %logger: %msg%n'
 
 appender('file', FileAppender) {
     file = 'log.txt'
@@ -20,5 +20,6 @@ logger('org.hibernate.validator', WARN)
 logger('org.jboss.logging', WARN)
 logger('org.neo4j', WARN)
 logger('org.springframework', WARN)
+logger('org.springframework.jdbc.core', TRACE)
 
 root(ALL, ['console', 'file'])
