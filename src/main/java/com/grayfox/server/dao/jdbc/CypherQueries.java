@@ -37,8 +37,10 @@ final class CypherQueries {
     static final String POIS = "MATCH (p:Poi) RETURN p.name, p.latitude, p.longitude, p.foursquareId";
 
     // Category queries
-    static final String CATEGORIES_BY_POI_FOURSQUARE_ID = "MATCH (c:Category)<-[:IS]-(:Poi {foursquareId:{1}}) return c.defaultName, c.iconUrl, c.foursquareId";
-    static final String CATEGORIES_BY_POI_FOURSQUARE_ID_SPANISH = "MATCH (c:Category)<-[:IS]-(:Poi {foursquareId:{1}}) return c.spanishName, c.iconUrl, c.foursquareId";
+    static final String CATEGORIES_BY_POI_FOURSQUARE_ID = "MATCH (c:Category)<-[:IS]-(:Poi {foursquareId:{1}}) RETURN c.defaultName, c.iconUrl, c.foursquareId";
+    static final String CATEGORIES_BY_POI_FOURSQUARE_ID_SPANISH = "MATCH (c:Category)<-[:IS]-(:Poi {foursquareId:{1}}) RETURN c.spanishName, c.iconUrl, c.foursquareId";
+    static final String CATEGORIES_LIKE_NAME = "MATCH (c:Category) WHERE c.defaultName =~ '(?i).*%s.*' RETURN c.defaultName, c.iconUrl, c.foursquareId LIMIT 5";
+    static final String CATEGORIES_LIKE_NAME_SPANISH = "MATCH (c:Category) WHERE c.spanishName =~ '(?i).*%s.*' RETURN c.spanishName, c.iconUrl, c.foursquareId LIMIT 5";
 
     private CypherQueries() {
         throw new IllegalAccessError("This class cannot be instantiated nor extended");

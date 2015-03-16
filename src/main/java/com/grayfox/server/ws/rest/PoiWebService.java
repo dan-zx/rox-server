@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 @Path("pois")
-public class PoiWebService {
+public class PoiWebService extends BaseRestComponent {
 
     @Inject private PoiService poiService;
 
