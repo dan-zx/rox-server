@@ -92,7 +92,7 @@ public class UserWebService extends BaseRestComponent {
             Category like) {
         LOGGER.debug("addLike({}, {})", accessToken, like);
         userService.addLike(accessToken, like);
-        return new Result<UpdateResult>(new UpdateResult(true));
+        return new Result<>(new UpdateResult(true));
     }
 
     @POST
@@ -104,6 +104,6 @@ public class UserWebService extends BaseRestComponent {
             Category like) {
         LOGGER.debug("removeLike({}, {})", accessToken, like);
         userService.removeLike(accessToken, like);
-        return new Result<UpdateResult>(new UpdateResult(true));
+        return new Result<>(new UpdateResult(true));
     }
 }

@@ -24,7 +24,7 @@
         	google.maps.event.addDomListener(window, 'load', initializeMap);
         	$(document).ready(function(){
         		$.getJSON('${pageContext.request.contextPath}/api/pois/all', function(json) {
-        			$.each(json, function(i, obj) {
+        			$.each(json.response, function(i, obj) {
         				var marker = new google.maps.Marker({
         					position: new google.maps.LatLng(obj.location.latitude, obj.location.longitude),
         					title: obj.name

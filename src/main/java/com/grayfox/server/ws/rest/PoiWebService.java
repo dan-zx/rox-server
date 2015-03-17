@@ -22,7 +22,7 @@ public class PoiWebService extends BaseRestComponent {
     @GET
     @Path("all")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Poi> getPois() {
-        return poiService.getPois();
+    public Result<List<Poi>> getPois() {
+        return new Result<>(poiService.getPois());
     }
 }
