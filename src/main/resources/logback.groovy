@@ -1,6 +1,6 @@
 appender('console', ConsoleAppender) {
     encoder(PatternLayoutEncoder) {
-        pattern = "{%thread} %-5level in %logger: %msg%n"
+        pattern = '{%thread} %-5level in %logger: %msg%n'
     }
 }
 
@@ -10,5 +10,6 @@ logger('org.hibernate.validator', WARN)
 logger('org.jboss.logging', WARN)
 logger('org.neo4j', WARN)
 logger('org.springframework', WARN)
+logger('org.springframework.jdbc.core', WARN)
 
 root(WARN, ['console'])

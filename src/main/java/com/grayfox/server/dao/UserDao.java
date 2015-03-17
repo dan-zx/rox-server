@@ -12,8 +12,10 @@ public interface UserDao {
     String fetchFoursquareIdByAccessToken(String accessToken);
     List<User> fetchFriendsByFoursquareId(String foursquareId);
     List<Category> fetchLikesByFoursquareId(String foursquareId, Locale locale);
-    boolean isFriend(String accessToken, String foursquareId);
+    boolean areFriends(String foursquareId1, String foursquareId2);
     boolean existsUser(String foursquareId);
     void save(User user);
     void update(User user);
+    void saveLike(String foursquareId, Category like);
+    void deleteLike(String foursquareId, Category like);
 }

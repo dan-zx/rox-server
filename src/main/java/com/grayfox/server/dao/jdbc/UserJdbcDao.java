@@ -9,6 +9,7 @@ import com.grayfox.server.dao.DaoException;
 import com.grayfox.server.dao.UserDao;
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.User;
+
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -72,8 +73,8 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
     }
 
     @Override
-    public boolean isFriend(String accessToken, String foursquareId) {
-        List<Boolean> exists = getJdbcTemplate().queryForList(CypherQueries.IS_FRIEND, Boolean.class, accessToken, foursquareId);
+    public boolean areFriends(String foursquareId1, String foursquareId2) {
+        List<Boolean> exists = getJdbcTemplate().queryForList(CypherQueries.ARE_FRIENDS, Boolean.class, foursquareId1, foursquareId2);
         return !exists.isEmpty();
     }
 
@@ -86,11 +87,13 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
     @Override
     public void save(User user) {
         getJdbcTemplate().update(CypherQueries.CREATE_USER, user.getCredential().getAccessToken(), user.getName(), user.getLastName(), user.getPhotoUrl(), user.getFoursquareId());
-        if (user.getLikes() != null) user.getLikes().forEach(like -> getJdbcTemplate().update(CypherQueries.CREATE_LIKES_RELATION, user.getFoursquareId(), like.getFoursquareId()));
+        if (user.getLikes() != null) user.getLikes().forEach(like -> saveLike(user.getFoursquareId(), like));
         if (user.getFriends() != null) {
             user.getFriends().forEach(friend -> {
-                if (!existsUser(friend.getFoursquareId())) getJdbcTemplate().update(CypherQueries.CREATE_FRIEND, user.getFoursquareId(), friend.getName(), friend.getLastName(), friend.getPhotoUrl(), friend.getFoursquareId());
-                else getJdbcTemplate().update(CypherQueries.CREATE_FRIENDS_RELATION, user.getFoursquareId(), friend.getFoursquareId());
+                if (!existsUser(friend.getFoursquareId())) {
+                    getJdbcTemplate().update(CypherQueries.CREATE_FRIEND, user.getFoursquareId(), friend.getName(), friend.getLastName(), friend.getPhotoUrl(), friend.getFoursquareId());
+                    if (friend.getLikes() != null) friend.getLikes().forEach(like -> saveLike(friend.getFoursquareId(), like));
+                } else getJdbcTemplate().update(CypherQueries.CREATE_FRIENDS_RELATION, user.getFoursquareId(), friend.getFoursquareId());
             });
         }
     }
@@ -98,7 +101,10 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
     @Override
     public void update(User user) {
         getJdbcTemplate().update(CypherQueries.UPDATE_USER, user.getFoursquareId(), user.getName(), user.getLastName(), user.getPhotoUrl());
-        if (user.getCredential() != null) getJdbcTemplate().update(CypherQueries.CREATE_HAS_CREDENTIAL_RELATION, user.getFoursquareId(), user.getCredential().getAccessToken());
+        if (user.getCredential() != null) {
+            getJdbcTemplate().update(CypherQueries.DELETE_CREDENTIALS, user.getFoursquareId());
+            getJdbcTemplate().update(CypherQueries.CREATE_HAS_CREDENTIAL_RELATION, user.getFoursquareId(), user.getCredential().getAccessToken());
+        }
         if (user.getFriends() != null) {
             List<String> oldFriendsIds = fetchFriendsIds(user.getFoursquareId());
             List<String> intersection = user.getFriends().stream().filter(friend -> oldFriendsIds.contains(friend.getFoursquareId())).map(User::getFoursquareId).collect(Collectors.toList());
@@ -106,8 +112,10 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
             oldFriendsIds.removeAll(intersection);
             oldFriendsIds.forEach(friendFoursquareId -> getJdbcTemplate().update(CypherQueries.DELETE_FRIENDS_RELATION, user.getFoursquareId(), friendFoursquareId));
             newFriends.forEach(friend -> {
-                if (!existsUser(friend.getFoursquareId())) getJdbcTemplate().update(CypherQueries.CREATE_FRIEND, user.getFoursquareId(), friend.getName(), friend.getLastName(), friend.getPhotoUrl(), friend.getFoursquareId());
-                else getJdbcTemplate().update(CypherQueries.CREATE_FRIENDS_RELATION, user.getFoursquareId(), friend.getFoursquareId());
+                if (!existsUser(friend.getFoursquareId())) {
+                    getJdbcTemplate().update(CypherQueries.CREATE_FRIEND, user.getFoursquareId(), friend.getName(), friend.getLastName(), friend.getPhotoUrl(), friend.getFoursquareId());
+                    if (friend.getLikes() != null) friend.getLikes().forEach(like -> saveLike(friend.getFoursquareId(), like));
+                } else getJdbcTemplate().update(CypherQueries.CREATE_FRIENDS_RELATION, user.getFoursquareId(), friend.getFoursquareId());
             });
         }
         if (user.getLikes() != null) {
@@ -116,8 +124,18 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
             List<Category> newLikes = user.getLikes().stream().filter(like -> !intersection.contains(like.getFoursquareId())).collect(Collectors.toList());
             oldLikesIds.removeAll(intersection);
             oldLikesIds.forEach(likeFoursquareId -> getJdbcTemplate().update(CypherQueries.DELETE_LIKES_RELATION, user.getFoursquareId(), likeFoursquareId));
-            newLikes.forEach(like -> getJdbcTemplate().update(CypherQueries.CREATE_LIKES_RELATION, user.getFoursquareId(), like.getFoursquareId()));
+            newLikes.forEach(like -> saveLike(user.getFoursquareId(), like));
         }
+    }
+
+    @Override
+    public void saveLike(String foursquareId, Category like) {
+        getJdbcTemplate().update(CypherQueries.CREATE_LIKES_RELATION, foursquareId, like.getFoursquareId());
+    }
+
+    @Override
+    public void deleteLike(String foursquareId, Category like) {
+        getJdbcTemplate().update(CypherQueries.DELETE_LIKES_RELATION, foursquareId, like.getFoursquareId());
     }
 
     private List<String> fetchFriendsIds(String foursquareId) {

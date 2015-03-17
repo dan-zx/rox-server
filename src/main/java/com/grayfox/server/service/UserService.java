@@ -61,49 +61,70 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User getSelf(String accessToken) {
-        if (!credentialDao.existsAccessToken(accessToken)) {
+        User user = userDao.fetchByAccessToken(accessToken);
+        if (user == null) {
             LOGGER.warn("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
-        return userDao.fetchByAccessToken(accessToken);
+        return user;
     }
 
     @Transactional(readOnly = true)
     public List<User> getSelfFriends(String accessToken) {
-        if (!credentialDao.existsAccessToken(accessToken)) {
+        String selfFoursquareId = userDao.fetchFoursquareIdByAccessToken(accessToken);
+        if (selfFoursquareId == null) {
             LOGGER.warn("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
-        return userDao.fetchFriendsByFoursquareId(userDao.fetchFoursquareIdByAccessToken(accessToken));
+        return userDao.fetchFriendsByFoursquareId(selfFoursquareId);
     }
 
     @Transactional(readOnly = true)
     public List<Category> getSelfLikes(String accessToken, Locale locale) {
-        if (!credentialDao.existsAccessToken(accessToken)) {
+        String selfFoursquareId = userDao.fetchFoursquareIdByAccessToken(accessToken);
+        if (selfFoursquareId == null) {
             LOGGER.warn("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
-        return userDao.fetchLikesByFoursquareId(userDao.fetchFoursquareIdByAccessToken(accessToken), locale);
+        return userDao.fetchLikesByFoursquareId(selfFoursquareId, locale);
     }
 
     @Transactional(readOnly = true)
-    public List<Category> getUserLikes(String accessToken, String foursquareId, Locale locale) {
-        if (!credentialDao.existsAccessToken(accessToken)) {
+    public List<Category> getUserLikes(String accessToken, String friendFoursquareId, Locale locale) {
+        String selfFoursquareId = userDao.fetchFoursquareIdByAccessToken(accessToken);
+        if (selfFoursquareId == null) {
             LOGGER.warn("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
-        if (!userDao.existsUser(foursquareId)) {
-            LOGGER.warn("User with Foursquare Id [{}] does not exist", foursquareId);
-            throw new ServiceException.Builder("user.not_exist.error").addFormatArg(foursquareId).build();
+        if (!userDao.existsUser(friendFoursquareId)) {
+            LOGGER.warn("User with Foursquare Id [{}] does not exist", friendFoursquareId);
+            throw new ServiceException.Builder("user.not_exist.error").addFormatArg(friendFoursquareId).build();
         }
-        if (!userDao.isFriend(accessToken, foursquareId)) {
-            String selfFourquareId = userDao.fetchFoursquareIdByAccessToken(accessToken);
-            if (!selfFourquareId.equals(foursquareId)) {
-                LOGGER.warn("Requested user with Foursquare id [{}] is not a friend", foursquareId);
-                throw new ServiceException.Builder("not_friends.error").addFormatArg(foursquareId).build();
-            }
+        if (!userDao.areFriends(selfFoursquareId, friendFoursquareId) && !selfFoursquareId.equals(friendFoursquareId)) {
+            LOGGER.warn("Requested user with Foursquare id [{}] is not a friend", friendFoursquareId);
+            throw new ServiceException.Builder("not_friends.error").addFormatArg(friendFoursquareId).build();
         }
-        return userDao.fetchLikesByFoursquareId(foursquareId, locale);
+        return userDao.fetchLikesByFoursquareId(friendFoursquareId, locale);
+    }
+
+    @Transactional
+    public void addLike(String accessToken, Category like) {
+        String selfFoursquareId = userDao.fetchFoursquareIdByAccessToken(accessToken);
+        if (selfFoursquareId == null) {
+            LOGGER.warn("Not existing user attempting to modify information");
+            throw new ServiceException.Builder("user.invalid.error").build();
+        }
+        userDao.saveLike(selfFoursquareId, like);
+    }
+
+    @Transactional
+    public void removeLike(String accessToken, Category like) {
+        String selfFoursquareId = userDao.fetchFoursquareIdByAccessToken(accessToken);
+        if (selfFoursquareId == null) {
+            LOGGER.warn("Not existing user attempting to modify information");
+            throw new ServiceException.Builder("user.invalid.error").build();
+        }
+        userDao.deleteLike(selfFoursquareId, like);
     }
 
     private String generateAccessToken() {

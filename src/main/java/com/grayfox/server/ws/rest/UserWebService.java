@@ -3,7 +3,9 @@ package com.grayfox.server.ws.rest;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -79,5 +81,29 @@ public class UserWebService extends BaseRestComponent {
             @PathParam("foursquareId") @NotBlank(message = "foursquare_id.required.error") String foursquareId) {
         LOGGER.debug("getUserLikes({}, {})", accessToken, foursquareId);
         return new Result<>(userService.getUserLikes(accessToken, foursquareId, getClientLocale()));
+    }
+
+    @POST
+    @Path("self/update/addlike")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Result<UpdateResult> addLike(
+            @NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken,
+            Category like) {
+        LOGGER.debug("addLike({}, {})", accessToken, like);
+        userService.addLike(accessToken, like);
+        return new Result<>(new UpdateResult(true));
+    }
+
+    @POST
+    @Path("self/update/removelike")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Result<UpdateResult> removeLike(
+            @NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken,
+            Category like) {
+        LOGGER.debug("removeLike({}, {})", accessToken, like);
+        userService.removeLike(accessToken, like);
+        return new Result<>(new UpdateResult(true));
     }
 }

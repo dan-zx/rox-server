@@ -10,7 +10,7 @@ final class CypherQueries {
     static final String USER_LIKES = "MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category) RETURN c.defaultName, c.iconUrl, c.foursquareId";
     static final String USER_LIKES_SPANISH = "MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category) RETURN c.spanishName, c.iconUrl, c.foursquareId";
     static final String USER_LIKES_FOURSQUARE_IDS = "MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category) RETURN c.foursquareId";
-    static final String IS_FRIEND = "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:FRIENDS]-(friend:User {foursquareId:{2}}) RETURN true";
+    static final String ARE_FRIENDS = "MATCH (:User {foursquareId:{1}})-[:FRIENDS]-(:User {foursquareId:{2}}) RETURN true";
     static final String EXISTS_USER = "MATCH (:User {foursquareId:{1}}) RETURN true";
     static final String CREATE_USER = "MATCH (c:Credential {accessToken:{1}}) CREATE (:User {name:{2}, lastName:{3}, photoUrl:{4}, foursquareId:{5}})-[:HAS]->(c)";
     static final String CREATE_FRIEND = "MATCH (me:User {foursquareId:{1}}) CREATE (:User {name:{2}, lastName:{3}, photoUrl:{4}, foursquareId:{5}})<-[:FRIENDS]-(me)";
@@ -25,6 +25,7 @@ final class CypherQueries {
     static final String CREDENTIAL = "MATCH (c:Credential {foursquareAccessToken:{1}}) RETURN c.accessToken";
     static final String EXISTS_ACCESS_TOKEN = "MATCH (:Credential {accessToken:{1}}) RETURN true";
     static final String CREATE_CREDENTIAL = "CREATE (:Credential {accessToken:{1}, foursquareAccessToken:{2}})";
+    static final String DELETE_CREDENTIALS = "MATCH (:User {foursquareId:{1}})-[r:HAS]->(c:Credential) DELETE r, c";
 
     // Recommendations queries
     static final String NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED = "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi) WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4} RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, c.defaultName";
@@ -32,9 +33,14 @@ final class CypherQueries {
     static final String NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_BY_FRIENDS = "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:FRIENDS]-(u:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi) WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4} RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, u.name, u.lastName, c.defaultName";
     static final String NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_BY_FRIENDS_SPANISH = "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:FRIENDS]-(u:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi) WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4} RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, u.name, u.lastName, c.spanishName";
 
+    // POI queries
+    static final String POIS = "MATCH (p:Poi) RETURN p.name, p.latitude, p.longitude, p.foursquareId";
+
     // Category queries
-    static final String CATEGORIES_BY_POI_FOURSQUARE_ID = "MATCH (c:Category)<-[:IS]-(:Poi {foursquareId:{1}}) return c.defaultName, c.iconUrl, c.foursquareId";
-    static final String CATEGORIES_BY_POI_FOURSQUARE_ID_SPANISH = "MATCH (c:Category)<-[:IS]-(:Poi {foursquareId:{1}}) return c.spanishName, c.iconUrl, c.foursquareId";
+    static final String CATEGORIES_BY_POI_FOURSQUARE_ID = "MATCH (c:Category)<-[:IS]-(:Poi {foursquareId:{1}}) RETURN c.defaultName, c.iconUrl, c.foursquareId";
+    static final String CATEGORIES_BY_POI_FOURSQUARE_ID_SPANISH = "MATCH (c:Category)<-[:IS]-(:Poi {foursquareId:{1}}) RETURN c.spanishName, c.iconUrl, c.foursquareId";
+    static final String CATEGORIES_LIKE_NAME = "MATCH (c:Category) WHERE c.defaultName =~ '(?i).*%s.*' RETURN c.defaultName, c.iconUrl, c.foursquareId LIMIT 5";
+    static final String CATEGORIES_LIKE_NAME_SPANISH = "MATCH (c:Category) WHERE c.spanishName =~ '(?i).*%s.*' RETURN c.spanishName, c.iconUrl, c.foursquareId LIMIT 5";
 
     private CypherQueries() {
         throw new IllegalAccessError("This class cannot be instantiated nor extended");
