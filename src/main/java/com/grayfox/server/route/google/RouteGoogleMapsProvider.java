@@ -51,16 +51,11 @@ public class RouteGoogleMapsProvider implements RouteProvider {
     private TravelMode toTravelMode(Transportation transportation) {
         if (transportation == null) return TravelMode.DRIVING;
         switch (transportation) {
-            case DRIVING:
-                return TravelMode.DRIVING;
-            case WALKING:
-                return TravelMode.WALKING;
-            case BICYCLING:
-                return TravelMode.BICYCLING;
-            case TRANSIT:
-                return TravelMode.TRANSIT;
-            default:
-                return TravelMode.UNKNOWN;
+            case DRIVING: return TravelMode.DRIVING;
+            case WALKING: return TravelMode.WALKING;
+            case TRANSIT: return TravelMode.TRANSIT;
+            case BICYCLING: return TravelMode.BICYCLING;
+            default: return TravelMode.UNKNOWN;
         }
     }
 

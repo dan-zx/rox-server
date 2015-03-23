@@ -24,8 +24,4 @@ public abstract class BaseRestComponent {
 
         return null;
     }
-
-    protected HttpHeaders getHeaders() {
-        return headers;
-    }
 }

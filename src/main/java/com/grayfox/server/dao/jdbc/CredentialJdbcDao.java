@@ -1,11 +1,14 @@
 package com.grayfox.server.dao.jdbc;
 
+import static com.grayfox.server.dao.jdbc.CypherQueries.*;
+
 import java.sql.ResultSet;
 import java.util.List;
 
 import com.grayfox.server.dao.CredentialDao;
 import com.grayfox.server.dao.DaoException;
 import com.grayfox.server.domain.Credential;
+
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -13,7 +16,7 @@ public class CredentialJdbcDao extends JdbcDao implements CredentialDao {
 
     @Override
     public Credential fetchByFoursquareAccessToken(String foursquareAccessToken) {
-        List<Credential> credentials = getJdbcTemplate().query(CypherQueries.CREDENTIAL, 
+        List<Credential> credentials = getJdbcTemplate().query(CREDENTIAL, 
                 (ResultSet rs, int i) -> {
                     Credential credential = new Credential();
                     credential.setAccessToken(rs.getString(1));
@@ -27,12 +30,12 @@ public class CredentialJdbcDao extends JdbcDao implements CredentialDao {
 
     @Override
     public boolean existsAccessToken(String accessToken) {
-        List<Boolean> exists = getJdbcTemplate().queryForList(CypherQueries.EXISTS_ACCESS_TOKEN, Boolean.class, accessToken);
+        List<Boolean> exists = getJdbcTemplate().queryForList(EXISTS_ACCESS_TOKEN, Boolean.class, accessToken);
         return !exists.isEmpty();
     }
 
     @Override
     public void save(Credential credential) {
-        getJdbcTemplate().update(CypherQueries.CREATE_CREDENTIAL, credential.getAccessToken(), credential.getFoursquareAccessToken());
+        getJdbcTemplate().update(CREATE_CREDENTIAL, credential.getAccessToken(), credential.getFoursquareAccessToken());
     }
 }
