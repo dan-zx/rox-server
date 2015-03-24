@@ -150,13 +150,6 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
-        <!-- GOOGLE MAPS -->
-        <dependency>
-            <groupId>com.google.maps</groupId>
-            <artifactId>google-maps-services</artifactId>
-            <version>0.1.6</version>
-        </dependency>
-
         <!-- DATABASE -->
         <dependency>
             <groupId>org.neo4j</groupId>

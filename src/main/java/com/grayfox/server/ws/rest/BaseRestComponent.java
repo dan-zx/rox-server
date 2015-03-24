@@ -5,6 +5,8 @@ import java.util.Locale;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
+import com.grayfox.server.util.Messages;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,10 +24,7 @@ public abstract class BaseRestComponent {
             }
         }
 
-        return null;
-    }
-
-    protected HttpHeaders getHeaders() {
-        return headers;
+        LOGGER.debug("Client languages not available. Using default language");
+        return Messages.DEFAULT_LOCALE;
     }
 }

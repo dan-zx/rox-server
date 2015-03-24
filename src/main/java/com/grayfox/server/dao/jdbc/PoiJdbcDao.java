@@ -1,5 +1,7 @@
 package com.grayfox.server.dao.jdbc;
 
+import static com.grayfox.server.dao.jdbc.CypherQueries.*;
+
 import java.sql.ResultSet;
 import java.util.List;
 
@@ -14,7 +16,7 @@ public class PoiJdbcDao extends JdbcDao implements PoiDao {
 
     @Override
     public List<Poi> fetchAll() {
-        return getJdbcTemplate().query(CypherQueries.POIS, 
+        return getJdbcTemplate().query(POIS, 
                 (ResultSet rs, int i) -> {
                     Poi poi = new Poi();
                     poi.setName(rs.getString(1));

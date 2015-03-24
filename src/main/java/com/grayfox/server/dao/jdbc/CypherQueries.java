@@ -1,5 +1,10 @@
 package com.grayfox.server.dao.jdbc;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 final class CypherQueries {
 
     // User queries
@@ -28,21 +33,43 @@ final class CypherQueries {
     static final String DELETE_CREDENTIALS = "MATCH (:User {foursquareId:{1}})-[r:HAS]->(c:Credential) DELETE r, c";
 
     // Recommendations queries
-    static final String NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED = "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi) WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4} RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, c.defaultName";
-    static final String NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_SPANISH = "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi) WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4} RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, c.spanishName";
-    static final String NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_BY_FRIENDS = "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:FRIENDS]-(u:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi) WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4} RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, u.name, u.lastName, c.defaultName";
-    static final String NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_BY_FRIENDS_SPANISH = "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:FRIENDS]-(u:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi) WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4} RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, u.name, u.lastName, c.spanishName";
+    static final Map<String, String> NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_I18N;
+    static final Map<String, String> NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_BY_FRIENDS_I18N;
 
     // POI queries
     static final String POIS = "MATCH (p:Poi) RETURN p.name, p.latitude, p.longitude, p.foursquareId";
 
     // Category queries
-    static final String CATEGORIES_BY_POI_FOURSQUARE_ID = "MATCH (c:Category)<-[:IS]-(:Poi {foursquareId:{1}}) RETURN c.defaultName, c.iconUrl, c.foursquareId";
-    static final String CATEGORIES_BY_POI_FOURSQUARE_ID_SPANISH = "MATCH (c:Category)<-[:IS]-(:Poi {foursquareId:{1}}) RETURN c.spanishName, c.iconUrl, c.foursquareId";
-    static final String CATEGORIES_LIKE_NAME = "MATCH (c:Category) WHERE c.defaultName =~ '(?i).*%s.*' RETURN c.defaultName, c.iconUrl, c.foursquareId LIMIT 5";
-    static final String CATEGORIES_LIKE_NAME_SPANISH = "MATCH (c:Category) WHERE c.spanishName =~ '(?i).*%s.*' RETURN c.spanishName, c.iconUrl, c.foursquareId LIMIT 5";
+    static final Map<String, String> CATEGORIES_BY_POI_FOURSQUARE_ID_I18N;
+    static final Map<String, String> CATEGORIES_LIKE_NAME_I18N;
+
+    static {
+        HashMap<String, String> queries = new HashMap<>();
+        queries.put("default", "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi) WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4} RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, c.defaultName");
+        queries.put("es", "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi) WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4} RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, c.spanishName");
+        NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_I18N = Collections.unmodifiableMap(queries);
+
+        queries = new HashMap<>();
+        queries.put("default", "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:FRIENDS]-(u:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi) WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4} RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, u.name, u.lastName, c.defaultName");
+        queries.put("es", "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:FRIENDS]-(u:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi) WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4} RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, u.name, u.lastName, c.spanishName");
+        NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_BY_FRIENDS_I18N = Collections.unmodifiableMap(queries);
+        
+        queries = new HashMap<>();
+        queries.put("default", "MATCH (c:Category)<-[:IS]-(:Poi {foursquareId:{1}}) RETURN c.defaultName, c.iconUrl, c.foursquareId");
+        queries.put("es", "MATCH (c:Category)<-[:IS]-(:Poi {foursquareId:{1}}) RETURN c.spanishName, c.iconUrl, c.foursquareId");
+        CATEGORIES_BY_POI_FOURSQUARE_ID_I18N = Collections.unmodifiableMap(queries);
+        
+        queries = new HashMap<>();
+        queries.put("default", "MATCH (c:Category) WHERE c.defaultName =~ '(?i).*%s.*' RETURN c.defaultName, c.iconUrl, c.foursquareId LIMIT 5");
+        queries.put("es", "MATCH (c:Category) WHERE c.spanishName =~ '(?i).*%s.*' RETURN c.spanishName, c.iconUrl, c.foursquareId LIMIT 5");
+        CATEGORIES_LIKE_NAME_I18N = Collections.unmodifiableMap(queries);
+    }
 
     private CypherQueries() {
         throw new IllegalAccessError("This class cannot be instantiated nor extended");
+    }
+
+    public static String getQueryFrom(Map<String, String> i18nMap, Locale locale) {
+        return i18nMap.getOrDefault(locale.getLanguage(), i18nMap.get("default"));
     }
 }

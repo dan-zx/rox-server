@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.foursquare4j.FoursquareApi;
@@ -34,6 +35,8 @@ public class PoiFoursquareDataSource implements PoiDataSource {
     @Override
     public List<Poi> nextPois(Poi originPoi, int limit, Locale locale) {
         FoursquareApi foursquareApi = new FoursquareApi(clientId, clientSecret);
+        Set<String> categoryIds = new HashSet<>();
+        categoryIds.addAll(originPoi.getCategories().stream().map(Category::getFoursquareId).collect(Collectors.toSet()));
         foursquareApi.setLocale(locale);
         List<Poi> pois = new ArrayList<>(limit);
         Poi currentPoi = originPoi;
@@ -45,8 +48,17 @@ public class PoiFoursquareDataSource implements PoiDataSource {
                     final String currentFoursquarId = venue.getId();
                     List<Poi> matchingPois = pois.stream().filter(poi -> poi.getFoursquareId().equals(currentFoursquarId)).collect(Collectors.toList());
                     if (matchingPois.isEmpty()) {
-                        pois.add(currentPoi);
-                        break;
+                        boolean existsCategory = false;
+                        for (Category currentPoiCategory : currentPoi.getCategories()) {
+                            if (!categoryIds.add(currentPoiCategory.getFoursquareId())) {
+                                existsCategory = true;
+                                break;
+                            }
+                        }
+                        if (!existsCategory) {
+                            pois.add(currentPoi);
+                            break;
+                        }
                     }
                 }
             } else {

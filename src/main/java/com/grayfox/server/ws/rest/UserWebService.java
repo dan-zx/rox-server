@@ -4,8 +4,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -83,7 +84,7 @@ public class UserWebService extends BaseRestComponent {
         return new Result<>(userService.getUserLikes(accessToken, foursquareId, getClientLocale()));
     }
 
-    @POST
+    @PUT
     @Path("self/update/addlike")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -95,7 +96,7 @@ public class UserWebService extends BaseRestComponent {
         return new Result<>(new UpdateResult(true));
     }
 
-    @POST
+    @DELETE
     @Path("self/update/removelike")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
