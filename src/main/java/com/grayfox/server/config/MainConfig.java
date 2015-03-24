@@ -4,8 +4,6 @@ import javax.sql.DataSource;
 
 import com.foursquare4j.FoursquareApi;
 
-import com.google.maps.GeoApiContext;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -46,11 +44,6 @@ public class MainConfig {
                 @Value("${foursquare.app.client.id}") String clientId, 
                 @Value("${foursquare.app.client.secret}") String clientSecret) {
             return new FoursquareApi(clientId, clientSecret);
-        }
-
-        @Bean
-        public GeoApiContext geoApiContext(@Value("${google.api.key}") String apiKey) {
-            return new GeoApiContext().setApiKey(apiKey);
         }
     }
 

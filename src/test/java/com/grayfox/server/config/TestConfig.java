@@ -4,8 +4,6 @@ import static org.mockito.Mockito.spy;
 
 import com.foursquare4j.FoursquareApi;
 
-import com.google.maps.GeoApiContext;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -28,11 +26,6 @@ public class TestConfig {
         @Override
         public FoursquareApi foursquareApi(String clientId, String clientSecret) {
             return spy(super.foursquareApi(clientId, clientSecret));
-        }
-
-        @Override
-        public GeoApiContext geoApiContext(String apiKey) {
-            return spy(super.geoApiContext(apiKey));
         }
     }
 }

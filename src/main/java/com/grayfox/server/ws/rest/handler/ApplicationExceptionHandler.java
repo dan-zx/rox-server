@@ -16,11 +16,6 @@ public class ApplicationExceptionHandler extends BaseRestComponent implements Ex
     public Response toResponse(BaseApplicationException exception) {
         String message = Messages.get(exception.getMessageKey(), getClientLocale(), exception.getFormatArgs());
         switch (exception.getMessageKey()) {
-            case "route.unavailable.error": 
-                return Response.status(Response.Status.BAD_REQUEST)
-                        .type(MediaType.APPLICATION_JSON)
-                        .entity(new ErrorResult(exception.getMessageKey(), message).toJson())
-                        .build();
             case "user.invalid.error":
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .type(MediaType.APPLICATION_JSON)
