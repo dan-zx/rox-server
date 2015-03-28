@@ -8,4 +8,5 @@ import com.grayfox.server.domain.Category;
 public interface CategoryDao {
 
     List<Category> fetchLikeName(String partialName, Locale locale);
+    List<Category> fetchByPoiFoursquareId(String foursquareId, Locale locale);
 }

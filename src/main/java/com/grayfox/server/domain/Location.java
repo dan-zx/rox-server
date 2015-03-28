@@ -25,6 +25,19 @@ public class Location implements Serializable {
         this.longitude = longitude;
     }
 
+    public static Location parse(String locationString) {
+        String[] latLng = locationString.split(",");
+        if (latLng == null || latLng.length != 2) throw new IllegalArgumentException("Incorrect location format. It must be '##.##,##.##'"); 
+        try {
+            Location location = new Location();
+            location.setLatitude(Double.parseDouble(latLng[0]));
+            location.setLongitude(Double.parseDouble(latLng[1]));
+            return location;
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("Incorrect location format. It must be '##.##,##.##'");
+        }
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

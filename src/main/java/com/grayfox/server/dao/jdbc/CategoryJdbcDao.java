@@ -26,4 +26,16 @@ public class CategoryJdbcDao extends JdbcDao implements CategoryDao {
                     return category;
                 });
     }
+
+    @Override
+    public List<Category> fetchByPoiFoursquareId(String foursquareId, Locale locale) {
+        return getJdbcTemplate().query(getQueryFrom(CATEGORIES_BY_POI_FOURSQUARE_ID_I18N, locale), 
+                (ResultSet rs, int i) -> {
+                    Category category = new Category();
+                    category.setName(rs.getString(1));
+                    category.setIconUrl(rs.getString(2));
+                    category.setFoursquareId(rs.getString(3));
+                    return category;
+                }, foursquareId);
+    }
 }
