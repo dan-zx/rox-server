@@ -3,6 +3,7 @@ package com.grayfox.server.ws.rest;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -75,11 +76,11 @@ public class UserWebService extends BaseRestComponent {
     }
 
     @GET
-    @Path("{foursquareId}/likes")
+    @Path("{userFoursquareId}/likes")
     @Produces(MediaType.APPLICATION_JSON)
     public Result<List<Category>> getUserLikes(
             @QueryParam("access-token") @NotBlank(message = "access_token.required.error") String accessToken,
-            @PathParam("foursquareId") @NotBlank(message = "foursquare_id.required.error") String foursquareId) {
+            @PathParam("userFoursquareId") @NotBlank(message = "user_foursquare_id.required.error") String foursquareId) {
         LOGGER.debug("getUserLikes({}, {})", accessToken, foursquareId);
         return new Result<>(userService.getUserLikes(accessToken, foursquareId, getClientLocale()));
     }
@@ -90,7 +91,7 @@ public class UserWebService extends BaseRestComponent {
     @Produces(MediaType.APPLICATION_JSON)
     public Result<UpdateResult> addLike(
             @NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken,
-            Category like) {
+            @NotNull(message = "category.required.error") Category like) {
         LOGGER.debug("addLike({}, {})", accessToken, like);
         userService.addLike(accessToken, like);
         return new Result<>(new UpdateResult(true));
@@ -102,7 +103,7 @@ public class UserWebService extends BaseRestComponent {
     @Produces(MediaType.APPLICATION_JSON)
     public Result<UpdateResult> removeLike(
             @NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken,
-            Category like) {
+            @NotNull(message = "category.required.error") Category like) {
         LOGGER.debug("removeLike({}, {})", accessToken, like);
         userService.removeLike(accessToken, like);
         return new Result<>(new UpdateResult(true));
