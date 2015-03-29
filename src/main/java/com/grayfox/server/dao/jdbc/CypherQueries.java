@@ -38,6 +38,7 @@ final class CypherQueries {
 
     // POI queries
     static final String POIS = "MATCH (p:Poi) RETURN p.name, p.latitude, p.longitude, p.foursquareId";
+    static final String NEAREAST_POIS_BY_CATEGORY = "MATCH (p:Poi)-[:IS]->(c:Category {foursquareId: {1}}) WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4} RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId";
 
     // Category queries
     static final Map<String, String> CATEGORIES_BY_POI_FOURSQUARE_ID_I18N;

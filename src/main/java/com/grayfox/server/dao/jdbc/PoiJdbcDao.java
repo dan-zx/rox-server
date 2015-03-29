@@ -28,4 +28,19 @@ public class PoiJdbcDao extends JdbcDao implements PoiDao {
                     return poi;
                 });
     }
+
+    @Override
+    public List<Poi> fetchNearestByCategory(Location location, Integer radius, String categoryFoursquareId) {
+        return getJdbcTemplate().query(NEAREAST_POIS_BY_CATEGORY, 
+                (ResultSet rs, int i) -> {
+                    Poi poi = new Poi();
+                    poi.setName(rs.getString(1));
+                    Location poiLocation = new Location();
+                    poiLocation.setLatitude(rs.getDouble(2));
+                    poiLocation.setLongitude(rs.getDouble(3));
+                    poi.setLocation(poiLocation);
+                    poi.setFoursquareId(rs.getString(4));
+                    return poi;
+                }, categoryFoursquareId, location.getLatitude(), location.getLongitude(), radius);
+    }
 }

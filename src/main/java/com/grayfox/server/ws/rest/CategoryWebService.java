@@ -25,7 +25,7 @@ public class CategoryWebService extends BaseRestComponent {
     @GET
     @Path("like/{partialName}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Result<List<Category>> getCategoriesLikeName(@PathParam("partialName") @NotBlank(message = "category_name.required.error") String partialName) {
+    public Result<List<Category>> getCategoriesLikeName(@NotBlank(message = "category_name.required.error") @PathParam("partialName") String partialName) {
         return new Result<>(categoryService.getCategoriesLikeName(partialName, getClientLocale()));
     }
 }
