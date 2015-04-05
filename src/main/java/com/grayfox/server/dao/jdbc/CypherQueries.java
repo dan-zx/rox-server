@@ -12,13 +12,11 @@ final class CypherQueries {
     static final String USER_FOURSQUARE_ID = "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(u:User) RETURN u.foursquareId";
     static final String USER_FRIENDS = "MATCH (:User {foursquareId:{1}})-[:FRIENDS]-(friends:User) RETURN friends.name, friends.lastName, friends.photoUrl, friends.foursquareId";
     static final String USER_FRIENDS_FOURSQUARE_IDS = "MATCH (:User {foursquareId:{1}})-[:FRIENDS]-(friends:User) RETURN friends.foursquareId";
-    static final String USER_LIKES = "MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category) RETURN c.defaultName, c.iconUrl, c.foursquareId";
-    static final String USER_LIKES_SPANISH = "MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category) RETURN c.spanishName, c.iconUrl, c.foursquareId";
+    static final Map<String, String> USER_LIKES_I18N;
     static final String USER_LIKES_FOURSQUARE_IDS = "MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category) RETURN c.foursquareId";
     static final String ARE_FRIENDS = "MATCH (:User {foursquareId:{1}})-[:FRIENDS]-(:User {foursquareId:{2}}) RETURN true";
     static final String EXISTS_USER = "MATCH (:User {foursquareId:{1}}) RETURN true";
-    static final String CREATE_USER = "MATCH (c:Credential {accessToken:{1}}) CREATE (:User {name:{2}, lastName:{3}, photoUrl:{4}, foursquareId:{5}})-[:HAS]->(c)";
-    static final String CREATE_FRIEND = "MATCH (me:User {foursquareId:{1}}) CREATE (:User {name:{2}, lastName:{3}, photoUrl:{4}, foursquareId:{5}})<-[:FRIENDS]-(me)";
+    static final String CREATE_USER = "CREATE (:User {name:{1}, lastName:{2}, photoUrl:{3}, foursquareId:{4}})-[:HAS]->(c)";
     static final String CREATE_HAS_CREDENTIAL_RELATION = "MATCH (u:User {foursquareId:{1}}), (c:Credential {accessToken:{2}}) CREATE (u)-[:HAS]->(c)";
     static final String CREATE_LIKES_RELATION = "MATCH (u:User {foursquareId:{1}}), (c:Category {foursquareId:{2}}) CREATE (u)-[:LIKES]->(c)";
     static final String DELETE_LIKES_RELATION = "MATCH (:User {foursquareId:{1}})-[r:LIKES]->(:Category {foursquareId:{2}}) DELETE r";
@@ -46,6 +44,11 @@ final class CypherQueries {
 
     static {
         HashMap<String, String> queries = new HashMap<>();
+        queries.put("default", "MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category) RETURN c.defaultName, c.iconUrl, c.foursquareId");
+        queries.put("es", "MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category) RETURN c.spanishName, c.iconUrl, c.foursquareId");
+        USER_LIKES_I18N = Collections.unmodifiableMap(queries);
+        
+        queries = new HashMap<>();
         queries.put("default", "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi) WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4} RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, c.defaultName");
         queries.put("es", "MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi) WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4} RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, c.spanishName");
         NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_I18N = Collections.unmodifiableMap(queries);
