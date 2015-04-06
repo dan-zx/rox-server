@@ -24,7 +24,7 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
         Set<String> categoryNames = new HashSet<>();
         List<Recommendation> recommendations = getJdbcTemplate().query(getQuery("nearestRecommendationsByCategoriesLiked", locale), 
                 (ResultSet rs, int i) -> {
-                    String categoryName = rs.getString(5);
+                    String categoryName = rs.getString(6);
                     if (categoryNames.add(categoryName)) {
                         Recommendation recommendation = new Recommendation();
                         Poi poi = new Poi();
@@ -33,6 +33,7 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                         poi.getLocation().setLatitude(rs.getDouble(2));
                         poi.getLocation().setLongitude(rs.getDouble(3));
                         poi.setFoursquareId(rs.getString(4));
+                        poi.setFoursquareRating(rs.getDouble(5));
                         recommendation.setType(Recommendation.Type.SELF);
                         recommendation.setReason(Messages.get("recommendation.self.reason", locale, new Object[] {categoryName}));
                         recommendation.setPoi(poi);
@@ -48,7 +49,7 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
         Set<String> categoryNames = new HashSet<>();
         List<Recommendation> recommendations = getJdbcTemplate().query(getQuery("nearestRecommendationsByCategoriesLikedByFriends", locale), 
                 (ResultSet rs, int i) -> {
-                    String categoryName = rs.getString(7);
+                    String categoryName = rs.getString(8);
                     if (categoryNames.add(categoryName)) {
                         Recommendation recommendation = new Recommendation();
                         Poi poi = new Poi();
@@ -57,9 +58,10 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                         poi.getLocation().setLatitude(rs.getDouble(2));
                         poi.getLocation().setLongitude(rs.getDouble(3));
                         poi.setFoursquareId(rs.getString(4));
+                        poi.setFoursquareRating(rs.getDouble(5));
                         recommendation.setType(Recommendation.Type.SOCIAL);
-                        String lastName = rs.getString(6);
-                        String friendName = lastName == null || lastName.trim().isEmpty() ? rs.getString(5) : new StringBuilder().append(rs.getString(5)).append(" ").append(lastName).toString();
+                        String lastName = rs.getString(7);
+                        String friendName = lastName == null || lastName.trim().isEmpty() ? rs.getString(6) : new StringBuilder().append(rs.getString(6)).append(" ").append(lastName).toString();
                         recommendation.setReason(Messages.get("recommendation.social.reason", locale, new Object[] {friendName, categoryName}));
                         recommendation.setPoi(poi);
                         return recommendation;
