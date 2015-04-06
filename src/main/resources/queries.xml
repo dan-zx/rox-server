@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <!-- //////////////////////////////////////// User ///////////////////////////////////////// -->
+    <entry key="userByAccessToken">
+        <![CDATA[
+            MATCH (:Credential {accessToken:{1}})<-[:HAS]-(u:User)
+            RETURN u.name, u.lastName, u.photoUrl, u.foursquareId
+        ]]>
+    </entry>
+    <entry key="userFoursquareIdByAccessToken">
+        <![CDATA[
+             MATCH (:Credential {accessToken:{1}})<-[:HAS]-(u:User) 
+             RETURN u.foursquareId
+        ]]>
+    </entry>
+    <entry key="friendsByUserFoursquareId">
+        <![CDATA[
+             MATCH (:User {foursquareId:{1}})-[:FRIENDS]-(friends:User)
+             RETURN friends.name, friends.lastName, friends.photoUrl, friends.foursquareId
+        ]]>
+    </entry>
+    <entry key="friendsFoursquareIdsByUserFoursquareId">
+        <![CDATA[
+             MATCH (:User {foursquareId:{1}})-[:FRIENDS]-(friends:User)
+             RETURN friends.foursquareId
+        ]]>
+    </entry>
+    <entry key="likesByUserFoursquareId">
+        <![CDATA[
+            MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category)
+            RETURN c.defaultName, c.iconUrl, c.foursquareId 
+        ]]>
+    </entry>
+    <entry key="likesFoursquareIdsByUserFoursquareId">
+        <![CDATA[
+             MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category)
+             RETURN c.foursquareId
+        ]]>
+    </entry>
+    <entry key="areFriends">
+        <![CDATA[
+             MATCH (:User {foursquareId:{1}})-[:FRIENDS]-(:User {foursquareId:{2}})
+             RETURN true
+        ]]>
+    </entry>
+    <entry key="existsUser">
+        <![CDATA[
+            MATCH (:User {foursquareId:{1}})
+            RETURN true 
+        ]]>
+    </entry>
+    <entry key="createUser">
+        <![CDATA[
+             CREATE (:User {name:{1}, lastName:{2}, photoUrl:{3}, foursquareId:{4}})
+        ]]>
+    </entry>
+    <entry key="createCredentialLink">
+        <![CDATA[
+             MATCH (u:User {foursquareId:{1}}), (c:Credential {accessToken:{2}})
+             CREATE (u)-[:HAS]->(c)
+        ]]>
+    </entry>
+    <entry key="createLikesLink">
+        <![CDATA[
+             MATCH (u:User {foursquareId:{1}}), (c:Category {foursquareId:{2}})
+             CREATE (u)-[:LIKES]->(c)
+        ]]>
+    </entry>
+    <entry key="createFriendsLink">
+        <![CDATA[
+             MATCH (me:User {foursquareId:{1}}), (friend:User {foursquareId:{2}})
+             CREATE (me)-[:FRIENDS]->(friend)
+        ]]>
+    </entry>
+    <entry key="updateUser">
+        <![CDATA[
+             MATCH (u:User {foursquareId:{1}})
+             SET u.name = {2}, u.lastName = {3}, u.photoUrl = {4}
+        ]]>
+    </entry>
+    <entry key="deleteLikesLink">
+        <![CDATA[
+             MATCH (:User {foursquareId:{1}})-[r:LIKES]->(:Category {foursquareId:{2}})
+             DELETE r
+        ]]>
+    </entry>
+    <entry key="deleteFriendsLink">
+        <![CDATA[
+             MATCH (:User {foursquareId:{1}})-[r:FRIENDS]-(:User {foursquareId:{2}})
+             DELETE r
+        ]]>
+    </entry>
+
+    <!-- ///////////////////////////////////// Credential ////////////////////////////////////// -->
+    <entry key="credentialByFoursquareAccessToken">
+        <![CDATA[
+             MATCH (c:Credential {foursquareAccessToken:{1}})
+             RETURN c.accessToken
+        ]]>
+    </entry>
+    <entry key="existsAccessToken">
+        <![CDATA[
+             MATCH (:Credential {accessToken:{1}})
+             RETURN true
+        ]]>
+    </entry>
+    <entry key="createCredential">
+        <![CDATA[
+             CREATE (:Credential {accessToken:{1}, foursquareAccessToken:{2}})
+        ]]>
+    </entry>
+    <entry key="deleteUserCredential">
+        <![CDATA[
+             MATCH (:User {foursquareId:{1}})-[r:HAS]->(c:Credential)
+             DELETE r, c
+        ]]>
+    </entry>
+
+    <!-- ///////////////////////////////////////// POI ///////////////////////////////////////// -->
+    <entry key="allPois">
+        <![CDATA[
+             MATCH (p:Poi) RETURN p.name, p.latitude, p.longitude, p.foursquareId
+        ]]>
+    </entry>
+    <entry key="nearestPoisByCategory">
+        <![CDATA[
+             MATCH (p:Poi)-[:IS]->(c:Category {foursquareId:{1}})
+             WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4}
+             RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId
+        ]]>
+    </entry>
+
+    <!-- ////////////////////////////////////// Category /////////////////////////////////////// -->
+    <entry key="categoriesByPoiFoursquareId">
+        <![CDATA[
+             MATCH (c:Category)<-[:IS]-(:Poi {foursquareId:{1}})
+             RETURN c.defaultName, c.iconUrl, c.foursquareId
+        ]]>
+    </entry>
+    <entry key="categoriesByPartialName">
+        <![CDATA[
+             MATCH (c:Category) WHERE c.defaultName =~ '(?i).*%s.*'
+             RETURN c.defaultName, c.iconUrl, c.foursquareId LIMIT 5
+        ]]>
+    </entry>
+
+    <!-- /////////////////////////////////// Recommendation //////////////////////////////////// -->
+    <entry key="nearestRecommendationsByCategoriesLiked">
+        <![CDATA[
+             MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi)
+             WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4}
+             RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, c.defaultName
+        ]]>
+    </entry>
+    <entry key="nearestRecommendationsByCategoriesLikedByFriends">
+        <![CDATA[
+             MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:FRIENDS]-(u:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi)
+             WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4}
+             RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, u.name, u.lastName, c.defaultName
+        ]]>
+    </entry>
+</properties>

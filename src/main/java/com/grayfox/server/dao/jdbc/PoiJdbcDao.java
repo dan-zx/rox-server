@@ -1,7 +1,5 @@
 package com.grayfox.server.dao.jdbc;
 
-import static com.grayfox.server.dao.jdbc.CypherQueries.*;
-
 import java.sql.ResultSet;
 import java.util.List;
 
@@ -16,7 +14,7 @@ public class PoiJdbcDao extends JdbcDao implements PoiDao {
 
     @Override
     public List<Poi> fetchAll() {
-        return getJdbcTemplate().query(POIS, 
+        return getJdbcTemplate().query(getQuery("allPois"), 
                 (ResultSet rs, int i) -> {
                     Poi poi = new Poi();
                     poi.setName(rs.getString(1));
@@ -31,7 +29,7 @@ public class PoiJdbcDao extends JdbcDao implements PoiDao {
 
     @Override
     public List<Poi> fetchNearestByCategory(Location location, Integer radius, String categoryFoursquareId) {
-        return getJdbcTemplate().query(NEAREAST_POIS_BY_CATEGORY, 
+        return getJdbcTemplate().query(getQuery("nearestPoisByCategory"), 
                 (ResultSet rs, int i) -> {
                     Poi poi = new Poi();
                     poi.setName(rs.getString(1));

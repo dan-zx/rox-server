@@ -8,12 +8,14 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import com.grayfox.server.config.Constants;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class Messages {
 
-    private static final Collection<Locale> SUPPORTED_LOCALES = Collections.singletonList(new Locale("es"));
+    private static final Collection<Locale> SUPPORTED_LOCALES = Collections.singletonList(Constants.SPANISH_LOCALE);
     private static final String RESOURCE_BUNDLE_BASE_NAME = "com.grayfox.server.messages";
     private static final String MISSING_RESOURCE_KEY_FORMAT = "???%s???";
     private static final Logger LOGGER = LoggerFactory.getLogger(Messages.class);

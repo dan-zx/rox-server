@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <!-- //////////////////////////////////////// User ///////////////////////////////////////// -->
+    <entry key="likesByUserFoursquareId">
+        <![CDATA[
+            MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category)
+            RETURN c.spanishName, c.iconUrl, c.foursquareId 
+        ]]>
+    </entry>
+
+    <!-- ////////////////////////////////////// Category /////////////////////////////////////// -->
+    <entry key="categoriesByPoiFoursquareId">
+        <![CDATA[
+             MATCH (c:Category)<-[:IS]-(:Poi {foursquareId:{1}})
+             RETURN c.spanishName, c.iconUrl, c.foursquareId
+        ]]>
+    </entry>
+    <entry key="categoriesByPartialName">
+        <![CDATA[
+             MATCH (c:Category) WHERE c.defaultName =~ '(?i).*%s.*'
+             RETURN c.spanishName, c.iconUrl, c.foursquareId LIMIT 5
+        ]]>
+    </entry>
+
+    <!-- /////////////////////////////////// Recommendation //////////////////////////////////// -->
+    <entry key="nearestRecommendationsByCategoriesLiked">
+        <![CDATA[
+             MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi)
+             WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4}
+             RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, c.spanishName
+        ]]>
+    </entry>
+    <entry key="nearestRecommendationsByCategoriesLikedByFriends">
+        <![CDATA[
+             MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:FRIENDS]-(u:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi)
+             WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4}
+             RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, u.name, u.lastName, c.spanishName
+        ]]>
+    </entry>
+</properties>

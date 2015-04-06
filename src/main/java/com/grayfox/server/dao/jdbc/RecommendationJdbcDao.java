@@ -1,7 +1,5 @@
 package com.grayfox.server.dao.jdbc;
 
-import static com.grayfox.server.dao.jdbc.CypherQueries.*;
-
 import java.sql.ResultSet;
 import java.util.HashSet;
 import java.util.List;
@@ -24,7 +22,7 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
     @Override
     public List<Recommendation> fetchNearestByCategoriesLiked(String accessToken, Location location, Integer radius, Locale locale) {
         Set<String> categoryNames = new HashSet<>();
-        List<Recommendation> recommendations = getJdbcTemplate().query(getQueryFrom(NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_I18N, locale), 
+        List<Recommendation> recommendations = getJdbcTemplate().query(getQuery("nearestRecommendationsByCategoriesLiked", locale), 
                 (ResultSet rs, int i) -> {
                     String categoryName = rs.getString(5);
                     if (categoryNames.add(categoryName)) {
@@ -48,7 +46,7 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
     @Override
     public List<Recommendation> fetchNearestByCategoriesLikedByFriends(String accessToken, Location location, Integer radius, Locale locale) {
         Set<String> categoryNames = new HashSet<>();
-        List<Recommendation> recommendations = getJdbcTemplate().query(getQueryFrom(NEAREAST_RECOMMENDATIONS_BY_CATEGORIES_LIKED_BY_FRIENDS_I18N, locale), 
+        List<Recommendation> recommendations = getJdbcTemplate().query(getQuery("nearestRecommendationsByCategoriesLikedByFriends", locale), 
                 (ResultSet rs, int i) -> {
                     String categoryName = rs.getString(7);
                     if (categoryNames.add(categoryName)) {
