@@ -18,7 +18,7 @@
     </entry>
     <entry key="categoriesByPartialName">
         <![CDATA[
-             MATCH (c:Category) WHERE c.defaultName =~ '(?i).*%s.*'
+             MATCH (c:Category) WHERE c.spanishName =~ '(?i).*%s.*'
              RETURN c.spanishName, c.iconUrl, c.foursquareId LIMIT 5
         ]]>
     </entry>
