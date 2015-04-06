@@ -18,11 +18,11 @@ public class PoiJdbcDao extends JdbcDao implements PoiDao {
                 (ResultSet rs, int i) -> {
                     Poi poi = new Poi();
                     poi.setName(rs.getString(1));
-                    Location location = new Location();
-                    location.setLatitude(rs.getDouble(2));
-                    location.setLongitude(rs.getDouble(3));
-                    poi.setLocation(location);
+                    poi.setLocation(new Location());
+                    poi.getLocation().setLatitude(rs.getDouble(2));
+                    poi.getLocation().setLongitude(rs.getDouble(3));
                     poi.setFoursquareId(rs.getString(4));
+                    poi.setFoursquareRating(rs.getDouble(5));
                     return poi;
                 });
     }
@@ -33,11 +33,11 @@ public class PoiJdbcDao extends JdbcDao implements PoiDao {
                 (ResultSet rs, int i) -> {
                     Poi poi = new Poi();
                     poi.setName(rs.getString(1));
-                    Location poiLocation = new Location();
-                    poiLocation.setLatitude(rs.getDouble(2));
-                    poiLocation.setLongitude(rs.getDouble(3));
-                    poi.setLocation(poiLocation);
+                    poi.setLocation(new Location());
+                    poi.getLocation().setLatitude(rs.getDouble(2));
+                    poi.getLocation().setLongitude(rs.getDouble(3));
                     poi.setFoursquareId(rs.getString(4));
+                    poi.setFoursquareRating(rs.getDouble(5));
                     return poi;
                 }, categoryFoursquareId, location.getLatitude(), location.getLongitude(), radius);
     }

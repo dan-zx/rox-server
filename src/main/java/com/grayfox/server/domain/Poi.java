@@ -10,6 +10,7 @@ public class Poi implements Serializable {
     private String name;
     private Location location;
     private String foursquareId;
+    private Double foursquareRating;
     private Set<Category> categories;
 
     public String getName() {
@@ -36,6 +37,14 @@ public class Poi implements Serializable {
         this.foursquareId = foursquareId;
     }
 
+    public Double getFoursquareRating() {
+        return foursquareRating;
+    }
+
+    public void setFoursquareRating(Double foursquareRating) {
+        this.foursquareRating = foursquareRating;
+    }
+
     public Set<Category> getCategories() {
         return categories;
     }
@@ -50,6 +59,7 @@ public class Poi implements Serializable {
         int result = 1;
         result = prime * result + ((categories == null) ? 0 : categories.hashCode());
         result = prime * result + ((foursquareId == null) ? 0 : foursquareId.hashCode());
+        result = prime * result + ((foursquareRating == null) ? 0 : foursquareRating.hashCode());
         result = prime * result + ((location == null) ? 0 : location.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
@@ -67,6 +77,9 @@ public class Poi implements Serializable {
         if (foursquareId == null) {
             if (other.foursquareId != null) return false;
         } else if (!foursquareId.equals(other.foursquareId)) return false;
+        if (foursquareRating == null) {
+            if (other.foursquareRating != null) return false;
+        } else if (!foursquareRating.equals(other.foursquareRating)) return false;
         if (location == null) {
             if (other.location != null) return false;
         } else if (!location.equals(other.location)) return false;
@@ -79,7 +92,7 @@ public class Poi implements Serializable {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Poi [name=").append(name).append(", location=").append(location).append(", foursquareId=").append(foursquareId).append(", categories=").append(categories).append("]");
+        builder.append("Poi [name=").append(name).append(", location=").append(location).append(", foursquareId=").append(foursquareId).append(", foursquareRating=").append(foursquareRating).append(", categories=").append(categories).append("]");
         return builder.toString();
     }
 }
