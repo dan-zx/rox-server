@@ -28,3 +28,6 @@ src/main/webapp/META-INF/context.xml
 
 # Log files
 log.txt
+
+# UML files
+etc/uml/
