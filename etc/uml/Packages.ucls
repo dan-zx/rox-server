@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.6" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
+  realizations="true" associations="true" dependencies="true" nesting-relationships="true">  
+  <package id="1" language="java" name="com.grayfox.server.dao" project="grayfox-server" 
+    file="/grayfox-server/src/main/java/com/grayfox/server/dao" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="48" width="160" x="42" y="213"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="2" language="java" name="com.grayfox.server.datasource" project="grayfox-server" 
+    file="/grayfox-server/src/main/java/com/grayfox/server/datasource" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="48" width="204" x="242" y="213"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="3" language="java" name="com.grayfox.server.oauth" project="grayfox-server" 
+    file="/grayfox-server/src/main/java/com/grayfox/server/oauth" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="48" width="171" x="507" y="213"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="4" language="java" name="com.grayfox.server.service" project="grayfox-server" 
+    file="/grayfox-server/src/main/java/com/grayfox/server/service" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="400" y="137"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="5" language="java" name="com.grayfox.server.domain" project="grayfox-server" 
+    file="/grayfox-server/src/main/java/com/grayfox/server/domain" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="404" y="353"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="6" language="java" name="com.grayfox.server.ws.rest" project="grayfox-server" 
+    file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="399" y="47"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <dependency id="7">    
+    <bendpoint x="480" y="238"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="8">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="9">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="10">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="11">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="12">    
+    <bendpoint x="708" y="125"/>    
+    <bendpoint x="708" y="271"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="13">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="14">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
