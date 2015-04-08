@@ -4,13 +4,28 @@
   <interface id="1" language="java" name="com.grayfox.server.oauth.SocialNetworkAuthenticator" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/oauth/SocialNetworkAuthenticator.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="112" y="49"/>    
+    <position height="-1" width="-1" x="127" y="65"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
+  <class id="2" language="java" name="com.grayfox.server.oauth.foursquare.FoursquareAuthenticator" 
+    project="grayfox-server" 
+    file="/grayfox-server/src/main/java/com/grayfox/server/oauth/foursquare/FoursquareAuthenticator.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="127" y="200"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <realization id="3">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
     accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
