@@ -17,6 +17,7 @@ import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
 import com.grayfox.server.domain.Recommendation;
 import com.grayfox.server.service.RecommenderService;
+import com.grayfox.server.util.Constants;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -38,11 +39,10 @@ public class RecommenderWebService extends BaseRestComponent {
     @Produces(MediaType.APPLICATION_JSON)
     public Result<List<Recommendation>> recommendByAll(
             @NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken,
-            @NotBlank(message = "location.required.error") @Pattern(message = "location.format.error", regexp = "(\\-?\\d+(\\.\\d+)?),(\\-?\\d+(\\.\\d+)?)") @QueryParam("location") String locationString,
-            @Pattern(message = "radius.format.error", regexp = "[1-9]\\d*") @QueryParam("radius") String radiusStr) {
-        LOGGER.debug("recommendByLikes({}, {}, {})", accessToken, locationString, radiusStr);
-        Integer radius = radiusStr == null || radiusStr.trim().isEmpty() ? null : Integer.parseInt(radiusStr);
-        return new Result<>(recommenderService.recommendByAll(accessToken, Location.parse(locationString), radius, getClientLocale()));
+            @NotBlank(message = "location.required.error") @Pattern(message = "location.format.error", regexp = Constants.Regexs.LOCATION) @QueryParam("location") String locationStr,
+            @NotBlank(message = "radius.required.error") @Pattern(message = "radius.format.error", regexp = Constants.Regexs.POSITIVE_INT) @QueryParam("radius") String radiusStr) {
+        LOGGER.debug("recommendByLikes({}, {}, {})", accessToken, locationStr, radiusStr);
+        return new Result<>(recommenderService.recommendByAll(accessToken, Location.parse(locationStr), Integer.parseInt(radiusStr), getClientLocale()));
     }
 
     @GET
@@ -50,11 +50,10 @@ public class RecommenderWebService extends BaseRestComponent {
     @Produces(MediaType.APPLICATION_JSON)
     public Result<List<Recommendation>> recommendByLikes(
             @NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken,
-            @NotBlank(message = "location.required.error") @Pattern(message = "location.format.error", regexp = "(\\-?\\d+(\\.\\d+)?),(\\-?\\d+(\\.\\d+)?)") @QueryParam("location") String locationString,
-            @Pattern(message = "radius.format.error", regexp = "[1-9]\\d*") @QueryParam("radius") String radiusStr) {
-        LOGGER.debug("recommendByLikes({}, {}, {})", accessToken, locationString, radiusStr);
-        Integer radius = radiusStr == null || radiusStr.trim().isEmpty() ? null : Integer.parseInt(radiusStr);
-        return new Result<>(recommenderService.recommendByLikes(accessToken, Location.parse(locationString), radius, getClientLocale()));
+            @NotBlank(message = "location.required.error") @Pattern(message = "location.format.error", regexp = Constants.Regexs.LOCATION) @QueryParam("location") String locationStr,
+            @NotBlank(message = "radius.required.error") @Pattern(message = "radius.format.error", regexp = Constants.Regexs.POSITIVE_INT) @QueryParam("radius") String radiusStr) {
+        LOGGER.debug("recommendByLikes({}, {}, {})", accessToken, locationStr, radiusStr);
+        return new Result<>(recommenderService.recommendByLikes(accessToken, Location.parse(locationStr), Integer.parseInt(radiusStr), getClientLocale()));
     }
 
     @GET
@@ -62,11 +61,10 @@ public class RecommenderWebService extends BaseRestComponent {
     @Produces(MediaType.APPLICATION_JSON)
     public Result<List<Recommendation>> recommendByFriendsLikes(
             @NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken,
-            @NotBlank(message = "location.required.error") @Pattern(message = "location.format.error", regexp = "(\\-?\\d+(\\.\\d+)?),(\\-?\\d+(\\.\\d+)?)") @QueryParam("location") String locationString,
-            @Pattern(message = "radius.format.error", regexp = "[1-9]\\d*") @QueryParam("radius") String radiusStr) {
-        LOGGER.debug("recommendByFriendsLikes({}, {}, {})", accessToken, locationString, radiusStr);
-        Integer radius = radiusStr == null || radiusStr.trim().isEmpty() ? null : Integer.parseInt(radiusStr);
-        return new Result<>(recommenderService.recommendByFriendsLikes(accessToken, Location.parse(locationString), radius, getClientLocale()));
+            @NotBlank(message = "location.required.error") @Pattern(message = "location.format.error", regexp = Constants.Regexs.LOCATION) @QueryParam("location") String locationStr,
+            @NotBlank(message = "radius.required.error") @Pattern(message = "radius.format.error", regexp = Constants.Regexs.POSITIVE_INT) @QueryParam("radius") String radiusStr) {
+        LOGGER.debug("recommendByFriendsLikes({}, {}, {})", accessToken, locationStr, radiusStr);
+        return new Result<>(recommenderService.recommendByFriendsLikes(accessToken, Location.parse(locationStr), Integer.parseInt(radiusStr), getClientLocale()));
     }
 
     @POST
