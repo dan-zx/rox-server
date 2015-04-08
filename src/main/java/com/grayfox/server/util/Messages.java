@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 public final class Messages {
 
-    private static final Collection<Locale> SUPPORTED_LOCALES = Collections.singletonList(Constants.SPANISH_LOCALE);
+    private static final Collection<Locale> SUPPORTED_LOCALES = Collections.singletonList(Constants.Locales.SPANISH);
     private static final String RESOURCE_BUNDLE_BASE_NAME = "com.grayfox.server.messages";
     private static final String MISSING_RESOURCE_KEY_FORMAT = "???%s???";
     private static final Logger LOGGER = LoggerFactory.getLogger(Messages.class);

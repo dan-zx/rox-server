@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
 import com.grayfox.server.service.PoiService;
+import com.grayfox.server.util.Constants;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -40,8 +41,8 @@ public class PoiWebService extends BaseRestComponent {
     @Path("search")
     @Produces(MediaType.APPLICATION_JSON)
     public Result<List<Poi>> searchPoisByCategory(
-            @NotBlank(message = "location.required.error") @Pattern(message = "location.format.error", regexp = "(\\-?\\d+(\\.\\d+)?),(\\-?\\d+(\\.\\d+)?)") @QueryParam("location") String locationStr,
-            @NotBlank(message = "radius.required.error") @Pattern(message = "radius.format.error", regexp = "[1-9]\\d*") @QueryParam("radius") String radiusStr,
+            @NotBlank(message = "location.required.error") @Pattern(message = "location.format.error", regexp = Constants.Regexs.LOCATION) @QueryParam("location") String locationStr,
+            @NotBlank(message = "radius.required.error") @Pattern(message = "radius.format.error", regexp = Constants.Regexs.POSITIVE_INT) @QueryParam("radius") String radiusStr,
             @NotBlank(message = "category_foursquare_id.required.error") @QueryParam("category-foursquare-id") String categoryFoursquareId) {
         LOGGER.debug("searchPoisByCategory({}, {}, {})", locationStr, radiusStr, categoryFoursquareId);
         return new Result<>(poiService.getNearestPoisByCategory(Location.parse(locationStr), Integer.parseInt(radiusStr), categoryFoursquareId, getClientLocale()));
