@@ -1,11 +1,10 @@
-package com.grayfox.server.config;
+package com.grayfox.server.util;
 
 import java.util.Locale;
 
 public final class Constants {
 
-    public static Locale SPANISH_LOCALE = new Locale("es");
-    public static final int DEFAULT_RADIUS = 20_000;
+    public static final Locale SPANISH_LOCALE = new Locale("es");
 
     private Constants() {
         throw new IllegalAccessError("This class cannot be instantiated nor extended");

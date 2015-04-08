@@ -9,8 +9,9 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
-import com.grayfox.server.config.Constants;
+import com.grayfox.server.util.Constants;
 import com.grayfox.server.util.XmlResourceBundleControl;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 
 abstract class JdbcDao {

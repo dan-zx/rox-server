@@ -40,11 +40,10 @@ public class PoiWebService extends BaseRestComponent {
     @Path("search")
     @Produces(MediaType.APPLICATION_JSON)
     public Result<List<Poi>> searchPoisByCategory(
-            @NotBlank(message = "location.required.error") @Pattern(message = "location.format.error", regexp = "(\\-?\\d+(\\.\\d+)?),(\\-?\\d+(\\.\\d+)?)") @QueryParam("location") String locationString,
-            @Pattern(message = "radius.format.error", regexp = "[1-9]\\d*") @QueryParam("radius") String radiusStr,
+            @NotBlank(message = "location.required.error") @Pattern(message = "location.format.error", regexp = "(\\-?\\d+(\\.\\d+)?),(\\-?\\d+(\\.\\d+)?)") @QueryParam("location") String locationStr,
+            @NotBlank(message = "radius.required.error") @Pattern(message = "radius.format.error", regexp = "[1-9]\\d*") @QueryParam("radius") String radiusStr,
             @NotBlank(message = "category_foursquare_id.required.error") @QueryParam("category-foursquare-id") String categoryFoursquareId) {
-        LOGGER.debug("searchPoisByCategory({}, {}, {})", locationString, radiusStr, categoryFoursquareId);
-        Integer radius = radiusStr == null || radiusStr.trim().isEmpty() ? null : Integer.parseInt(radiusStr);
-        return new Result<>(poiService.getNearestPoisByCategory(Location.parse(locationString), radius, categoryFoursquareId, getClientLocale()));
+        LOGGER.debug("searchPoisByCategory({}, {}, {})", locationStr, radiusStr, categoryFoursquareId);
+        return new Result<>(poiService.getNearestPoisByCategory(Location.parse(locationStr), Integer.parseInt(radiusStr), categoryFoursquareId, getClientLocale()));
     }
 }

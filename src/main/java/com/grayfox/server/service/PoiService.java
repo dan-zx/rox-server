@@ -1,7 +1,5 @@
 package com.grayfox.server.service;
 
-import static com.grayfox.server.config.Constants.*;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -30,8 +28,8 @@ public class PoiService {
     }
 
     @Transactional(readOnly = true)
-    public List<Poi> getNearestPoisByCategory(Location location, Integer radius, String categoryFoursquareId, Locale locale) {
-        List<Poi> pois = poiDao.fetchNearestByCategory(location, radius != null ? radius : DEFAULT_RADIUS, categoryFoursquareId);
+    public List<Poi> getNearestPoisByCategory(Location location, int radius, String categoryFoursquareId, Locale locale) {
+        List<Poi> pois = poiDao.fetchNearestByCategory(location, radius, categoryFoursquareId);
         pois.forEach(poi -> poi.setCategories(new HashSet<>(categoryDao.fetchByPoiFoursquareId(poi.getFoursquareId(), locale))));
         return pois;
     }
