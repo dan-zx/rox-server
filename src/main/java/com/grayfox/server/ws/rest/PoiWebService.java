@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
+import com.grayfox.server.domain.Recommendation;
 import com.grayfox.server.service.PoiService;
 import com.grayfox.server.util.Constants;
 import com.grayfox.server.ws.rest.response.Response;
@@ -39,7 +40,7 @@ public class PoiWebService extends BaseRestComponent {
     @GET
     @Path("all")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response<List<Poi>> getPois() {
+    public Response<List<Poi>> pois() {
         return new Response<>(poiService.getPois(getClientLocale()));
     }
 
@@ -60,13 +61,25 @@ public class PoiWebService extends BaseRestComponent {
     @Produces(MediaType.APPLICATION_JSON)
     public Response<List<Poi>> nextPois(@NotNull(message = "seed.required.error") Poi seed) {
         LOGGER.debug("nextPois({})", seed);
-        return new Response<>(poiService.nextPois(seed, getClientLocale()));
+        return new Response<>(poiService.getNextPois(seed, getClientLocale()));
+    }
+
+    @GET
+    @Path("recommend")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response<List<Recommendation>> recommend(
+            @QueryParam("access-token") String accessToken,
+            @NotBlank(message = "location.required.error") @Pattern(message = "location.format.error", regexp = Constants.Regexs.LOCATION) @QueryParam("location") String locationStr,
+            @NotBlank(message = "radius.required.error") @Pattern(message = "radius.format.error", regexp = Constants.Regexs.POSITIVE_INT) @QueryParam("radius") String radiusStr) {
+        if (accessToken != null && accessToken.trim().isEmpty()) accessToken = null;
+        LOGGER.debug("recommend({}, {}, {})", accessToken, locationStr, radiusStr);
+        return new Response<>(poiService.recommend(accessToken, Location.parse(locationStr), Integer.parseInt(radiusStr), getClientLocale()));
     }
 
     @GET
     @Path("categories/like/{partialName}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response<List<Category>> getCategoriesLikeName(@NotBlank(message = "category_name.required.error") @PathParam("partialName") String partialName) {
+    public Response<List<Category>> categoriesLikeName(@NotBlank(message = "category_name.required.error") @PathParam("partialName") String partialName) {
         return new Response<>(poiService.getCategoriesLikeName(partialName, getClientLocale()));
     }
 }

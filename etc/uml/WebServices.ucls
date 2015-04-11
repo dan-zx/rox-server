@@ -1,30 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.6" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="true" nesting-relationships="true">  
-  <class id="1" language="java" name="com.grayfox.server.ws.rest.RecommenderWebService" project="grayfox-server" 
-    file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest/RecommenderWebService.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="213" y="103"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="false" protected="false" private="false" static="false"/>      
-      <operations public="true" package="false" protected="false" private="false" static="false"/>    
-    </display>  
-  </class>  
-  <class id="2" language="java" name="com.grayfox.server.ws.rest.UserWebService" project="grayfox-server" 
+  <class id="1" language="java" name="com.grayfox.server.ws.rest.UserWebService" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest/UserWebService.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="615" y="139"/>    
+    <position height="205" width="354" x="437" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="false" protected="false" private="false" static="false"/>      
       <operations public="true" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="com.grayfox.server.ws.rest.PoiWebService" project="grayfox-server" 
+  <class id="2" language="java" name="com.grayfox.server.ws.rest.PoiWebService" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest/PoiWebService.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="168" y="251"/>    
+    <position height="169" width="356" x="41" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="false" protected="false" private="false" static="false"/>      
