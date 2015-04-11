@@ -8,6 +8,7 @@ import javax.ws.rs.ext.Provider;
 import com.grayfox.server.BaseApplicationException;
 import com.grayfox.server.util.Messages;
 import com.grayfox.server.ws.rest.BaseRestComponent;
+import com.grayfox.server.ws.rest.response.ErrorResponse;
 
 @Provider
 public class ApplicationExceptionHandler extends BaseRestComponent implements ExceptionMapper<BaseApplicationException> {
@@ -19,12 +20,12 @@ public class ApplicationExceptionHandler extends BaseRestComponent implements Ex
             case "user.invalid.error":
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .type(MediaType.APPLICATION_JSON)
-                        .entity(new ErrorResult(exception.getMessageKey(), message).toJson())
+                        .entity(new ErrorResponse(exception.getMessageKey(), message).toJson())
                         .build();
             default: 
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                         .type(MediaType.APPLICATION_JSON)
-                        .entity(new ErrorResult(exception.getMessageKey(), message).toJson())
+                        .entity(new ErrorResponse(exception.getMessageKey(), message).toJson())
                         .build();
         }
     }

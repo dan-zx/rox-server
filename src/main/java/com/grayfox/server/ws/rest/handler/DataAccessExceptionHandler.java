@@ -7,6 +7,7 @@ import javax.ws.rs.ext.Provider;
 
 import com.grayfox.server.util.Messages;
 import com.grayfox.server.ws.rest.BaseRestComponent;
+import com.grayfox.server.ws.rest.response.ErrorResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ public class DataAccessExceptionHandler extends BaseRestComponent implements Exc
         String message = Messages.get(messageKey, getClientLocale());
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .type(MediaType.APPLICATION_JSON)
-                .entity(new ErrorResult(messageKey, message).toJson())
+                .entity(new ErrorResponse(messageKey, message).toJson())
                 .build();
     }
 }

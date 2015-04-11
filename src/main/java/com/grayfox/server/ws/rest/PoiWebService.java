@@ -14,6 +14,7 @@ import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
 import com.grayfox.server.service.PoiService;
 import com.grayfox.server.util.Constants;
+import com.grayfox.server.ws.rest.response.Response;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -33,18 +34,18 @@ public class PoiWebService extends BaseRestComponent {
     @GET
     @Path("all")
     @Produces(MediaType.APPLICATION_JSON)
-    public Result<List<Poi>> getPois() {
-        return new Result<>(poiService.getPois(getClientLocale()));
+    public Response<List<Poi>> getPois() {
+        return new Response<>(poiService.getPois(getClientLocale()));
     }
 
     @GET
     @Path("search")
     @Produces(MediaType.APPLICATION_JSON)
-    public Result<List<Poi>> searchPoisByCategory(
+    public Response<List<Poi>> searchPoisByCategory(
             @NotBlank(message = "location.required.error") @Pattern(message = "location.format.error", regexp = Constants.Regexs.LOCATION) @QueryParam("location") String locationStr,
             @NotBlank(message = "radius.required.error") @Pattern(message = "radius.format.error", regexp = Constants.Regexs.POSITIVE_INT) @QueryParam("radius") String radiusStr,
             @NotBlank(message = "category_foursquare_id.required.error") @QueryParam("category-foursquare-id") String categoryFoursquareId) {
         LOGGER.debug("searchPoisByCategory({}, {}, {})", locationStr, radiusStr, categoryFoursquareId);
-        return new Result<>(poiService.getNearestPoisByCategory(Location.parse(locationStr), Integer.parseInt(radiusStr), categoryFoursquareId, getClientLocale()));
+        return new Response<>(poiService.getNearestPoisByCategory(Location.parse(locationStr), Integer.parseInt(radiusStr), categoryFoursquareId, getClientLocale()));
     }
 }

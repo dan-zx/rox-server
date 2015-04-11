@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.service.CategoryService;
+import com.grayfox.server.ws.rest.response.Response;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -25,7 +26,7 @@ public class CategoryWebService extends BaseRestComponent {
     @GET
     @Path("like/{partialName}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Result<List<Category>> getCategoriesLikeName(@NotBlank(message = "category_name.required.error") @PathParam("partialName") String partialName) {
-        return new Result<>(categoryService.getCategoriesLikeName(partialName, getClientLocale()));
+    public Response<List<Category>> getCategoriesLikeName(@NotBlank(message = "category_name.required.error") @PathParam("partialName") String partialName) {
+        return new Response<>(categoryService.getCategoriesLikeName(partialName, getClientLocale()));
     }
 }

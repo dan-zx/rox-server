@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.6" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="true" nesting-relationships="true">  
-  <class id="1" language="java" name="com.grayfox.server.ws.rest.UpdateResult" project="grayfox-server" 
-    file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest/UpdateResult.java" binary="false" 
+  <class id="1" language="java" name="com.grayfox.server.ws.rest.response.UpdateResponse" project="grayfox-server" 
+    file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest/response/UpdateResponse.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1324" y="318"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
@@ -51,8 +51,9 @@
       <operations public="true" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="com.grayfox.server.ws.rest.Result" project="grayfox-server" 
-    file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest/Result.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="6" language="java" name="com.grayfox.server.ws.rest.response.Response" project="grayfox-server" 
+    file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest/response/Response.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
     <position height="74" width="125" x="607" y="282"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
@@ -61,8 +62,7 @@
     </display>  
   </class>  
   <dependency id="7">    
-    <bendpoint x="417" y="245"/>    
-    <end type="SOURCE" refId="2"/>    
+    <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="6"/>  
   </dependency>  
   <dependency id="8">    
@@ -70,7 +70,7 @@
     <end type="TARGET" refId="6"/>  
   </dependency>  
   <dependency id="9">    
-    <end type="SOURCE" refId="4"/>    
+    <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="6"/>  
   </dependency>  
   <dependency id="10">    
@@ -78,7 +78,8 @@
     <end type="TARGET" refId="1"/>  
   </dependency>  
   <dependency id="11">    
-    <end type="SOURCE" refId="3"/>    
+    <bendpoint x="417" y="245"/>    
+    <end type="SOURCE" refId="2"/>    
     <end type="TARGET" refId="6"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
