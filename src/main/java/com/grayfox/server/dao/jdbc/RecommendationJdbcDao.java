@@ -8,12 +8,13 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.grayfox.server.domain.Category;
+
 import com.grayfox.server.dao.RecommendationDao;
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
 import com.grayfox.server.domain.Recommendation;
 import com.grayfox.server.util.Messages;
-
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -36,6 +37,7 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                         recommendation.setPoi(poi);
                         return recommendation;
                 }, location.getLatitude(), location.getLongitude(), radius);
+        recommendations.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(fetchCategoriesByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
         return recommendations;
     }
 
@@ -61,6 +63,7 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                     } else return null;
                 }, accessToken, location.getLatitude(), location.getLongitude(), radius);
         recommendations = recommendations.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        recommendations.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(fetchCategoriesByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
         return recommendations;
     }
 
@@ -87,7 +90,19 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                         return recommendation;
                     } else return null;
                 }, accessToken, location.getLatitude(), location.getLongitude(), radius);
-        recommendations = recommendations.stream().filter(Objects::nonNull).collect(Collectors.toList()); 
+        recommendations = recommendations.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        recommendations.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(fetchCategoriesByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
         return recommendations;
+    }
+
+    private List<Category> fetchCategoriesByPoiFoursquareId(String foursquareId, Locale locale) {
+        return getJdbcTemplate().query(getQuery("categoriesByPoiFoursquareId", locale), 
+                (ResultSet rs, int i) -> {
+                    Category category = new Category();
+                    category.setName(rs.getString(1));
+                    category.setIconUrl(rs.getString(2));
+                    category.setFoursquareId(rs.getString(3));
+                    return category;
+                }, foursquareId);
     }
 }

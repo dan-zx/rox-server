@@ -60,8 +60,8 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User getSelf(String accessToken) {
-        User user = userDao.fetchByAccessToken(accessToken);
+    public User getCompactSelf(String accessToken) {
+        User user = userDao.fetchCompactByAccessToken(accessToken);
         if (user == null) {
             LOGGER.warn("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
@@ -70,13 +70,13 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<User> getSelfFriends(String accessToken) {
+    public List<User> getSelfCompactFriends(String accessToken) {
         String selfFoursquareId = userDao.fetchFoursquareIdByAccessToken(accessToken);
         if (selfFoursquareId == null) {
             LOGGER.warn("Not existing user attempting to retrive information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
-        return userDao.fetchFriendsByFoursquareId(selfFoursquareId);
+        return userDao.fetchCompactFriendsByFoursquareId(selfFoursquareId);
     }
 
     @Transactional(readOnly = true)

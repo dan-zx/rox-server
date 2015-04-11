@@ -8,9 +8,9 @@ import com.grayfox.server.domain.User;
 
 public interface UserDao {
 
-    User fetchByAccessToken(String accessToken);
+    User fetchCompactByAccessToken(String accessToken);
     String fetchFoursquareIdByAccessToken(String accessToken);
-    List<User> fetchFriendsByFoursquareId(String foursquareId);
+    List<User> fetchCompactFriendsByFoursquareId(String foursquareId);
     List<Category> fetchLikesByFoursquareId(String foursquareId, Locale locale);
     boolean areFriends(String foursquareId1, String foursquareId2);
     boolean existsUser(String foursquareId);

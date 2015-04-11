@@ -38,13 +38,6 @@ public class PoiWebService extends BaseRestComponent {
     @Inject private PoiService poiService;
 
     @GET
-    @Path("all")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response<List<Poi>> pois() {
-        return new Response<>(poiService.getPois(getClientLocale()));
-    }
-
-    @GET
     @Path("search")
     @Produces(MediaType.APPLICATION_JSON)
     public Response<List<Poi>> searchPoisByCategory(

@@ -43,7 +43,7 @@ public class UserDaoTest {
 
         credentialDao.save(credential);
 
-        assertThat(userDao.fetchByAccessToken(credential.getAccessToken())).isNull();
+        assertThat(userDao.fetchCompactByAccessToken(credential.getAccessToken())).isNull();
 
         User expectedUser = new User();
         expectedUser.setName("name");
@@ -68,10 +68,10 @@ public class UserDaoTest {
 
         expectedUser.setCredential(null);
         
-        User actualUser = userDao.fetchByAccessToken(credential.getAccessToken());
+        User actualUser = userDao.fetchCompactByAccessToken(credential.getAccessToken());
         assertThat(actualUser).isNotNull();
         
-        actualUser.setFriends(new HashSet<>(userDao.fetchFriendsByFoursquareId(actualUser.getFoursquareId())));
+        actualUser.setFriends(new HashSet<>(userDao.fetchCompactFriendsByFoursquareId(actualUser.getFoursquareId())));
         actualUser.setLikes(new HashSet<>(userDao.fetchLikesByFoursquareId(actualUser.getFoursquareId(), null)));
 
         assertThat(actualUser).isEqualTo(expectedUser);
@@ -89,10 +89,10 @@ public class UserDaoTest {
         
         userDao.update(expectedUser);
         
-        actualUser = userDao.fetchByAccessToken(credential.getAccessToken());
+        actualUser = userDao.fetchCompactByAccessToken(credential.getAccessToken());
         assertThat(actualUser).isNotNull();
         
-        actualUser.setFriends(new HashSet<>(userDao.fetchFriendsByFoursquareId(actualUser.getFoursquareId())));
+        actualUser.setFriends(new HashSet<>(userDao.fetchCompactFriendsByFoursquareId(actualUser.getFoursquareId())));
         actualUser.setLikes(new HashSet<>(userDao.fetchLikesByFoursquareId(actualUser.getFoursquareId(), null)));
 
         assertThat(actualUser).isEqualTo(expectedUser);
