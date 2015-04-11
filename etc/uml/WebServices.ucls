@@ -1,87 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.6" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="true" nesting-relationships="true">  
-  <class id="1" language="java" name="com.grayfox.server.ws.rest.response.UpdateResponse" project="grayfox-server" 
-    file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest/response/UpdateResponse.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1324" y="318"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="false"/>      
-      <operations public="false" package="false" protected="false" private="false" static="false"/>    
-    </display>  
-  </class>  
-  <class id="2" language="java" name="com.grayfox.server.ws.rest.CategoryWebService" project="grayfox-server" 
-    file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest/CategoryWebService.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="97" width="294" x="41" y="37"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="false" protected="false" private="false" static="false"/>      
-      <operations public="true" package="false" protected="false" private="false" static="false"/>    
-    </display>  
-  </class>  
-  <class id="3" language="java" name="com.grayfox.server.ws.rest.RecommenderWebService" project="grayfox-server" 
+  <class id="1" language="java" name="com.grayfox.server.ws.rest.RecommenderWebService" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest/RecommenderWebService.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="151" width="410" x="375" y="37"/>    
+    <position height="-1" width="-1" x="213" y="103"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="false" protected="false" private="false" static="false"/>      
       <operations public="true" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="com.grayfox.server.ws.rest.UserWebService" project="grayfox-server" 
+  <class id="2" language="java" name="com.grayfox.server.ws.rest.UserWebService" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest/UserWebService.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="205" width="274" x="1185" y="37"/>    
+    <position height="-1" width="-1" x="615" y="139"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="false" protected="false" private="false" static="false"/>      
       <operations public="true" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="com.grayfox.server.ws.rest.PoiWebService" project="grayfox-server" 
+  <class id="3" language="java" name="com.grayfox.server.ws.rest.PoiWebService" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest/PoiWebService.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="115" width="320" x="825" y="37"/>    
+    <position height="-1" width="-1" x="168" y="251"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="false" protected="false" private="false" static="false"/>      
       <operations public="true" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="com.grayfox.server.ws.rest.response.Response" project="grayfox-server" 
-    file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest/response/Response.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="74" width="125" x="607" y="282"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="false"/>      
-      <operations public="false" package="false" protected="false" private="false" static="false"/>    
-    </display>  
-  </class>  
-  <dependency id="7">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="6"/>  
-  </dependency>  
-  <dependency id="8">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="6"/>  
-  </dependency>  
-  <dependency id="9">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="6"/>  
-  </dependency>  
-  <dependency id="10">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <dependency id="11">    
-    <bendpoint x="417" y="245"/>    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="6"/>  
-  </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
     accessors="true" visibility="true">    
     <attributes public="true" package="false" protected="false" private="false" static="false"/>    
