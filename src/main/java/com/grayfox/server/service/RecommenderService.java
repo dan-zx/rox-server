@@ -12,7 +12,6 @@ import javax.inject.Inject;
 import com.grayfox.server.dao.CategoryDao;
 import com.grayfox.server.dao.CredentialDao;
 import com.grayfox.server.dao.RecommendationDao;
-import com.grayfox.server.datasource.PoiDataSource;
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
@@ -27,13 +26,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RecommenderService {
 
-    private static final int MAX_POIS_PER_ROUTE = 6;
     private static final Logger LOGGER = LoggerFactory.getLogger(RecommenderService.class);
 
     @Inject private RecommendationDao recommendationDao;
     @Inject private CredentialDao credentialDao;
     @Inject private CategoryDao categoryDao;
-    @Inject private PoiDataSource poiDataSource;
 
     @Transactional(readOnly = true)
     public List<Recommendation> recommendByAll(String accessToken, Location location, int radius, Locale locale) {
@@ -73,14 +70,5 @@ public class RecommenderService {
         List<Recommendation> recommendations = recommendationDao.fetchNearestByCategoriesLikedByFriends(accessToken, location, radius, locale);
         recommendations.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(categoryDao.fetchByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
         return recommendations; 
-    }
-
-    @Transactional(readOnly = true)
-    public List<Poi> nextPois(String accessToken, Poi seed, Locale locale) {
-        if (!credentialDao.existsAccessToken(accessToken)) {
-            LOGGER.warn("Not existing user attempting to retrive information");
-            throw new ServiceException.Builder("user.invalid.error").build();
-        }
-        return poiDataSource.nextPois(seed, MAX_POIS_PER_ROUTE, locale);
     }
 }
