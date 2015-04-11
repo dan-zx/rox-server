@@ -146,17 +146,25 @@
     </entry>
 
     <!-- /////////////////////////////////// Recommendation //////////////////////////////////// -->
+    <entry key="nearestRecommendationsByRating">
+        <![CDATA[
+             MATCH (p:Poi)
+             WHERE (ACOS( SIN(RADIANS(p.latitude))*SIN(RADIANS({1})) + COS(RADIANS(p.latitude))*COS(RADIANS({1}))*COS(RADIANS(p.longitude-{2})) ) * 6371000) <= {3}
+                AND p.foursquareRating >= 9
+             RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, p.foursquareRating
+        ]]>
+    </entry>
     <entry key="nearestRecommendationsByCategoriesLiked">
         <![CDATA[
              MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi)
-             WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4}
+             WHERE (ACOS( SIN(RADIANS(p.latitude))*SIN(RADIANS({2})) + COS(RADIANS(p.latitude))*COS(RADIANS({2}))*COS(RADIANS(p.longitude-{3})) ) * 6371000) <= {4}
              RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, p.foursquareRating, c.defaultName
         ]]>
     </entry>
     <entry key="nearestRecommendationsByCategoriesLikedByFriends">
         <![CDATA[
              MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:FRIENDS]-(u:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi)
-             WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4}
+             WHERE (ACOS( SIN(RADIANS(p.latitude))*SIN(RADIANS({2})) + COS(RADIANS(p.latitude))*COS(RADIANS({2}))*COS(RADIANS(p.longitude-{3})) ) * 6371000) <= {4}
              RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, p.foursquareRating, u.name, u.lastName, c.defaultName
         ]]>
     </entry>

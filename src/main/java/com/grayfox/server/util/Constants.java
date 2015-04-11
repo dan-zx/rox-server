@@ -24,4 +24,13 @@ public final class Constants {
             throw new IllegalAccessError("This class cannot be instantiated nor extended");
         }
     }
+
+    public static final class Ints {
+
+        public static final int EARTH_RADIUS = 6371000;
+
+        private Ints() {
+            throw new IllegalAccessError("This class cannot be instantiated nor extended");
+        }
+    }
 }

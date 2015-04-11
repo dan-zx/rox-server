@@ -50,7 +50,7 @@ public class UserWebService extends BaseRestComponent {
     @GET
     @Path("self")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response<User> getSelf(@NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken) {
+    public Response<User> self(@NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken) {
         LOGGER.debug("getSelf({})", accessToken);
         return new Response<>(userService.getSelf(accessToken));
     }
@@ -58,7 +58,7 @@ public class UserWebService extends BaseRestComponent {
     @GET
     @Path("self/friends")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response<List<User>> getSelfFriends(@NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken) {
+    public Response<List<User>> selfFriends(@NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken) {
         LOGGER.debug("getSelfFriends({})", accessToken);
         return new Response<>(userService.getSelfFriends(accessToken));
     }
@@ -66,7 +66,7 @@ public class UserWebService extends BaseRestComponent {
     @GET
     @Path("self/likes")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response<List<Category>> getSelfLikes(@NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken) {
+    public Response<List<Category>> selfLikes(@NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken) {
         LOGGER.debug("getSelfLikes({})", accessToken);
         return new Response<>(userService.getSelfLikes(accessToken, getClientLocale()));
     }
@@ -74,7 +74,7 @@ public class UserWebService extends BaseRestComponent {
     @GET
     @Path("{userFoursquareId}/likes")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response<List<Category>> getUserLikes(
+    public Response<List<Category>> userLikes(
             @QueryParam("access-token") @NotBlank(message = "access_token.required.error") String accessToken,
             @PathParam("userFoursquareId") @NotBlank(message = "user_foursquare_id.required.error") String foursquareId) {
         LOGGER.debug("getUserLikes({}, {})", accessToken, foursquareId);

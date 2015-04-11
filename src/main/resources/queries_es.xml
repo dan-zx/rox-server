@@ -27,14 +27,14 @@
     <entry key="nearestRecommendationsByCategoriesLiked">
         <![CDATA[
              MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi)
-             WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4}
+             WHERE (ACOS( SIN(RADIANS(p.latitude))*SIN(RADIANS({2})) + COS(RADIANS(p.latitude))*COS(RADIANS({2}))*COS(RADIANS(p.longitude-{3})) ) * 6371000) <= {4}
              RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, p.foursquareRating, c.spanishName
         ]]>
     </entry>
     <entry key="nearestRecommendationsByCategoriesLikedByFriends">
         <![CDATA[
              MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:FRIENDS]-(u:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi)
-             WHERE (DEGREES(ACOS((SIN(RADIANS(p.latitude)) * SIN(RADIANS({2})) + COS(RADIANS(p.latitude)) * COS(RADIANS({2})) * COS(RADIANS(p.longitude-({3}))))))*60*1.1515*1.609344*1000) <= {4}
+             WHERE (ACOS( SIN(RADIANS(p.latitude))*SIN(RADIANS({2})) + COS(RADIANS(p.latitude))*COS(RADIANS({2}))*COS(RADIANS(p.longitude-{3})) ) * 6371000) <= {4}
              RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, p.foursquareRating, u.name, u.lastName, c.spanishName
         ]]>
     </entry>

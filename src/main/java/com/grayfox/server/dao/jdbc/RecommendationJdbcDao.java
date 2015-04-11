@@ -20,6 +20,26 @@ import org.springframework.stereotype.Repository;
 public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao {
 
     @Override
+    public List<Recommendation> fetchNearestByRating(Location location, Integer radius, Locale locale) {
+        List<Recommendation> recommendations = getJdbcTemplate().query(getQuery("nearestRecommendationsByRating"), 
+                (ResultSet rs, int i) -> {
+                        Recommendation recommendation = new Recommendation();
+                        Poi poi = new Poi();
+                        poi.setName(rs.getString(1));
+                        poi.setLocation(new Location());
+                        poi.getLocation().setLatitude(rs.getDouble(2));
+                        poi.getLocation().setLongitude(rs.getDouble(3));
+                        poi.setFoursquareId(rs.getString(4));
+                        poi.setFoursquareRating(rs.getDouble(5));
+                        recommendation.setType(Recommendation.Type.GLOBAL);
+                        recommendation.setReason(Messages.get("recommendation.global.reason", locale));
+                        recommendation.setPoi(poi);
+                        return recommendation;
+                }, location.getLatitude(), location.getLongitude(), radius);
+        return recommendations;
+    }
+
+    @Override
     public List<Recommendation> fetchNearestByCategoriesLiked(String accessToken, Location location, Integer radius, Locale locale) {
         Set<String> categoryNames = new HashSet<>();
         List<Recommendation> recommendations = getJdbcTemplate().query(getQuery("nearestRecommendationsByCategoriesLiked", locale), 
