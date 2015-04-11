@@ -1,18 +1,18 @@
-package com.grayfox.server.ws.rest.handler;
+package com.grayfox.server.ws.rest.response;
 
 import java.io.Serializable;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-public class ErrorResult implements Serializable {
+public class ErrorResponse implements Serializable {
 
     private static final long serialVersionUID = -7554491972876922142L;
 
     private final String errorCode;
     private final String errorMessage;
 
-    public ErrorResult(String errorCode, String errorMessage) {
+    public ErrorResponse(String errorCode, String errorMessage) {
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
     }
@@ -39,7 +39,7 @@ public class ErrorResult implements Serializable {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        ErrorResult other = (ErrorResult) obj;
+        ErrorResponse other = (ErrorResponse) obj;
         if (errorCode == null) {
             if (other.errorCode != null) return false;
         } else if (!errorCode.equals(other.errorCode)) return false;
@@ -61,7 +61,7 @@ public class ErrorResult implements Serializable {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("ErrorResult [errorCode=").append(errorCode).append(", errorMessage=").append(errorMessage).append("]");
+        builder.append("ErrorResponse [errorCode=").append(errorCode).append(", errorMessage=").append(errorMessage).append("]");
         return builder.toString();
     }
 }

@@ -9,6 +9,7 @@ import javax.ws.rs.ext.Provider;
 
 import com.grayfox.server.util.Messages;
 import com.grayfox.server.ws.rest.BaseRestComponent;
+import com.grayfox.server.ws.rest.response.ErrorResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class ConstraintViolationExceptionHandler extends BaseRestComponent imple
         LOGGER.error("Constraints violated in arguments: {}", logMessageBuilder);
         return Response.status(Response.Status.BAD_REQUEST)
                 .type(MediaType.APPLICATION_JSON)
-                .entity(new ErrorResult("param.validation.error", messageBuilder.toString()))
+                .entity(new ErrorResponse("param.validation.error", messageBuilder.toString()))
                 .build();
     }
 }

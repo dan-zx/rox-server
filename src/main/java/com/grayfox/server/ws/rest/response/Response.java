@@ -1,14 +1,14 @@
-package com.grayfox.server.ws.rest;
+package com.grayfox.server.ws.rest.response;
 
 import java.io.Serializable;
 
-public class Result<T> implements Serializable {
+public class Response<T> implements Serializable {
 
     private static final long serialVersionUID = -7239525962816927992L;
 
     private final T response;
 
-    public Result(T response) {
+    public Response(T response) {
         this.response = response;
     }
 
@@ -30,7 +30,7 @@ public class Result<T> implements Serializable {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        Result<T> other = (Result<T>) obj;
+        Response<T> other = (Response<T>) obj;
         if (response == null) {
             if (other.response != null) return false;
         } else if (!response.equals(other.response)) return false;
@@ -40,7 +40,7 @@ public class Result<T> implements Serializable {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Result [response=").append(response).append("]");
+        builder.append("Response [response=").append(response).append("]");
         return builder.toString();
     }
 }
