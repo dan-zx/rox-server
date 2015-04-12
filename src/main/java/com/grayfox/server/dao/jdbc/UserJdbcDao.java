@@ -12,7 +12,7 @@ import com.grayfox.server.domain.User;
 
 import org.springframework.stereotype.Repository;
 
-@Repository
+@Repository("userLocalDao")
 public class UserJdbcDao extends JdbcDao implements UserDao {
 
     @Override

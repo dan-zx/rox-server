@@ -4,10 +4,10 @@
   <interface id="1" language="java" name="com.grayfox.server.oauth.SocialNetworkAuthenticator" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/oauth/SocialNetworkAuthenticator.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="127" y="65"/>    
+    <position height="79" width="201" x="41" y="169"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
@@ -15,7 +15,7 @@
     project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/oauth/foursquare/FoursquareAuthenticator.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="127" y="200"/>    
+    <position height="92" width="201" x="41" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      

@@ -1,4 +1,4 @@
-package com.grayfox.server.datasource.foursquare;
+package com.grayfox.server.dao.foursquare;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -8,8 +8,8 @@ import com.foursquare4j.response.Group;
 import com.foursquare4j.response.Result;
 import com.foursquare4j.response.Venue;
 
-import com.grayfox.server.datasource.DataSourceException;
-import com.grayfox.server.datasource.ProfileDataSource;
+import com.grayfox.server.dao.DaoException;
+import com.grayfox.server.dao.SocialNetworkProfileDao;
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.User;
 
@@ -20,9 +20,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ProfileFoursquareDataSource implements ProfileDataSource {
+public class FoursquareProfileDao implements SocialNetworkProfileDao {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProfileFoursquareDataSource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FoursquareProfileDao.class);
 
     @Value("${foursquare.app.client.id}")     private String clientId; 
     @Value("${foursquare.app.client.secret}") private String clientSecret;
@@ -47,13 +47,13 @@ public class ProfileFoursquareDataSource implements ProfileDataSource {
                 user.setFriends(friends);
             } else {
                 LOGGER.error("Foursquare error while requesting [user/friends] [code={}, errorType={}, errorDetail={}]", foursquareFriends.getMeta().getCode(), foursquareFriends.getMeta().getErrorType(), foursquareFriends.getMeta().getErrorDetail());
-                throw new DataSourceException.Builder("foursquare.request.error").build();
+                throw new DaoException.Builder("foursquare.request.error").build();
             }
             LOGGER.trace("Done");
             return user;
         } else {
             LOGGER.error("Foursquare error while requesting [user/self] [code={}, errorType={}, errorDetail={}]", foursquareUser.getMeta().getCode(), foursquareUser.getMeta().getErrorType(), foursquareUser.getMeta().getErrorDetail());
-            throw new DataSourceException.Builder("foursquare.request.error").build();
+            throw new DaoException.Builder("foursquare.request.error").build();
         }
     }
 
@@ -84,7 +84,7 @@ public class ProfileFoursquareDataSource implements ProfileDataSource {
             return myCategories;
         } else {
             LOGGER.error("Foursquare error while requesting [user/venuelikes] [code={}, errorType={}, errorDetail={}]", venueLikes.getMeta().getCode(), venueLikes.getMeta().getErrorType(), venueLikes.getMeta().getErrorDetail());
-            throw new DataSourceException.Builder("foursquare.request.error").build();
+            throw new DaoException.Builder("foursquare.request.error").build();
         }
     }
 }

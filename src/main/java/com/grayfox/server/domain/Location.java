@@ -25,6 +25,10 @@ public class Location implements Serializable {
         this.longitude = longitude;
     }
 
+    public String stringValues() {
+        return new StringBuilder().append(latitude).append(',').append(longitude).toString();
+    }
+
     public static Location parse(String locationString) {
         String[] latLng = locationString.split(",");
         if (latLng == null || latLng.length != 2) throw new IllegalArgumentException("Incorrect location format. It must be '##.##,##.##'"); 

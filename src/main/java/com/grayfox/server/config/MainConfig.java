@@ -32,7 +32,6 @@ public class MainConfig {
     @EnableTransactionManagement
     @ComponentScan(basePackages = { 
             "com.grayfox.server.dao.*",
-            "com.grayfox.server.datasource.*",
             "com.grayfox.server.oauth.*",
             "com.grayfox.server.service",
             "com.grayfox.server.ws.*"})

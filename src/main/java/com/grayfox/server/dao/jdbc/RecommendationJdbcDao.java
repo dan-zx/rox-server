@@ -8,16 +8,16 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.grayfox.server.domain.Category;
-
 import com.grayfox.server.dao.RecommendationDao;
+import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
 import com.grayfox.server.domain.Recommendation;
 import com.grayfox.server.util.Messages;
+
 import org.springframework.stereotype.Repository;
 
-@Repository
+@Repository("recommendationLocalDao")
 public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao {
 
     @Override

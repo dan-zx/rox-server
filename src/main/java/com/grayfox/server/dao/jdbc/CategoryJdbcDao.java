@@ -9,7 +9,7 @@ import com.grayfox.server.domain.Category;
 
 import org.springframework.stereotype.Repository;
 
-@Repository
+@Repository("categoryLocalDao")
 public class CategoryJdbcDao extends JdbcDao implements CategoryDao {
 
     @Override

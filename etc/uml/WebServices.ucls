@@ -4,20 +4,20 @@
   <class id="1" language="java" name="com.grayfox.server.ws.rest.UserWebService" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest/UserWebService.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="205" width="354" x="437" y="37"/>    
+    <position height="200" width="354" x="41" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="false" protected="false" private="false" static="false"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
       <operations public="true" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
   <class id="2" language="java" name="com.grayfox.server.ws.rest.PoiWebService" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest/PoiWebService.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="169" width="356" x="41" y="37"/>    
+    <position height="146" width="356" x="435" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="false" protected="false" private="false" static="false"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
       <operations public="true" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  

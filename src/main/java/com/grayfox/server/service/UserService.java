@@ -8,8 +8,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.grayfox.server.dao.CredentialDao;
+import com.grayfox.server.dao.SocialNetworkProfileDao;
 import com.grayfox.server.dao.UserDao;
-import com.grayfox.server.datasource.ProfileDataSource;
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Credential;
 import com.grayfox.server.domain.User;
@@ -29,8 +29,8 @@ public class UserService {
 
     @Inject private UserDao userDao;
     @Inject private CredentialDao credentialDao;
-    @Inject @Named("profileFoursquareDataSource") private ProfileDataSource profileFoursquareDataSource;
-    @Inject @Named("foursquareAuthenticator")     private SocialNetworkAuthenticator foursquareAuthenticator;
+    @Inject @Named("foursquareAuthenticator") private SocialNetworkAuthenticator foursquareAuthenticator;
+    @Inject @Named("foursquareProfileDao")    private SocialNetworkProfileDao foursquareProfileDao;
 
     @Transactional
     public Credential registerUsingFoursquare(String authorizationCode) {
@@ -53,7 +53,7 @@ public class UserService {
     @Async
     @Transactional
     public void generateProfileUsingFoursquare(Credential credential) {
-        User user = profileFoursquareDataSource.collectUserData(credential.getFoursquareAccessToken());
+        User user = foursquareProfileDao.collectUserData(credential.getFoursquareAccessToken());
         user.setCredential(credential);
         if (userDao.existsUser(user.getFoursquareId())) userDao.update(user);
         else userDao.save(user);

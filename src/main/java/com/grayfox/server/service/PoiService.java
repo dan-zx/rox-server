@@ -13,7 +13,6 @@ import com.grayfox.server.dao.CategoryDao;
 import com.grayfox.server.dao.CredentialDao;
 import com.grayfox.server.dao.PoiDao;
 import com.grayfox.server.dao.RecommendationDao;
-import com.grayfox.server.datasource.PoiDataSource;
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
@@ -33,10 +32,9 @@ public class PoiService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PoiService.class);
 
     @Inject private CredentialDao credentialDao;
-    @Inject private PoiDao poiDao;
     @Inject private CategoryDao categoryDao;
     @Inject private RecommendationDao recommendationDao;
-    @Inject private PoiDataSource poiDataSource;
+    @Inject private PoiDao poiDao;
 
     @Transactional(readOnly = true)
     public List<Poi> getNearestPoisByCategory(Location location, int radius, String categoryFoursquareId, Locale locale) {
@@ -44,7 +42,7 @@ public class PoiService {
     }
 
     public List<Poi> getNextPois(Poi seed, Locale locale) {
-        return poiDataSource.nextPois(seed, MAX_POIS_PER_ROUTE, locale);
+        return poiDao.fetchNext(seed, MAX_POIS_PER_ROUTE, locale);
     }
 
     @Transactional(readOnly = true)

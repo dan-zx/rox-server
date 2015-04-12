@@ -1,6 +1,7 @@
-package com.grayfox.server.datasource.foursquare;
+package com.grayfox.server.dao.foursquare;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -12,8 +13,8 @@ import com.foursquare4j.response.Group;
 import com.foursquare4j.response.Result;
 import com.foursquare4j.response.Venue;
 
-import com.grayfox.server.datasource.DataSourceException;
-import com.grayfox.server.datasource.PoiDataSource;
+import com.grayfox.server.dao.DaoException;
+import com.grayfox.server.dao.PoiDao;
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
@@ -25,21 +26,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class PoiFoursquareDataSource implements PoiDataSource {
+public class PoiFoursquareDao implements PoiDao {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PoiFoursquareDataSource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PoiFoursquareDao.class);
 
     @Value("${foursquare.app.client.id}")     private String clientId; 
     @Value("${foursquare.app.client.secret}") private String clientSecret;
 
     @Override
-    public List<Poi> nextPois(Poi originPoi, int limit, Locale locale) {
+    public List<Poi> fetchNext(Poi seed, int limit, Locale locale) {
         FoursquareApi foursquareApi = new FoursquareApi(clientId, clientSecret);
-        Set<String> categoryIds = new HashSet<>();
-        categoryIds.addAll(originPoi.getCategories().stream().map(Category::getFoursquareId).collect(Collectors.toSet()));
         foursquareApi.setLocale(locale);
+        Set<String> categoryIds = new HashSet<>();
+        categoryIds.addAll(seed.getCategories().stream().map(Category::getFoursquareId).collect(Collectors.toSet()));
         List<Poi> pois = new ArrayList<>(limit);
-        Poi currentPoi = originPoi;
+        Poi currentPoi = seed;
         for (int numberOfPois = 0; numberOfPois < limit-1; numberOfPois++) {
             Result<Group<Venue>> nextVenues = foursquareApi.getNextVenues(currentPoi.getFoursquareId());
             if (nextVenues.getMeta().getCode() == 200) {
@@ -63,10 +64,25 @@ public class PoiFoursquareDataSource implements PoiDataSource {
                 }
             } else {
                 LOGGER.error("Foursquare error while requesting [venues/{}/nextvenues] [code={}, errorType={}, errorDetail={}]", currentPoi.getFoursquareId(), nextVenues.getMeta().getCode(), nextVenues.getMeta().getErrorType(), nextVenues.getMeta().getErrorDetail());
-                throw new DataSourceException.Builder("foursquare.request.error").build();
+                throw new DaoException.Builder("foursquare.request.error").build();
             }
         }
         return pois;
+    }
+
+    @Override
+    public List<Poi> fetchNearestByCategory(Location location, Integer radius, String categoryFoursquareId, Locale locale) {
+        FoursquareApi foursquareApi = new FoursquareApi(clientId, clientSecret);
+        foursquareApi.setLocale(locale);
+        Result<Venue[]> venuesResult = foursquareApi.searchVenues(location.stringValues(), null, null, null, null, null, null, null, radius, null, null, categoryFoursquareId, null, null, null);
+        if (venuesResult.getMeta().getCode() == 200) {
+            List<Poi> pois = new ArrayList<>(venuesResult.getResponse().length);
+            Arrays.stream(venuesResult.getResponse()).forEach(venue -> pois.add(toPoi(venue)));
+            return pois;
+        } else {
+            LOGGER.error("Foursquare error while requesting [venues/search] [code={}, errorType={}, errorDetail={}]", venuesResult.getMeta().getCode(), venuesResult.getMeta().getErrorType(), venuesResult.getMeta().getErrorDetail());
+            throw new DaoException.Builder("foursquare.request.error").build();
+        }
     }
 
     private Poi toPoi(Venue venue) {

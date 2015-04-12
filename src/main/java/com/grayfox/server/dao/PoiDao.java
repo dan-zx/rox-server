@@ -8,5 +8,6 @@ import com.grayfox.server.domain.Poi;
 
 public interface PoiDao {
 
+    List<Poi> fetchNext(Poi seed, int limit, Locale locale);
     List<Poi> fetchNearestByCategory(Location location, Integer radius, String categoryFoursquareId, Locale locale);
 }
