@@ -9,7 +9,7 @@ import com.grayfox.server.domain.Category;
 
 import org.springframework.stereotype.Repository;
 
-@Repository
+@Repository("categoryLocalDao")
 public class CategoryJdbcDao extends JdbcDao implements CategoryDao {
 
     @Override
@@ -23,17 +23,5 @@ public class CategoryJdbcDao extends JdbcDao implements CategoryDao {
                     category.setFoursquareId(rs.getString(3));
                     return category;
                 });
-    }
-
-    @Override
-    public List<Category> fetchByPoiFoursquareId(String foursquareId, Locale locale) {
-        return getJdbcTemplate().query(getQuery("categoriesByPoiFoursquareId", locale), 
-                (ResultSet rs, int i) -> {
-                    Category category = new Category();
-                    category.setName(rs.getString(1));
-                    category.setIconUrl(rs.getString(2));
-                    category.setFoursquareId(rs.getString(3));
-                    return category;
-                }, foursquareId);
     }
 }

@@ -9,7 +9,7 @@ import com.grayfox.server.domain.Credential;
 
 import org.springframework.stereotype.Repository;
 
-@Repository
+@Repository("credentialLocalDao")
 public class CredentialJdbcDao extends JdbcDao implements CredentialDao {
 
     @Override

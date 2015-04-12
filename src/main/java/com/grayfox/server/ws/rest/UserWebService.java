@@ -52,7 +52,7 @@ public class UserWebService extends BaseRestComponent {
     @Produces(MediaType.APPLICATION_JSON)
     public Response<User> self(@NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken) {
         LOGGER.debug("getSelf({})", accessToken);
-        return new Response<>(userService.getSelf(accessToken));
+        return new Response<>(userService.getCompactSelf(accessToken));
     }
 
     @GET
@@ -60,7 +60,7 @@ public class UserWebService extends BaseRestComponent {
     @Produces(MediaType.APPLICATION_JSON)
     public Response<List<User>> selfFriends(@NotBlank(message = "access_token.required.error") @QueryParam("access-token") String accessToken) {
         LOGGER.debug("getSelfFriends({})", accessToken);
-        return new Response<>(userService.getSelfFriends(accessToken));
+        return new Response<>(userService.getSelfCompactFriends(accessToken));
     }
 
     @GET

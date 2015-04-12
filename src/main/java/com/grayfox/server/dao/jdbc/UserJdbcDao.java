@@ -12,11 +12,11 @@ import com.grayfox.server.domain.User;
 
 import org.springframework.stereotype.Repository;
 
-@Repository
+@Repository("userLocalDao")
 public class UserJdbcDao extends JdbcDao implements UserDao {
 
     @Override
-    public User fetchByAccessToken(String accessToken) {
+    public User fetchCompactByAccessToken(String accessToken) {
         List<User> users = getJdbcTemplate().query(getQuery("userByAccessToken"), 
                 (ResultSet rs, int i) -> {
                     User user = new User();
@@ -39,7 +39,7 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
     }
 
     @Override
-    public List<User> fetchFriendsByFoursquareId(String foursquareId) {
+    public List<User> fetchCompactFriendsByFoursquareId(String foursquareId) {
         return getJdbcTemplate().query(getQuery("friendsByUserFoursquareId"), 
                 (ResultSet rs, int i) -> {
                     User user = new User();

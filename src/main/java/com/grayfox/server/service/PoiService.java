@@ -13,7 +13,6 @@ import com.grayfox.server.dao.CategoryDao;
 import com.grayfox.server.dao.CredentialDao;
 import com.grayfox.server.dao.PoiDao;
 import com.grayfox.server.dao.RecommendationDao;
-import com.grayfox.server.datasource.PoiDataSource;
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
@@ -33,27 +32,17 @@ public class PoiService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PoiService.class);
 
     @Inject private CredentialDao credentialDao;
-    @Inject private PoiDao poiDao;
     @Inject private CategoryDao categoryDao;
     @Inject private RecommendationDao recommendationDao;
-    @Inject private PoiDataSource poiDataSource;
-
-    @Transactional(readOnly = true)
-    public List<Poi> getPois(Locale locale) {
-        List<Poi> pois = poiDao.fetchAll();
-        pois.forEach(poi -> poi.setCategories(new HashSet<>(categoryDao.fetchByPoiFoursquareId(poi.getFoursquareId(), locale))));
-        return pois;
-    }
+    @Inject private PoiDao poiDao;
 
     @Transactional(readOnly = true)
     public List<Poi> getNearestPoisByCategory(Location location, int radius, String categoryFoursquareId, Locale locale) {
-        List<Poi> pois = poiDao.fetchNearestByCategory(location, radius, categoryFoursquareId);
-        pois.forEach(poi -> poi.setCategories(new HashSet<>(categoryDao.fetchByPoiFoursquareId(poi.getFoursquareId(), locale))));
-        return pois;
+        return poiDao.fetchNearestByCategory(location, radius, categoryFoursquareId, locale);
     }
 
     public List<Poi> getNextPois(Poi seed, Locale locale) {
-        return poiDataSource.nextPois(seed, MAX_POIS_PER_ROUTE, locale);
+        return poiDao.fetchNext(seed, MAX_POIS_PER_ROUTE, locale);
     }
 
     @Transactional(readOnly = true)
@@ -73,13 +62,10 @@ public class PoiService {
             }
             List<Recommendation> recommendationsByCategoriesLiked = recommendationDao.fetchNearestByCategoriesLiked(accessToken, location, radius, locale);
             List<Recommendation> recommendationsByCategoriesLikedByFriends = recommendationDao.fetchNearestByCategoriesLikedByFriends(accessToken, location, radius, locale);
-            recommendationsByCategoriesLiked.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(categoryDao.fetchByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
-            recommendationsByCategoriesLikedByFriends.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(categoryDao.fetchByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
             recommendations.addAll(recommendationsByCategoriesLiked);
             recommendations.addAll(recommendationsByCategoriesLikedByFriends);
         } else LOGGER.debug("Only global recommendations...");
         List<Recommendation> recommendationsByRating = recommendationDao.fetchNearestByRating(location, radius, locale);
-        recommendationsByRating.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(categoryDao.fetchByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
         recommendations.addAll(recommendationsByRating);
         for (Iterator<Recommendation> iterator = recommendations.iterator(); iterator.hasNext();) {
             Recommendation recommendation = iterator.next();
