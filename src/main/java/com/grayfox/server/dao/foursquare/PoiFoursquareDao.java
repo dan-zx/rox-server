@@ -34,40 +34,47 @@ public class PoiFoursquareDao implements PoiDao {
     @Value("${foursquare.app.client.secret}") private String clientSecret;
 
     @Override
-    public List<Poi> fetchNext(Poi seed, int limit, Locale locale) {
+    public List<Poi> fetchNext(String poiFoursquareId, int limit, Locale locale) {
         FoursquareApi foursquareApi = new FoursquareApi(clientId, clientSecret);
         foursquareApi.setLocale(locale);
-        Set<String> categoryIds = new HashSet<>();
-        categoryIds.addAll(seed.getCategories().stream().map(Category::getFoursquareId).collect(Collectors.toSet()));
-        List<Poi> pois = new ArrayList<>(limit);
-        Poi currentPoi = seed;
-        for (int numberOfPois = 0; numberOfPois < limit-1; numberOfPois++) {
-            Result<Group<Venue>> nextVenues = foursquareApi.getNextVenues(currentPoi.getFoursquareId());
-            if (nextVenues.getMeta().getCode() == 200) {
-                for (Venue venue : nextVenues.getResponse().getItems()) {
-                    currentPoi = toPoi(venue);
-                    final String currentFoursquarId = venue.getId();
-                    List<Poi> matchingPois = pois.stream().filter(poi -> poi.getFoursquareId().equals(currentFoursquarId)).collect(Collectors.toList());
-                    if (matchingPois.isEmpty()) {
-                        boolean existsCategory = false;
-                        for (Category currentPoiCategory : currentPoi.getCategories()) {
-                            if (!categoryIds.add(currentPoiCategory.getFoursquareId())) {
-                                existsCategory = true;
+        Result<Venue> venueResult = foursquareApi.getVenue(poiFoursquareId);
+        if (venueResult.getMeta().getCode() == 200) {
+            Poi seed = toPoi(venueResult.getResponse());
+            Set<String> categoryIds = new HashSet<>();
+            categoryIds.addAll(seed.getCategories().stream().map(Category::getFoursquareId).collect(Collectors.toSet()));
+            List<Poi> pois = new ArrayList<>(limit);
+            Poi currentPoi = seed;
+            for (int numberOfPois = 0; numberOfPois < limit-1; numberOfPois++) {
+                Result<Group<Venue>> nextVenues = foursquareApi.getNextVenues(currentPoi.getFoursquareId());
+                if (nextVenues.getMeta().getCode() == 200) {
+                    for (Venue venue : nextVenues.getResponse().getItems()) {
+                        currentPoi = toPoi(venue);
+                        final String currentFoursquarId = venue.getId();
+                        List<Poi> matchingPois = pois.stream().filter(poi -> poi.getFoursquareId().equals(currentFoursquarId)).collect(Collectors.toList());
+                        if (matchingPois.isEmpty()) {
+                            boolean existsCategory = false;
+                            for (Category currentPoiCategory : currentPoi.getCategories()) {
+                                if (!categoryIds.add(currentPoiCategory.getFoursquareId())) {
+                                    existsCategory = true;
+                                    break;
+                                }
+                            }
+                            if (!existsCategory) {
+                                pois.add(currentPoi);
                                 break;
                             }
                         }
-                        if (!existsCategory) {
-                            pois.add(currentPoi);
-                            break;
-                        }
                     }
+                } else {
+                    LOGGER.error("Foursquare error while requesting [venues/{}/nextvenues] [code={}, errorType={}, errorDetail={}]", currentPoi.getFoursquareId(), nextVenues.getMeta().getCode(), nextVenues.getMeta().getErrorType(), nextVenues.getMeta().getErrorDetail());
+                    throw new DaoException.Builder("foursquare.request.error").build();
                 }
-            } else {
-                LOGGER.error("Foursquare error while requesting [venues/{}/nextvenues] [code={}, errorType={}, errorDetail={}]", currentPoi.getFoursquareId(), nextVenues.getMeta().getCode(), nextVenues.getMeta().getErrorType(), nextVenues.getMeta().getErrorDetail());
-                throw new DaoException.Builder("foursquare.request.error").build();
             }
+            return pois;
+        } else {
+            LOGGER.error("Foursquare error while requesting [venues/{}] [code={}, errorType={}, errorDetail={}]", poiFoursquareId, venueResult.getMeta().getCode(), venueResult.getMeta().getErrorType(), venueResult.getMeta().getErrorDetail());
+            throw new DaoException.Builder("foursquare.request.error").build();
         }
-        return pois;
     }
 
     @Override
