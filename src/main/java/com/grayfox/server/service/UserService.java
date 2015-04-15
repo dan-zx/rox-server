@@ -108,23 +108,23 @@ public class UserService {
     }
 
     @Transactional
-    public void addLike(String accessToken, Category like) {
+    public void addLike(String accessToken, String categoryFoursquareId) {
         String selfFoursquareId = userDao.fetchFoursquareIdByAccessToken(accessToken);
         if (selfFoursquareId == null) {
             LOGGER.warn("Not existing user attempting to modify information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
-        userDao.saveLike(selfFoursquareId, like);
+        userDao.saveLike(selfFoursquareId, categoryFoursquareId);
     }
 
     @Transactional
-    public void removeLike(String accessToken, Category like) {
+    public void removeLike(String accessToken, String categoryFoursquareId) {
         String selfFoursquareId = userDao.fetchFoursquareIdByAccessToken(accessToken);
         if (selfFoursquareId == null) {
             LOGGER.warn("Not existing user attempting to modify information");
             throw new ServiceException.Builder("user.invalid.error").build();
         }
-        userDao.deleteLike(selfFoursquareId, like);
+        userDao.deleteLike(selfFoursquareId, categoryFoursquareId);
     }
 
     private String generateAccessToken() {

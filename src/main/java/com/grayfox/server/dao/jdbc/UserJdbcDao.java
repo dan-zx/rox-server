@@ -79,13 +79,13 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
     public void save(User user) {
         getJdbcTemplate().update(getQuery("createUser"), user.getName(), user.getLastName(), user.getPhotoUrl(), user.getFoursquareId());
         if (user.getCredential() != null) getJdbcTemplate().update(getQuery("createCredentialLink"), user.getFoursquareId(), user.getCredential().getAccessToken());
-        if (user.getLikes() != null) user.getLikes().forEach(like -> saveLike(user.getFoursquareId(), like));
+        if (user.getLikes() != null) user.getLikes().forEach(like -> saveLike(user.getFoursquareId(), like.getFoursquareId()));
         if (user.getFriends() != null) {
             user.getFriends().forEach(friend -> {
                 if (!existsUser(friend.getFoursquareId())) {
                     getJdbcTemplate().update(getQuery("createUser"), friend.getName(), friend.getLastName(), friend.getPhotoUrl(), friend.getFoursquareId());
                     getJdbcTemplate().update(getQuery("createFriendsLink"), user.getFoursquareId(), friend.getFoursquareId());
-                    if (friend.getLikes() != null) friend.getLikes().forEach(like -> saveLike(friend.getFoursquareId(), like));
+                    if (friend.getLikes() != null) friend.getLikes().forEach(like -> saveLike(friend.getFoursquareId(), like.getFoursquareId()));
                 } else getJdbcTemplate().update(getQuery("createFriendsLink"), user.getFoursquareId(), friend.getFoursquareId());
             });
         }
@@ -108,7 +108,7 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
                 if (!existsUser(friend.getFoursquareId())) {
                     getJdbcTemplate().update(getQuery("createUser"), friend.getName(), friend.getLastName(), friend.getPhotoUrl(), friend.getFoursquareId());
                     getJdbcTemplate().update(getQuery("createFriendsLink"), user.getFoursquareId(), friend.getFoursquareId());
-                    if (friend.getLikes() != null) friend.getLikes().forEach(like -> saveLike(friend.getFoursquareId(), like));
+                    if (friend.getLikes() != null) friend.getLikes().forEach(like -> saveLike(friend.getFoursquareId(), like.getFoursquareId()));
                 } else getJdbcTemplate().update(getQuery("createFriendsLink"), user.getFoursquareId(), friend.getFoursquareId());
             });
         }
@@ -118,18 +118,18 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
             List<Category> newLikes = user.getLikes().stream().filter(like -> !intersection.contains(like.getFoursquareId())).collect(Collectors.toList());
             oldLikesIds.removeAll(intersection);
             oldLikesIds.forEach(likeFoursquareId -> getJdbcTemplate().update(getQuery("deleteLikesLink"), user.getFoursquareId(), likeFoursquareId));
-            newLikes.forEach(like -> saveLike(user.getFoursquareId(), like));
+            newLikes.forEach(like -> saveLike(user.getFoursquareId(), like.getFoursquareId()));
         }
     }
 
     @Override
-    public void saveLike(String foursquareId, Category like) {
-        getJdbcTemplate().update(getQuery("createLikesLink"), foursquareId, like.getFoursquareId());
+    public void saveLike(String foursquareId, String categoryFoursquareI) {
+        getJdbcTemplate().update(getQuery("createLikesLink"), foursquareId, categoryFoursquareI);
     }
 
     @Override
-    public void deleteLike(String foursquareId, Category like) {
-        getJdbcTemplate().update(getQuery("deleteLikesLink"), foursquareId, like.getFoursquareId());
+    public void deleteLike(String foursquareId, String categoryFoursquareI) {
+        getJdbcTemplate().update(getQuery("deleteLikesLink"), foursquareId, categoryFoursquareI);
     }
 
     private List<String> fetchFriendsIds(String foursquareId) {

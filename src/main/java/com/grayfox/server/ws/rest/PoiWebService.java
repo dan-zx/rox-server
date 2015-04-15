@@ -3,11 +3,8 @@ package com.grayfox.server.ws.rest;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -43,25 +40,24 @@ public class PoiWebService extends BaseRestComponent {
     public Response<List<Poi>> searchPoisByCategory(
             @NotBlank(message = "location.required.error") @Pattern(message = "location.format.error", regexp = Constants.Regexs.LOCATION) @QueryParam("location") String locationStr,
             @NotBlank(message = "radius.required.error") @Pattern(message = "radius.format.error", regexp = Constants.Regexs.POSITIVE_INT) @QueryParam("radius") String radiusStr,
-            @NotBlank(message = "category_foursquare_id.required.error") @QueryParam("category-foursquare-id") String categoryFoursquareId) {
+            @NotBlank(message = "category_foursquare_id.required.error") @QueryParam("category_foursquare_id") String categoryFoursquareId) {
         LOGGER.debug("searchPoisByCategory({}, {}, {})", locationStr, radiusStr, categoryFoursquareId);
         return new Response<>(poiService.getNearestPoisByCategory(Location.parse(locationStr), Integer.parseInt(radiusStr), categoryFoursquareId, getClientLocale()));
     }
 
-    @POST
-    @Path("next")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
+    @Path("route")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response<List<Poi>> nextPois(@NotNull(message = "seed.required.error") Poi seed) {
-        LOGGER.debug("nextPois({})", seed);
-        return new Response<>(poiService.getNextPois(seed, getClientLocale()));
+    public Response<List<Poi>> route(@NotBlank(message = "poi_foursquare_id.required.error") @QueryParam("poi_foursquare_id") String poiFoursquareId) {
+        LOGGER.debug("route({})", poiFoursquareId);
+        return new Response<>(poiService.buildRoute(poiFoursquareId, getClientLocale()));
     }
 
     @GET
     @Path("recommend")
     @Produces(MediaType.APPLICATION_JSON)
     public Response<List<Recommendation>> recommend(
-            @QueryParam("access-token") String accessToken,
+            @QueryParam("access_token") String accessToken,
             @NotBlank(message = "location.required.error") @Pattern(message = "location.format.error", regexp = Constants.Regexs.LOCATION) @QueryParam("location") String locationStr,
             @NotBlank(message = "radius.required.error") @Pattern(message = "radius.format.error", regexp = Constants.Regexs.POSITIVE_INT) @QueryParam("radius") String radiusStr) {
         if (accessToken != null && accessToken.trim().isEmpty()) accessToken = null;
@@ -70,9 +66,9 @@ public class PoiWebService extends BaseRestComponent {
     }
 
     @GET
-    @Path("categories/like/{partialName}")
+    @Path("categories/like/{partial_name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response<List<Category>> categoriesLikeName(@NotBlank(message = "category_name.required.error") @PathParam("partialName") String partialName) {
+    public Response<List<Category>> categoriesLikeName(@NotBlank(message = "category_name.required.error") @PathParam("partial_name") String partialName) {
         return new Response<>(poiService.getCategoriesLikeName(partialName, getClientLocale()));
     }
 }

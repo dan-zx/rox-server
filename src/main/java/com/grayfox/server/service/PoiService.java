@@ -41,8 +41,9 @@ public class PoiService {
         return poiDao.fetchNearestByCategory(location, radius, categoryFoursquareId, locale);
     }
 
-    public List<Poi> getNextPois(Poi seed, Locale locale) {
-        return poiDao.fetchNext(seed, MAX_POIS_PER_ROUTE, locale);
+    @Transactional(readOnly = true)
+    public List<Poi> buildRoute(String poiFoursquareId, Locale locale) {
+        return poiDao.fetchNext(poiFoursquareId, MAX_POIS_PER_ROUTE, locale);
     }
 
     @Transactional(readOnly = true)

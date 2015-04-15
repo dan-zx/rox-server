@@ -16,6 +16,6 @@ public interface UserDao {
     boolean existsUser(String foursquareId);
     void save(User user);
     void update(User user);
-    void saveLike(String foursquareId, Category like);
-    void deleteLike(String foursquareId, Category like);
+    void saveLike(String foursquareId, String categoryFoursquareI);
+    void deleteLike(String foursquareId, String categoryFoursquareI);
 }
