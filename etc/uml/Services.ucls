@@ -4,7 +4,7 @@
   <class id="1" language="java" name="com.grayfox.server.service.UserService" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/service/UserService.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="223" width="264" x="41" y="37"/>    
+    <position height="218" width="264" x="41" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="false"/>      
@@ -13,7 +13,7 @@
   </class>  
   <class id="2" language="java" name="com.grayfox.server.service.PoiService" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/service/PoiService.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="151" width="328" x="345" y="37"/>    
+    <position height="146" width="328" x="345" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="false"/>      

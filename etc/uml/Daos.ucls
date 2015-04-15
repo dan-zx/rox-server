@@ -3,7 +3,7 @@
   realizations="true" associations="true" dependencies="true" nesting-relationships="true">  
   <interface id="1" language="java" name="com.grayfox.server.dao.CategoryDao" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/dao/CategoryDao.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="79" width="242" x="569" y="522"/>    
+    <position height="74" width="242" x="42" y="517"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -13,7 +13,7 @@
   <interface id="2" language="java" name="com.grayfox.server.dao.SocialNetworkProfileDao" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/dao/SocialNetworkProfileDao.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="79" width="167" x="1493" y="223"/>    
+    <position height="74" width="167" x="1872" y="223"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -22,7 +22,7 @@
   </interface>  
   <interface id="3" language="java" name="com.grayfox.server.dao.PoiDao" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/dao/PoiDao.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="97" width="338" x="1700" y="223"/>    
+    <position height="92" width="338" x="1494" y="223"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -32,7 +32,7 @@
   <interface id="4" language="java" name="com.grayfox.server.dao.RecommendationDao" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/dao/RecommendationDao.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="115" width="488" x="41" y="522"/>    
+    <position height="110" width="488" x="631" y="517"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -41,7 +41,7 @@
   </interface>  
   <interface id="5" language="java" name="com.grayfox.server.dao.UserDao" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/dao/UserDao.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="241" width="295" x="1158" y="522"/>    
+    <position height="236" width="295" x="1159" y="517"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -50,7 +50,7 @@
   </interface>  
   <interface id="6" language="java" name="com.grayfox.server.dao.CredentialDao" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/dao/CredentialDao.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="115" width="267" x="851" y="522"/>    
+    <position height="110" width="267" x="324" y="517"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -60,7 +60,7 @@
   <class id="7" language="java" name="com.grayfox.server.dao.foursquare.PoiFoursquareDao" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/dao/foursquare/PoiFoursquareDao.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="110" width="338" x="1700" y="37"/>    
+    <position height="110" width="338" x="1494" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -70,7 +70,7 @@
   <class id="8" language="java" name="com.grayfox.server.dao.foursquare.FoursquareProfileDao" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/dao/foursquare/FoursquareProfileDao.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="92" width="163" x="1493" y="37"/>    
+    <position height="92" width="163" x="1872" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -79,7 +79,7 @@
   </class>  
   <class id="9" language="java" name="com.grayfox.server.dao.jdbc.JdbcDao" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/dao/jdbc/JdbcDao.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="146" width="184" x="655" y="37"/>    
+    <position height="146" width="184" x="539" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -89,7 +89,7 @@
   <class id="10" language="java" name="com.grayfox.server.dao.jdbc.CredentialJdbcDao" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/dao/jdbc/CredentialJdbcDao.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="133" width="267" x="851" y="223"/>    
+    <position height="128" width="267" x="324" y="223"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -99,7 +99,7 @@
   <class id="11" language="java" name="com.grayfox.server.dao.jdbc.RecommendationJdbcDao" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/dao/jdbc/RecommendationJdbcDao.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="133" width="488" x="41" y="223"/>    
+    <position height="146" width="488" x="631" y="223"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -109,7 +109,7 @@
   <class id="12" language="java" name="com.grayfox.server.dao.jdbc.UserJdbcDao" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/dao/jdbc/UserJdbcDao.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="259" width="295" x="1158" y="223"/>    
+    <position height="254" width="295" x="1159" y="223"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -119,7 +119,7 @@
   <class id="13" language="java" name="com.grayfox.server.dao.jdbc.CategoryJdbcDao" project="grayfox-server" 
     file="/grayfox-server/src/main/java/com/grayfox/server/dao/jdbc/CategoryJdbcDao.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="97" width="242" x="569" y="223"/>    
+    <position height="92" width="242" x="42" y="223"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -127,44 +127,44 @@
     </display>  
   </class>  
   <realization id="14">    
-    <end type="SOURCE" refId="11"/>    
-    <end type="TARGET" refId="4"/>  
-  </realization>  
-  <realization id="15">    
-    <end type="SOURCE" refId="13"/>    
-    <end type="TARGET" refId="1"/>  
-  </realization>  
-  <realization id="16">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="2"/>  
-  </realization>  
-  <realization id="17">    
     <end type="SOURCE" refId="7"/>    
     <end type="TARGET" refId="3"/>  
   </realization>  
-  <generalization id="18">    
-    <bendpoint x="1115" y="172"/>    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="9"/>  
-  </generalization>  
-  <realization id="19">    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="5"/>  
-  </realization>  
-  <generalization id="20">    
-    <end type="SOURCE" refId="11"/>    
-    <end type="TARGET" refId="9"/>  
-  </generalization>  
-  <realization id="21">    
+  <realization id="15">    
     <end type="SOURCE" refId="10"/>    
     <end type="TARGET" refId="6"/>  
   </realization>  
-  <generalization id="22">    
-    <end type="SOURCE" refId="10"/>    
+  <realization id="16">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="4"/>  
+  </realization>  
+  <realization id="17">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="5"/>  
+  </realization>  
+  <generalization id="18">    
+    <bendpoint x="1142" y="110"/>    
+    <end type="SOURCE" refId="12"/>    
     <end type="TARGET" refId="9"/>  
   </generalization>  
-  <generalization id="23">    
+  <generalization id="19">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <realization id="20">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="2"/>  
+  </realization>  
+  <generalization id="21">    
     <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <realization id="22">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <generalization id="23">    
+    <end type="SOURCE" refId="10"/>    
     <end type="TARGET" refId="9"/>  
   </generalization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
