@@ -27,14 +27,22 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
                     return user;
                 },
                 accessToken);
-        if (users.size() > 1) throw new DaoException.Builder("data.integrity.error").build();
+        if (users.size() > 1) {
+            throw new DaoException.Builder()
+                .messageKey("data.integrity.error")
+                .build();
+        }
         return users.isEmpty() ? null : users.get(0);
     }
 
     @Override
     public String fetchFoursquareIdByAccessToken(String accessToken) {
         List<String> foursquareIds = getJdbcTemplate().queryForList(getQuery("userFoursquareIdByAccessToken"), String.class, accessToken);
-        if (foursquareIds.size() > 1) throw new DaoException.Builder("data.integrity.error").build();
+        if (foursquareIds.size() > 1) {
+            throw new DaoException.Builder()
+                .messageKey("data.integrity.error")
+                .build();
+        }
         return foursquareIds.isEmpty() ? null : foursquareIds.get(0);
     }
 

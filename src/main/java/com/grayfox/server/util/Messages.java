@@ -41,25 +41,25 @@ public final class Messages {
         }
     }
 
-    public static String get(String key, Object[] formatArgs) {
+    public static String get(String key, Object[] messageArguments) {
         String unformattedMessage = get(key);
-        if (formatArgs != null && formatArgs.length > 0) {
+        if (messageArguments != null && messageArguments.length > 0) {
             try {
-                return MessageFormat.format(unformattedMessage, formatArgs);
+                return MessageFormat.format(unformattedMessage, messageArguments);
             } catch (IllegalArgumentException ex) {
-                LOGGER.warn("Can't format message: [{}] with args: {}", unformattedMessage, Arrays.deepToString(formatArgs), ex);
+                LOGGER.warn("Can't format message: [{}] with arguments: {}", unformattedMessage, Arrays.deepToString(messageArguments), ex);
             }
         }
         return unformattedMessage;
     }
 
-    public static String get(String key, Locale locale, Object[] formatArgs) {
+    public static String get(String key, Locale locale, Object[] messageArguments) {
         String unformattedMessage = get(key, locale);
-        if (formatArgs != null && formatArgs.length > 0) {
+        if (messageArguments != null && messageArguments.length > 0) {
             try {
-                return MessageFormat.format(unformattedMessage, formatArgs);
+                return MessageFormat.format(unformattedMessage, messageArguments);
             } catch (IllegalArgumentException ex) {
-                LOGGER.warn("Can't format message: [{}] with args: {}", unformattedMessage, Arrays.deepToString(formatArgs), ex);
+                LOGGER.warn("Can't format message: [{}] with arguments: {}", unformattedMessage, Arrays.deepToString(messageArguments), ex);
             }
         }
         return unformattedMessage;

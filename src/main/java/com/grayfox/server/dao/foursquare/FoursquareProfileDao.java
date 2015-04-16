@@ -47,13 +47,19 @@ public class FoursquareProfileDao implements SocialNetworkProfileDao {
                 user.setFriends(friends);
             } else {
                 LOGGER.error("Foursquare error while requesting [user/friends] [code={}, errorType={}, errorDetail={}]", foursquareFriends.getMeta().getCode(), foursquareFriends.getMeta().getErrorType(), foursquareFriends.getMeta().getErrorDetail());
-                throw new DaoException.Builder("foursquare.request.error").build();
+                throw new DaoException.Builder()
+                    .messageKey("foursquare.request.error")
+                    .addMessageArgument(foursquareFriends.getMeta().getErrorDetail())
+                    .build();
             }
             LOGGER.trace("Done");
             return user;
         } else {
             LOGGER.error("Foursquare error while requesting [user/self] [code={}, errorType={}, errorDetail={}]", foursquareUser.getMeta().getCode(), foursquareUser.getMeta().getErrorType(), foursquareUser.getMeta().getErrorDetail());
-            throw new DaoException.Builder("foursquare.request.error").build();
+            throw new DaoException.Builder()
+                .messageKey("foursquare.request.error")
+                .addMessageArgument(foursquareUser.getMeta().getErrorDetail())
+                .build();
         }
     }
 
@@ -84,7 +90,10 @@ public class FoursquareProfileDao implements SocialNetworkProfileDao {
             return myCategories;
         } else {
             LOGGER.error("Foursquare error while requesting [user/venuelikes] [code={}, errorType={}, errorDetail={}]", venueLikes.getMeta().getCode(), venueLikes.getMeta().getErrorType(), venueLikes.getMeta().getErrorDetail());
-            throw new DaoException.Builder("foursquare.request.error").build();
+            throw new DaoException.Builder()
+                .messageKey("foursquare.request.error")
+                .addMessageArgument(venueLikes.getMeta().getErrorDetail())
+                .build();
         }
     }
 }

@@ -64,7 +64,9 @@ public class UserService {
         User user = userDao.fetchCompactByAccessToken(accessToken);
         if (user == null) {
             LOGGER.warn("Not existing user attempting to retrive information");
-            throw new ServiceException.Builder("user.invalid.error").build();
+            throw new ServiceException.Builder()
+                .messageKey("user.invalid.error")
+                .build();
         }
         return user;
     }
@@ -74,7 +76,9 @@ public class UserService {
         String selfFoursquareId = userDao.fetchFoursquareIdByAccessToken(accessToken);
         if (selfFoursquareId == null) {
             LOGGER.warn("Not existing user attempting to retrive information");
-            throw new ServiceException.Builder("user.invalid.error").build();
+            throw new ServiceException.Builder()
+                .messageKey("user.invalid.error")
+                .build();
         }
         return userDao.fetchCompactFriendsByFoursquareId(selfFoursquareId);
     }
@@ -84,7 +88,9 @@ public class UserService {
         String selfFoursquareId = userDao.fetchFoursquareIdByAccessToken(accessToken);
         if (selfFoursquareId == null) {
             LOGGER.warn("Not existing user attempting to retrive information");
-            throw new ServiceException.Builder("user.invalid.error").build();
+            throw new ServiceException.Builder()
+                .messageKey("user.invalid.error")
+                .build();
         }
         return userDao.fetchLikesByFoursquareId(selfFoursquareId, locale);
     }
@@ -94,15 +100,23 @@ public class UserService {
         String selfFoursquareId = userDao.fetchFoursquareIdByAccessToken(accessToken);
         if (selfFoursquareId == null) {
             LOGGER.warn("Not existing user attempting to retrive information");
-            throw new ServiceException.Builder("user.invalid.error").build();
+            throw new ServiceException.Builder()
+                .messageKey("user.invalid.error")
+                .build();
         }
         if (!userDao.existsUser(friendFoursquareId)) {
             LOGGER.warn("User with Foursquare Id [{}] does not exist", friendFoursquareId);
-            throw new ServiceException.Builder("user.not_exist.error").addFormatArg(friendFoursquareId).build();
+            throw new ServiceException.Builder()
+                .messageKey("user.not_exist.error")
+                .addMessageArgument(friendFoursquareId)
+                .build();
         }
         if (!userDao.areFriends(selfFoursquareId, friendFoursquareId) && !selfFoursquareId.equals(friendFoursquareId)) {
             LOGGER.warn("Requested user with Foursquare id [{}] is not a friend", friendFoursquareId);
-            throw new ServiceException.Builder("not_friends.error").addFormatArg(friendFoursquareId).build();
+            throw new ServiceException.Builder()
+                .messageKey("not_friends.error")
+                .addMessageArgument(friendFoursquareId)
+                .build();
         }
         return userDao.fetchLikesByFoursquareId(friendFoursquareId, locale);
     }
@@ -112,7 +126,9 @@ public class UserService {
         String selfFoursquareId = userDao.fetchFoursquareIdByAccessToken(accessToken);
         if (selfFoursquareId == null) {
             LOGGER.warn("Not existing user attempting to modify information");
-            throw new ServiceException.Builder("user.invalid.error").build();
+            throw new ServiceException.Builder()
+                .messageKey("user.invalid.error")
+                .build();
         }
         userDao.saveLike(selfFoursquareId, categoryFoursquareId);
     }
@@ -122,7 +138,9 @@ public class UserService {
         String selfFoursquareId = userDao.fetchFoursquareIdByAccessToken(accessToken);
         if (selfFoursquareId == null) {
             LOGGER.warn("Not existing user attempting to modify information");
-            throw new ServiceException.Builder("user.invalid.error").build();
+            throw new ServiceException.Builder()
+                .messageKey("user.invalid.error")
+                .build();
         }
         userDao.deleteLike(selfFoursquareId, categoryFoursquareId);
     }

@@ -59,7 +59,9 @@ public class PoiService {
             LOGGER.debug("Adding personalized recommendations...");
             if (!credentialDao.existsAccessToken(accessToken)) {
                 LOGGER.warn("Not existing user attempting to retrive information");
-                throw new ServiceException.Builder("user.invalid.error").build();
+                throw new ServiceException.Builder()
+                    .messageKey("user.invalid.error")
+                    .build();
             }
             List<Recommendation> recommendationsByCategoriesLiked = recommendationDao.fetchNearestByCategoriesLiked(accessToken, location, radius, locale);
             List<Recommendation> recommendationsByCategoriesLikedByFriends = recommendationDao.fetchNearestByCategoriesLikedByFriends(accessToken, location, radius, locale);

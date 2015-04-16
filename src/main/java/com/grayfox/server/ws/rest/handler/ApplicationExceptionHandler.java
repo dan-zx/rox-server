@@ -15,7 +15,13 @@ public class ApplicationExceptionHandler extends BaseRestComponent implements Ex
 
     @Override
     public Response toResponse(BaseApplicationException exception) {
-        String message = Messages.get(exception.getMessageKey(), getClientLocale(), exception.getFormatArgs());
+        if (exception.getMessageKey() == null) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .type(MediaType.APPLICATION_JSON)
+                    .entity(new ErrorResponse("server.internal.error", exception.getMessage()).toJson())
+                    .build();
+        }
+        String message = Messages.get(exception.getMessageKey(), getClientLocale(), exception.getMessageArguments());
         switch (exception.getMessageKey()) {
             case "user.invalid.error":
                 return Response.status(Response.Status.UNAUTHORIZED)

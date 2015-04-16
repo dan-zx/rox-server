@@ -25,9 +25,11 @@ public class FoursquareAuthenticator implements SocialNetworkAuthenticator {
         AccessTokenResponse foursquareResponse = foursquareApi.getAccessToken(authorizationCode);
         if (foursquareResponse.getException() != null) {
             LOGGER.error("Foursquare authentication error", foursquareResponse.getException());
-            throw new OAuthException.Builder("foursquare.authentication.error")
-                .addFormatArg(foursquareResponse.getException().getMessage())
-                .setCause(foursquareResponse.getException()).build();
+            throw new OAuthException.Builder()
+                .messageKey("foursquare.authentication.error")
+                .addMessageArgument(foursquareResponse.getException().getMessage())
+                .cause(foursquareResponse.getException())
+                .build();
         }
         return foursquareResponse.getAccessToken();
     }

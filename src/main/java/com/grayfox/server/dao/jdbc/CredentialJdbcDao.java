@@ -22,7 +22,11 @@ public class CredentialJdbcDao extends JdbcDao implements CredentialDao {
                     return credential;
                 }, 
                 foursquareAccessToken);
-        if (credentials.size() > 1) throw new DaoException.Builder("data.integrity.error").build();
+        if (credentials.size() > 1) {
+            throw new DaoException.Builder()
+                .messageKey("data.integrity.error")
+                .build();
+        }
         return credentials.isEmpty() ? null : credentials.get(0);
     }
 
