@@ -22,28 +22,15 @@ public final class Messages {
         throw new IllegalAccessError("This class cannot be instantiated nor extended");
     }
 
-    public static String get(String key) {
+    public static String get(String key, Object... messageArguments) {
+        String unformattedMessage;
         try {
-            return ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME, Locale.ROOT).getString(key);
+            unformattedMessage = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME, Locale.ROOT).getString(key);
         } catch (MissingResourceException ex) {
             LOGGER.warn("Can't find message for key: [{}]", key, ex);
             return String.format(MISSING_RESOURCE_KEY_FORMAT, key);
         }
-    }
-
-    public static String get(String key, Locale locale) {
-        try {
-            ResourceBundle bundle = SUPPORTED_LOCALES.contains(locale) ? ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME, locale) : ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME, Locale.ROOT);
-            return bundle.getString(key);
-        } catch (MissingResourceException ex) {
-            LOGGER.warn("Can't find message for key: [{}]", key, ex);
-            return String.format(MISSING_RESOURCE_KEY_FORMAT, key);
-        }
-    }
-
-    public static String get(String key, Object[] messageArguments) {
-        String unformattedMessage = get(key);
-        if (messageArguments != null && messageArguments.length > 0) {
+        if (messageArguments.length > 0) {
             try {
                 return MessageFormat.format(unformattedMessage, messageArguments);
             } catch (IllegalArgumentException ex) {
@@ -53,9 +40,16 @@ public final class Messages {
         return unformattedMessage;
     }
 
-    public static String get(String key, Locale locale, Object[] messageArguments) {
-        String unformattedMessage = get(key, locale);
-        if (messageArguments != null && messageArguments.length > 0) {
+    public static String get(String key, Locale locale, Object... messageArguments) {
+        String unformattedMessage;
+        try {
+            ResourceBundle bundle = SUPPORTED_LOCALES.contains(locale) ? ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME, locale) : ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME, Locale.ROOT);
+            unformattedMessage = bundle.getString(key);
+        } catch (MissingResourceException ex) {
+            LOGGER.warn("Can't find message for key: [{}]", key, ex);
+            return String.format(MISSING_RESOURCE_KEY_FORMAT, key);
+        }
+        if (messageArguments.length > 0) {
             try {
                 return MessageFormat.format(unformattedMessage, messageArguments);
             } catch (IllegalArgumentException ex) {

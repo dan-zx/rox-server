@@ -12,8 +12,8 @@ import org.junit.Test;
 public class ExceptionTest {
 
     private static final Object[] MESSAGE_ARGS = {99, 29.6};
-    private static final String MESSAGE_KEY = "test.message.error";
-    private static final String MESSAGE_WITH_ARGS_KEY = "test.message_with_args.error";
+    private static final String MESSAGE_KEY = "test.message";
+    private static final String MESSAGE_WITH_ARGS_KEY = "test.message_with_args";
     private static final String MESSAGE = Messages.get(MESSAGE_KEY);
     private static final String MESSAGE_WITH_ARGS = Messages.get(MESSAGE_WITH_ARGS_KEY, MESSAGE_ARGS);
     private static final Throwable CAUSE = new IllegalArgumentException("A cause");
