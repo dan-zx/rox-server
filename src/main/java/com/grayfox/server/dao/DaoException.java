@@ -6,29 +6,62 @@ public class DaoException extends BaseApplicationException {
 
     private static final long serialVersionUID = 6442324698959192799L;
 
-    private DaoException(Builder builder) {
-        super(builder);
+    private DaoException() { }
+
+    private DaoException(String messageKey, Object[] messageArguments, Throwable cause) {
+        super(messageKey, messageArguments, cause);
+    }
+
+    private DaoException(String messageKey, Object[] messageArguments) {
+        super(messageKey, messageArguments);
+    }
+
+    private DaoException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    private DaoException(String message) {
+        super(message);
+    }
+
+    private DaoException(Throwable cause) {
+        super(cause);
     }
 
     public static class Builder extends BaseBuilder {
 
-        public Builder(String messageKey) {
-            super(messageKey);
+        @Override
+        public Builder message(String message) {
+            return (Builder) super.message(message);
         }
 
         @Override
-        public Builder addFormatArg(Object formatArg) {
-            return (Builder) super.addFormatArg(formatArg);
+        public Builder messageKey(String messageKey) {
+            return (Builder) super.messageKey(messageKey);
+        }
+
+        @Override
+        public Builder addMessageArgument(Object argument) {
+            return (Builder) super.addMessageArgument(argument);
         }
         
         @Override
-        public Builder setCause(Throwable cause) {
-            return (Builder) super.setCause(cause);
+        public Builder cause(Throwable cause) {
+            return (Builder) super.cause(cause);
         }
 
         @Override
         public DaoException build() {
-            return new DaoException(this);
+            if (getMessage() != null) {
+                if (getCause() != null) return new DaoException(getMessage(), getCause());
+                return new DaoException(getMessage());
+            }
+            if (getMessageKey() != null) {
+                if (getCause() != null) return new DaoException(getMessageKey(), getMessageArguments(), getCause());
+                return new DaoException(getMessageKey(), getMessageArguments());
+            }
+            if (getCause() != null) return new DaoException(getCause());
+            return new DaoException();
         }
     }
 }

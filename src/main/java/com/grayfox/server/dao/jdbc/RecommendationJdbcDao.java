@@ -57,7 +57,7 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                         poi.setFoursquareId(rs.getString(4));
                         poi.setFoursquareRating(rs.getDouble(5));
                         recommendation.setType(Recommendation.Type.SELF);
-                        recommendation.setReason(Messages.get("recommendation.self.reason", locale, new Object[] {categoryName}));
+                        recommendation.setReason(Messages.get("recommendation.self.reason", locale, categoryName));
                         recommendation.setPoi(poi);
                         return recommendation;
                     } else return null;
@@ -85,7 +85,7 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                         recommendation.setType(Recommendation.Type.SOCIAL);
                         String lastName = rs.getString(7);
                         String friendName = lastName == null || lastName.trim().isEmpty() ? rs.getString(6) : new StringBuilder().append(rs.getString(6)).append(" ").append(lastName).toString();
-                        recommendation.setReason(Messages.get("recommendation.social.reason", locale, new Object[] {friendName, categoryName}));
+                        recommendation.setReason(Messages.get("recommendation.social.reason", locale, friendName, categoryName));
                         recommendation.setPoi(poi);
                         return recommendation;
                     } else return null;

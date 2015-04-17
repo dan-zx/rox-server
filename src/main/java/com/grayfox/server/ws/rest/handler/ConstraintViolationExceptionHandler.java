@@ -1,5 +1,7 @@
 package com.grayfox.server.ws.rest.handler;
 
+import java.util.Locale;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.core.MediaType;
@@ -23,8 +25,9 @@ public class ConstraintViolationExceptionHandler extends BaseRestComponent imple
     public Response toResponse(ConstraintViolationException exception) {
         StringBuilder messageBuilder = new StringBuilder();
         StringBuilder logMessageBuilder = new StringBuilder();
+        Locale clientLocale = getClientLocale();
         for (ConstraintViolation<?> constraintViolation : exception.getConstraintViolations()) {
-            String message = Messages.get(constraintViolation.getMessageTemplate(), getClientLocale(), new Object[] {constraintViolation.getInvalidValue()});
+            String message = Messages.get(constraintViolation.getMessageTemplate(), clientLocale, constraintViolation.getInvalidValue());
             messageBuilder.append(message).append(", ");
             logMessageBuilder.append(constraintViolation.getMessageTemplate()).append("->[")
                 .append(constraintViolation.getInvalidValue()).append("], ");

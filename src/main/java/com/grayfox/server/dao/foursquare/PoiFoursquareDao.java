@@ -67,13 +67,19 @@ public class PoiFoursquareDao implements PoiDao {
                     }
                 } else {
                     LOGGER.error("Foursquare error while requesting [venues/{}/nextvenues] [code={}, errorType={}, errorDetail={}]", currentPoi.getFoursquareId(), nextVenues.getMeta().getCode(), nextVenues.getMeta().getErrorType(), nextVenues.getMeta().getErrorDetail());
-                    throw new DaoException.Builder("foursquare.request.error").build();
+                    throw new DaoException.Builder()
+                        .messageKey("foursquare.request.error")
+                        .addMessageArgument(nextVenues.getMeta().getErrorDetail())
+                        .build();
                 }
             }
             return pois;
         } else {
             LOGGER.error("Foursquare error while requesting [venues/{}] [code={}, errorType={}, errorDetail={}]", poiFoursquareId, venueResult.getMeta().getCode(), venueResult.getMeta().getErrorType(), venueResult.getMeta().getErrorDetail());
-            throw new DaoException.Builder("foursquare.request.error").build();
+            throw new DaoException.Builder()
+                .messageKey("foursquare.request.error")
+                .addMessageArgument(venueResult.getMeta().getErrorDetail())
+                .build();
         }
     }
 
@@ -88,7 +94,10 @@ public class PoiFoursquareDao implements PoiDao {
             return pois;
         } else {
             LOGGER.error("Foursquare error while requesting [venues/search] [code={}, errorType={}, errorDetail={}]", venuesResult.getMeta().getCode(), venuesResult.getMeta().getErrorType(), venuesResult.getMeta().getErrorDetail());
-            throw new DaoException.Builder("foursquare.request.error").build();
+            throw new DaoException.Builder()
+                .messageKey("foursquare.request.error")
+                .addMessageArgument(venuesResult.getMeta().getErrorDetail())
+                .build();
         }
     }
 
