@@ -14,7 +14,6 @@ apply plugin: 'jettyEclipse'
 
 group = 'com.grayfox'
 version = '1.0-SNAPSHOT'
-
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 [compileJava, compileTestJava]*.options*.compilerArgs = ['-Xlint']
@@ -26,9 +25,9 @@ repositories {
 }
 
 ext {
-    springVersion = '4.1.5.RELEASE'
-    jerseyVersion = '2.16'
-    neo4jVersion  = '2.1.7'
+    springVersion = '4.1.6.RELEASE'
+    jerseyVersion = '2.17'
+    neo4jVersion  = '2.1.8'
 }
 
 dependencies {
@@ -40,9 +39,9 @@ dependencies {
     providedCompile 'javax.servlet.jsp:javax.servlet.jsp-api:2.3.1'
 
     // LOGGING
-    compile 'ch.qos.logback:logback-classic:1.1.2'
-    runtime 'org.codehaus.groovy:groovy:2.4.1'
-    compile 'org.slf4j:jcl-over-slf4j:1.7.10'
+    compile 'ch.qos.logback:logback-classic:1.1.3'
+    runtime 'org.codehaus.groovy:groovy:2.4.3'
+    compile 'org.slf4j:jcl-over-slf4j:1.7.12'
 
     // SPRING
     compile ("org.springframework:spring-context:${springVersion}") {
@@ -71,7 +70,7 @@ dependencies {
     // TEST
     testCompile fileTree(dir: 'libs/test', include: '*.jar')
     testCompile 'junit:junit:4.12'
-    testCompile 'org.assertj:assertj-core:2.0.0'
+    testCompile 'org.assertj:assertj-core:3.0.0'
     testCompile 'org.mockito:mockito-core:1.10.19'
     testCompile "org.neo4j:neo4j:${neo4jVersion}"
     testCompile group: 'org.neo4j', name: 'neo4j-kernel', version: "${neo4jVersion}", classifier: 'tests'
@@ -79,7 +78,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.2.1'
+    gradleVersion = '2.3'
 }
 
 jettyEclipse {
