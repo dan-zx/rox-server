@@ -46,7 +46,7 @@ public abstract class BaseApplicationException extends RuntimeException {
         return messageArguments;
     }
 
-    protected static abstract class BaseBuilder {
+    public static abstract class BaseBuilder<T extends BaseApplicationException> {
 
         private String message;
         private String messageKey;
@@ -57,22 +57,22 @@ public abstract class BaseApplicationException extends RuntimeException {
             messageArguments = new ArrayList<>();
         }
 
-        public BaseBuilder message(String message) {
+        public BaseBuilder<T> message(String message) {
             this.message = message;
             return this;
         }
 
-        public BaseBuilder messageKey(String messageKey) {
+        public BaseBuilder<T> messageKey(String messageKey) {
             this.messageKey = messageKey;
             return this;
         }        
 
-        public BaseBuilder addMessageArgument(Object argument) {
+        public BaseBuilder<T> addMessageArgument(Object argument) {
             messageArguments.add(argument);
             return this;
         }
 
-        public BaseBuilder cause(Throwable cause) {
+        public BaseBuilder<T> cause(Throwable cause) {
             this.cause = cause;
             return this;
         }
@@ -93,6 +93,6 @@ public abstract class BaseApplicationException extends RuntimeException {
             return cause;
         }
 
-        public abstract BaseApplicationException build();
+        public abstract T build();
     }
 }

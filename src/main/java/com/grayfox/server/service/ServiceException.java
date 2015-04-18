@@ -28,27 +28,7 @@ public class ServiceException extends BaseApplicationException {
         super(cause);
     }
 
-    public static class Builder extends BaseBuilder {
-
-        @Override
-        public Builder message(String message) {
-            return (Builder) super.message(message);
-        }
-
-        @Override
-        public Builder messageKey(String messageKey) {
-            return (Builder) super.messageKey(messageKey);
-        }
-
-        @Override
-        public Builder addMessageArgument(Object argument) {
-            return (Builder) super.addMessageArgument(argument);
-        }
-        
-        @Override
-        public Builder cause(Throwable cause) {
-            return (Builder) super.cause(cause);
-        }
+    public static class Builder extends BaseBuilder<ServiceException> {
 
         @Override
         public ServiceException build() {

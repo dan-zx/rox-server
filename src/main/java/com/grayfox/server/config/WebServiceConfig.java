@@ -1,5 +1,6 @@
 package com.grayfox.server.config;
 
+import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
+@ApplicationPath("/api/*")
 public class WebServiceConfig extends ResourceConfig {
 
     public WebServiceConfig() {
