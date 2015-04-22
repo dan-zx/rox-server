@@ -108,6 +108,7 @@ public class PoiFoursquareDao implements PoiDao {
         poi.getLocation().setLatitude(venue.getLocation().getLat());
         poi.getLocation().setLongitude(venue.getLocation().getLng());
         poi.setFoursquareId(venue.getId());
+        poi.setFoursquareRating(venue.getRating());
         poi.setCategories(new HashSet<>());
         for (com.foursquare4j.response.Category foursquareCategory : venue.getCategories()) {
             Category myCategory = new Category();
