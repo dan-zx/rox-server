@@ -13,7 +13,7 @@ apply plugin: 'eclipse-wtp'
 apply plugin: 'jettyEclipse' 
 
 group = 'com.grayfox'
-version = '1.0-SNAPSHOT'
+version = '1.0-BETA1'
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 [compileJava, compileTestJava]*.options*.compilerArgs = ['-Xlint']
