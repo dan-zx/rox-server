@@ -60,8 +60,6 @@ public class ErrorResponse implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("ErrorResponse [errorCode=").append(errorCode).append(", errorMessage=").append(errorMessage).append("]");
-        return builder.toString();
+        return "ErrorResponse [errorCode=" + errorCode + ", errorMessage=" + errorMessage + "]";
     }
 }

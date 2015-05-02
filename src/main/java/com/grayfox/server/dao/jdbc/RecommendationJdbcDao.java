@@ -84,7 +84,7 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                         poi.setFoursquareRating(rs.getDouble(5));
                         recommendation.setType(Recommendation.Type.SOCIAL);
                         String lastName = rs.getString(7);
-                        String friendName = lastName == null || lastName.trim().isEmpty() ? rs.getString(6) : new StringBuilder().append(rs.getString(6)).append(" ").append(lastName).toString();
+                        String friendName = lastName == null || lastName.trim().isEmpty() ? rs.getString(6) : rs.getString(6) + ' ' + lastName;
                         recommendation.setReason(Messages.get("recommendation.social.reason", locale, friendName, categoryName));
                         recommendation.setPoi(poi);
                         return recommendation;

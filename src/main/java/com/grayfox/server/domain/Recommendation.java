@@ -64,8 +64,6 @@ public class Recommendation implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Recommendation [type=").append(type).append(", reason=").append(reason).append(", poi=").append(poi).append("]");
-        return builder.toString();
+        return "Recommendation [type=" + type + ", reason=" + reason + ", poi=" + poi + "]";
     }
 }
