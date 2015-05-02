@@ -38,8 +38,6 @@ public class AccessTokenResponse implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("AccessTokenResponse [accessToken=").append(accessToken).append("]");
-        return builder.toString();
+        return "AccessTokenResponse [accessToken=" + accessToken + "]";
     }
 }

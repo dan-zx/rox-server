@@ -62,8 +62,6 @@ public class Credential implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Credential [accessToken=").append(accessToken).append(", foursquareAccessToken=").append(foursquareAccessToken).append(", isNew=").append(isNew).append("]");
-        return builder.toString();
+        return "Credential [accessToken=" + accessToken + ", foursquareAccessToken=" + foursquareAccessToken + ", isNew=" + isNew + "]";
     }
 }

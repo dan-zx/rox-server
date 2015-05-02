@@ -39,8 +39,6 @@ public class Response<T> implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Response [response=").append(response).append("]");
-        return builder.toString();
+        return "Response [response=" + response + "]";
     }
 }

@@ -67,8 +67,6 @@ public class Location implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Location [latitude=").append(latitude).append(", longitude=").append(longitude).append("]");
-        return builder.toString();
+        return "Location [latitude=" + latitude + ", longitude=" + longitude + "]";
     }
 }
