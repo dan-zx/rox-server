@@ -75,11 +75,6 @@
             <version>2.4.3</version>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>1.7.12</version>
-        </dependency>
 
         <!-- SPRING -->
         <dependency>
@@ -147,7 +142,7 @@
         <dependency>
             <groupId>com.foursquare4j</groupId>
             <artifactId>foursquare4j</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.1</version>
         </dependency>
 
         <!-- DATABASE -->
@@ -188,7 +183,7 @@
                                 <artifactItem>
                                     <groupId>org.eclipse.jetty</groupId>
                                     <artifactId>jetty-runner</artifactId>
-                                    <version>9.2.10.v20150310</version>
+                                    <version>9.2.11.v20150529</version>
                                     <destFileName>jetty-runner.jar</destFileName>
                                 </artifactItem>
                             </artifactItems>
