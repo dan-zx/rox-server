@@ -229,7 +229,7 @@ Gray Fox is an Recommender Service for tourists that recommends Points of Intere
 * Returns the user details of the acting user.
 
   ```
-  https://gray-fox.herokuapp.com/api/users/self/?params
+  https://gray-fox.herokuapp.com/api/users/self?params
   ```
 
   HTTP Method: **GET** **
@@ -254,7 +254,7 @@ Gray Fox is an Recommender Service for tourists that recommends Points of Intere
 * Returns the list of friends of the acting user.
 
   ```
-  https://gray-fox.herokuapp.com/api/users/self/friends/?params
+  https://gray-fox.herokuapp.com/api/users/self/friends?params
   ```
 
   HTTP Method: **GET** **
@@ -287,7 +287,7 @@ Gray Fox is an Recommender Service for tourists that recommends Points of Intere
 * Returns a list of likes of the given user.
 
   ```
-  https://gray-fox.herokuapp.com/api/users/{user_foursquare_id}/likes/?params
+  https://gray-fox.herokuapp.com/api/users/{user_foursquare_id}/likes?params
   ```
 
   HTTP Method: **GET** **
@@ -321,7 +321,7 @@ Gray Fox is an Recommender Service for tourists that recommends Points of Intere
 * Adds a new like of the acting user.
 
   ```
-  https://gray-fox.herokuapp.com/api/users/update/addlike/?params
+  https://gray-fox.herokuapp.com/api/users/update/addlike?params
   ```
 
   HTTP Method: **PUT**
@@ -344,7 +344,7 @@ Gray Fox is an Recommender Service for tourists that recommends Points of Intere
 * Deletes a like of the acting user.
 
   ```
-  https://gray-fox.herokuapp.com/api/users/update/removelike/?params
+  https://gray-fox.herokuapp.com/api/users/update/removelike?params
   ```
 
   HTTP Method: **DELETE**
