@@ -81,6 +81,6 @@ task wrapper(type: Wrapper) {
 }
 
 jettyEclipse {
-    contextPath = '/gray-fox-server'
+    contextPath = '/rox-server'
     automaticReload = true
 }
