@@ -5,14 +5,14 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.grayfox</groupId>
-    <artifactId>grayfox-server</artifactId>
+    <groupId>com.rox</groupId>
+    <artifactId>rox-server</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
 
-    <name>Gray Fox Server Application</name>
+    <name>RoX Server Application</name>
     <url>http://gray-fox.herokuapp.com</url>
-    <description>Gray Fox web API and web site</description>
+    <description>RoX web API and web site</description>
 
     <developers>
         <developer>
