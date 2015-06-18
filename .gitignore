@@ -32,5 +32,6 @@ log.txt
 # UML files
 etc/uml/
 
-# README
+# Usless files
 README.md
+LICENSE
