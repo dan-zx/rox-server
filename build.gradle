@@ -79,13 +79,12 @@ dependencies {
 
     // DATABASE
     compile 'org.neo4j:neo4j-jdbc:2.1.4'
+    compile "org.neo4j:neo4j:${neo4jVersion}"
 
     // TEST
-    testCompile fileTree(dir: 'libs/test', include: '*.jar')
     testCompile 'junit:junit:4.12'
     testCompile 'org.assertj:assertj-core:3.0.0'
     testCompile 'org.mockito:mockito-core:1.10.19'
-    testCompile "org.neo4j:neo4j:${neo4jVersion}"
     testCompile "org.neo4j:neo4j-kernel:${neo4jVersion}:tests@jar"
     testCompile "org.springframework:spring-test:${springVersion}"
 }
