@@ -1,3 +1,5 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html">
 <!--
   ~ Copyright 2014-2015 Daniel Pedraza-Arcega
   ~
@@ -13,8 +15,6 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html">
 <html>
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
