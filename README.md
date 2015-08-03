@@ -209,7 +209,7 @@ RoX is an Recommender Service for tourists that recommends Points of Interests (
   https://rox.herokuapp.com/api/users/register/{social_network}?params
   ```
 
-  HTTP Method: **GET** **
+  HTTP Method: **GET**
 
   | Parameters         | Type  | Example    | Decription                                                                                   |
   |--------------------|-------|------------|----------------------------------------------------------------------------------------------|
@@ -232,7 +232,7 @@ RoX is an Recommender Service for tourists that recommends Points of Interests (
   https://rox.herokuapp.com/api/users/self?params
   ```
 
-  HTTP Method: **GET** **
+  HTTP Method: **GET**
 
   | Parameters   | Type  | Example    | Decription                              |
   |--------------|-------|------------|-----------------------------------------|
@@ -257,7 +257,7 @@ RoX is an Recommender Service for tourists that recommends Points of Interests (
   https://rox.herokuapp.com/api/users/self/friends?params
   ```
 
-  HTTP Method: **GET** **
+  HTTP Method: **GET**
 
   | Parameters   | Type  | Example    | Decription                              |
   |--------------|-------|------------|-----------------------------------------|
@@ -290,7 +290,7 @@ RoX is an Recommender Service for tourists that recommends Points of Interests (
   https://rox.herokuapp.com/api/users/{user_foursquare_id}/likes?params
   ```
 
-  HTTP Method: **GET** **
+  HTTP Method: **GET**
 
   | Parameters         | Type  | Example    | Decription                                                                         |
   |--------------------|-------|------------|------------------------------------------------------------------------------------|
