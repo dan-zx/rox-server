@@ -1,0 +1,10 @@
+{
+   "meta":{
+      "code":500,
+      "errorType":"generic_error",
+      "errorDetail":"Generic error"
+   },
+   "response":{
+
+   }
+}

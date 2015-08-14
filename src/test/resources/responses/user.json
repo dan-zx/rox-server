@@ -1,0 +1,148 @@
+{
+   "meta":{
+      "code":200
+   },
+   "notifications":[
+      {
+         "type":"notificationTray",
+         "item":{
+            "unreadCount":0
+         }
+      }
+   ],
+   "response":{
+      "user":{
+         "id":"34468234",
+         "firstName":"John",
+         "lastName":"Doe",
+         "gender":"male",
+         "relationship":"self",
+         "photo":{
+            "prefix":"https:\/\/irs3.4sqi.net\/img\/user\/",
+            "suffix":"\/photo.jpg"
+         },
+         "friends":{
+            "count":1,
+            "groups":[
+               {
+                  "type":"friends",
+                  "name":"Amigos en com&uacute;n",
+                  "count":0,
+                  "items":[
+
+                  ]
+               },
+               {
+                  "type":"others",
+                  "name":"Otros amigos",
+                  "count":1,
+                  "items":[
+                     {
+                        "id":"94578235",
+                        "firstName":"Jane",
+                        "lastName":"Doe",
+                        "gender":"female",
+                        "relationship":"friend",
+                        "photo":{
+                           "prefix":"https:\/\/irs1.4sqi.net\/img\/user\/",
+                           "suffix":"\/photo.jpg"
+                        },
+                        "tips":{
+                           "count":0
+                        },
+                        "lists":{
+                           "groups":[
+                              {
+                                 "type":"created",
+                                 "count":1,
+                                 "items":[
+
+                                 ]
+                              }
+                           ]
+                        },
+                        "homeCity":"City",
+                        "bio":"Bio",
+                        "contact":{
+                           "email":"mail@mail.com",
+                           "twitter":"twitter",
+                           "facebook":"9999992"
+                        }
+                     }
+                  ]
+               }
+            ]
+         },
+         "tips":{
+            "count":0
+         },
+         "homeCity":"City",
+         "bio":"Bio",
+         "contact":{
+            "email":"mail@mail.com",
+            "twitter":"twitter",
+            "facebook":"9999991"
+         },
+         "checkinPings":"off",
+         "pings":false,
+         "type":"user",
+         "badges":{
+            "count":0,
+            "items":[
+
+            ]
+         },
+         "mayorships":{
+            "count":0,
+            "items":[
+
+            ]
+         },
+         "checkins":{
+            "count":0,
+            "items":[
+
+            ]
+         },
+         "following":{
+            "count":0,
+            "groups":[
+               {
+                  "type":"following",
+                  "name":"Seguimiento mutuo",
+                  "count":0,
+                  "items":[
+
+                  ]
+               },
+               {
+                  "type":"others",
+                  "name":"Otro seguimiento",
+                  "count":0,
+                  "items":[
+
+                  ]
+               }
+            ]
+         },
+         "requests":{
+            "count":0
+         },
+         "lists":{
+            "count":0,
+            "groups":[
+
+            ]
+         },
+         "photos":{
+            "count":0,
+            "items":[
+
+            ]
+         },
+         "blockedStatus":"none",
+         "createdAt":1402863858,
+         "referralId":"u-88260846"
+      }
+   }
+}

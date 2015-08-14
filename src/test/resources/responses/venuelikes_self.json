@@ -1,0 +1,69 @@
+{
+   "meta":{
+      "code":200
+   },
+   "notifications":[
+      {
+         "type":"notificationTray",
+         "item":{
+            "unreadCount":0
+         }
+      }
+   ],
+   "response":{
+      "venues":{
+         "count":1,
+         "items":[
+            {
+               "id":"5156237ce4b034f6d590e908",
+               "name":"La Casa del Mendrugo",
+               "contact":{
+                  "phone":"012222325148",
+                  "formattedPhone":"01 222 232 5148",
+                  "twitter":"casamendrugo"
+               },
+               "location":{
+                  "address":"4 Sur 304",
+                  "crossStreet":"5 Oriente",
+                  "lat":19.04177692301569,
+                  "lng":-98.1960990300466,
+                  "postalCode":"72000",
+                  "cc":"MX",
+                  "city":"Puebla de Zaragoza",
+                  "state":"Puebla",
+                  "country":"México",
+                  "formattedAddress":[
+                     "4 Sur 304 (5 Oriente)",
+                     "72000 Puebla de Zaragoza, Puebla"
+                  ]
+               },
+               "categories":[
+                  {
+                     "id":"4bf58dd8d48988d190941735",
+                     "name":"Museo histórico",
+                     "pluralName":"Museo de historia",
+                     "shortName":"Museo histórico",
+                     "icon":{
+                        "prefix":"https:\/\/ss3.4sqi.net\/img\/categories_v2\/arts_entertainment\/museum_history_",
+                        "suffix":".png"
+                     },
+                     "primary":true
+                  }
+               ],
+               "verified":true,
+               "stats":{
+                  "checkinsCount":1663,
+                  "usersCount":1219,
+                  "tipCount":85
+               },
+               "url":"http:\/\/www.casadelmendrugo.com",
+               "like":false,
+               "venuePage":{
+                  "id":"56395318"
+               },
+               "storeId":""
+            }
+         ]
+      }
+   }
+}
