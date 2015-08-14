@@ -52,6 +52,10 @@ public class PoiFoursquareDao implements PoiDao {
     public List<Poi> fetchNext(String poiFoursquareId, int limit, Locale locale) {
         FoursquareApi foursquareApi = new FoursquareApi(clientId, clientSecret);
         foursquareApi.setLocale(locale);
+        return fetchNext(foursquareApi, poiFoursquareId, limit);
+    }
+
+    protected List<Poi> fetchNext(FoursquareApi foursquareApi, String poiFoursquareId, int limit) {
         Result<Venue> venueResult = foursquareApi.getVenue(poiFoursquareId);
         if (venueResult.getMeta().getCode() == 200) {
             Poi seed = toPoi(venueResult.getResponse());
@@ -102,6 +106,10 @@ public class PoiFoursquareDao implements PoiDao {
     public List<Poi> fetchNearestByCategory(Location location, Integer radius, String categoryFoursquareId, Locale locale) {
         FoursquareApi foursquareApi = new FoursquareApi(clientId, clientSecret);
         foursquareApi.setLocale(locale);
+        return fetchNearestByCategory(foursquareApi, location, radius, categoryFoursquareId);
+    }
+
+    protected List<Poi> fetchNearestByCategory(FoursquareApi foursquareApi, Location location, Integer radius, String categoryFoursquareId) {
         Result<Venue[]> venuesResult = foursquareApi.searchVenues(location.stringValues(), null, null, null, null, null, null, null, radius, null, null, categoryFoursquareId, null, null, null);
         if (venuesResult.getMeta().getCode() == 200) {
             List<Poi> pois = new ArrayList<>(venuesResult.getResponse().length);
