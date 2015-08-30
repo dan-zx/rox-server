@@ -23,15 +23,17 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import com.foursquare4j.FoursquareApi;
+
 import com.grayfox.server.config.MainConfig;
+
 import com.squareup.okhttp.mockwebserver.MockWebServer;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
@@ -44,13 +46,12 @@ public class TestConfig {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
-    @EnableAsync
     @Configuration
     @EnableTransactionManagement
     @ComponentScan(basePackages = {
             "com.grayfox.server.test.dao.*",
+            "com.grayfox.server.test.oauth.*",
             "com.grayfox.server.dao.jdbc",
-            "com.grayfox.server.oauth.*",
             "com.grayfox.server.service",
             "com.grayfox.server.ws.*"})
     public static class BeanConfig {
