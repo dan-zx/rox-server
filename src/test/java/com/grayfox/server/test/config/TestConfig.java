@@ -48,8 +48,8 @@ public class TestConfig {
     @Configuration
     @EnableTransactionManagement
     @ComponentScan(basePackages = {
-            "com.grayfox.server.dao.jdbc",
             "com.grayfox.server.test.dao.*",
+            "com.grayfox.server.dao.jdbc",
             "com.grayfox.server.oauth.*",
             "com.grayfox.server.service",
             "com.grayfox.server.ws.*"})
