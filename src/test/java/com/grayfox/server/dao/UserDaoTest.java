@@ -22,13 +22,14 @@ import java.util.HashSet;
 
 import javax.inject.Inject;
 
-import com.grayfox.server.test.config.TestConfig;
-
 import com.grayfox.server.domain.Credential;
 import com.grayfox.server.domain.User;
+import com.grayfox.server.test.config.TestConfig;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -57,8 +58,6 @@ public class UserDaoTest {
 
         credentialDao.save(credential);
 
-        assertThat(userDao.fetchCompactByAccessToken(credential.getAccessToken())).isNull();
-
         User expectedUser = new User();
         expectedUser.setName("name");
         expectedUser.setLastName("lastName");
@@ -78,13 +77,22 @@ public class UserDaoTest {
         expectedUser.setFriends(new HashSet<>(Arrays.asList(friend1, friend2)));
         expectedUser.setLikes(new HashSet<>());
 
+        assertThat(userDao.fetchCompactByAccessToken(credential.getAccessToken())).isNull();
+        assertThat(userDao.existsUser(expectedUser.getFoursquareId())).isNotNull().isFalse();
+        assertThat(userDao.fetchFoursquareIdByAccessToken(expectedUser.getCredential().getAccessToken())).isNull();
+
         userDao.save(expectedUser);
 
         expectedUser.setCredential(null);
-        
+
         User actualUser = userDao.fetchCompactByAccessToken(credential.getAccessToken());
+
         assertThat(actualUser).isNotNull();
-        
+        assertThat(userDao.existsUser(expectedUser.getFoursquareId())).isNotNull().isTrue();
+        assertThat(userDao.fetchFoursquareIdByAccessToken(credential.getAccessToken())).isNotNull().isNotEmpty().isEqualTo(expectedUser.getFoursquareId());
+        assertThat(userDao.areFriends(expectedUser.getFoursquareId(), friend1.getFoursquareId())).isNotNull().isTrue();
+        assertThat(userDao.areFriends(expectedUser.getFoursquareId(), friend2.getFoursquareId())).isNotNull().isTrue();
+
         actualUser.setFriends(new HashSet<>(userDao.fetchCompactFriendsByFoursquareId(actualUser.getFoursquareId())));
         actualUser.setLikes(new HashSet<>(userDao.fetchLikesByFoursquareId(actualUser.getFoursquareId(), null)));
 
@@ -100,12 +108,15 @@ public class UserDaoTest {
         friend3.setPhotoUrl("url");
         friend3.setFoursquareId("4");
         expectedUser.getFriends().add(friend3);
-        
+
         userDao.update(expectedUser);
-        
+
         actualUser = userDao.fetchCompactByAccessToken(credential.getAccessToken());
+
         assertThat(actualUser).isNotNull();
-        
+        assertThat(userDao.areFriends(expectedUser.getFoursquareId(), friend1.getFoursquareId())).isNotNull().isFalse();
+        assertThat(userDao.areFriends(expectedUser.getFoursquareId(), friend3.getFoursquareId())).isNotNull().isTrue();
+
         actualUser.setFriends(new HashSet<>(userDao.fetchCompactFriendsByFoursquareId(actualUser.getFoursquareId())));
         actualUser.setLikes(new HashSet<>(userDao.fetchLikesByFoursquareId(actualUser.getFoursquareId(), null)));
 
