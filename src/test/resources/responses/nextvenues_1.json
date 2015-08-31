@@ -1,0 +1,67 @@
+{
+   "meta":{
+      "code":200
+   },
+   "notifications":[
+      {
+         "type":"notificationTray",
+         "item":{
+            "unreadCount":0
+         }
+      }
+   ],
+   "response":{
+      "nextVenues":{
+         "count":1,
+         "items":[
+            {
+               "id":"4bad0850f964a52082263be3",
+               "name":"Cinépolis",
+               "contact":{
+                  "phone":"012222250081",
+                  "formattedPhone":"01 222 225 0081",
+                  "twitter":"cinepolis"
+               },
+               "location":{
+                  "address":"Centro Comercial Angelópolis",
+                  "crossStreet":"Blvd. del Niño Poblano 2510",
+                  "lat":19.032099226143384,
+                  "lng":-98.23300838470459,
+                  "postalCode":"72450",
+                  "cc":"MX",
+                  "city":"Puebla de Zaragoza",
+                  "state":"Puebla",
+                  "country":"México",
+                  "formattedAddress":[
+                     "Centro Comercial Angelópolis (Blvd. del Niño Poblano 2510)",
+                     "72450 Puebla de Zaragoza, Puebla"
+                  ]
+               },
+               "categories":[
+                  {
+                     "id":"4bf58dd8d48988d180941735",
+                     "name":"Multicine",
+                     "pluralName":"Multicines",
+                     "shortName":"Multicine",
+                     "icon":{
+                        "prefix":"https:\/\/ss3.4sqi.net\/img\/categories_v2\/arts_entertainment\/movietheater_",
+                        "suffix":".png"
+                     },
+                     "primary":true
+                  }
+               ],
+               "verified":true,
+               "stats":{
+                  "checkinsCount":39002,
+                  "usersCount":10678,
+                  "tipCount":181
+               },
+               "url":"http:\/\/www.cinepolis.com",
+               "reservations":{
+                  "url":"http:\/\/www.opentable.com\/single.aspx?rid=58000&ref=9601"
+               }
+            }
+         ]
+      }
+   }
+}

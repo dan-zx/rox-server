@@ -1,0 +1,133 @@
+{
+    "meta":{
+        "code":200,
+        "requestId":"55e47d7f498ec2032c43db22"
+    },
+    "notifications":[
+        {
+            "type":"notificationTray",
+            "item":{
+                "unreadCount":0
+            }
+        }
+    ],
+    "response":{
+        "venues":[
+            {
+                "id":"4cdd6a06930af04d92fb9597",
+                "name":"Taquería Los Ángeles",
+                "contact":{
+
+                },
+                "location":{
+                    "address":"Portal Morelos",
+                    "crossStreet":"Don Juan de Palafox y Mendoza 202",
+                    "lat":19.04336700060403,
+                    "lng":-98.19716334342957,
+                    "distance":90,
+                    "postalCode":"72000",
+                    "cc":"MX",
+                    "city":"Puebla de Zaragoza",
+                    "state":"Puebla",
+                    "country":"México",
+                    "formattedAddress":[
+                        "Portal Morelos (Don Juan de Palafox y Mendoza 202)",
+                        "72000 Puebla, Puebla"
+                    ]
+                },
+                "categories":[
+                    {
+                        "id":"4bf58dd8d48988d151941735",
+                        "name":"Taco Place",
+                        "pluralName":"Taco Places",
+                        "shortName":"Tacos",
+                        "icon":{
+                            "prefix":"https:\/\/ss3.4sqi.net\/img\/categories_v2\/food\/taco_",
+                            "suffix":".png"
+                        },
+                        "primary":true
+                    }
+                ],
+                "verified":false,
+                "stats":{
+                    "checkinsCount":2563,
+                    "usersCount":1847,
+                    "tipCount":77
+                },
+                "url":"http:\/\/taquerialosangeles.com.mx",
+                "allowMenuUrlEdit":true,
+                "specials":{
+                    "count":0,
+                    "items":[
+
+                    ]
+                },
+                "hereNow":{
+                    "count":0,
+                    "summary":"Nobody here",
+                    "groups":[
+
+                    ]
+                },
+                "referralId":"v-1441037696"
+            },
+            {
+                "id":"4c3ce8087c1ee21ebd388d71",
+                "name":"Antigua Taquería La Oriental",
+                "contact":{
+
+                },
+                "location":{
+                    "address":"2 Oriente 8",
+                    "lat":19.044926274591635,
+                    "lng":-98.19751471281052,
+                    "distance":149,
+                    "postalCode":"72000",
+                    "cc":"MX",
+                    "city":"Puebla de Zaragoza",
+                    "state":"Puebla",
+                    "country":"México",
+                    "formattedAddress":[
+                        "2 Oriente 8",
+                        "72000 Puebla, Puebla"
+                    ]
+                },
+                "categories":[
+                    {
+                        "id":"4bf58dd8d48988d151941735",
+                        "name":"Taco Place",
+                        "pluralName":"Taco Places",
+                        "shortName":"Tacos",
+                        "icon":{
+                            "prefix":"https:\/\/ss3.4sqi.net\/img\/categories_v2\/food\/taco_",
+                            "suffix":".png"
+                        },
+                        "primary":true
+                    }
+                ],
+                "verified":false,
+                "stats":{
+                    "checkinsCount":1378,
+                    "usersCount":1087,
+                    "tipCount":29
+                },
+                "allowMenuUrlEdit":true,
+                "specials":{
+                    "count":0,
+                    "items":[
+
+                    ]
+                },
+                "hereNow":{
+                    "count":0,
+                    "summary":"Nobody here",
+                    "groups":[
+
+                    ]
+                },
+                "referralId":"v-1441037696"
+            }
+        ],
+        "confident":true
+    }
+}

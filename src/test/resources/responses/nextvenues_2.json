@@ -1,0 +1,161 @@
+{
+   "meta":{
+      "code":200
+   },
+   "notifications":[
+      {
+         "type":"notificationTray",
+         "item":{
+            "unreadCount":0
+         }
+      }
+   ],
+   "response":{
+      "nextVenues":{
+         "count":2,
+         "items":[
+            {
+               "id":"4bad0850f964a52082263be3",
+               "name":"Cinépolis",
+               "contact":{
+                  "phone":"012222250081",
+                  "formattedPhone":"01 222 225 0081",
+                  "twitter":"cinepolis"
+               },
+               "location":{
+                  "address":"Centro Comercial Angelópolis",
+                  "crossStreet":"Blvd. del Niño Poblano 2510",
+                  "lat":19.032099226143384,
+                  "lng":-98.23300838470459,
+                  "postalCode":"72450",
+                  "cc":"MX",
+                  "city":"Puebla de Zaragoza",
+                  "state":"Puebla",
+                  "country":"México",
+                  "formattedAddress":[
+                     "Centro Comercial Angelópolis (Blvd. del Niño Poblano 2510)",
+                     "72450 Puebla de Zaragoza, Puebla"
+                  ]
+               },
+               "categories":[
+                  {
+                     "id":"4bf58dd8d48988d180941735",
+                     "name":"Multicine",
+                     "pluralName":"Multicines",
+                     "shortName":"Multicine",
+                     "icon":{
+                        "prefix":"https:\/\/ss3.4sqi.net\/img\/categories_v2\/arts_entertainment\/movietheater_",
+                        "suffix":".png"
+                     },
+                     "primary":true
+                  }
+               ],
+               "verified":true,
+               "stats":{
+                  "checkinsCount":39002,
+                  "usersCount":10678,
+                  "tipCount":181
+               },
+               "url":"http:\/\/www.cinepolis.com",
+               "reservations":{
+                  "url":"http:\/\/www.opentable.com\/single.aspx?rid=58000&ref=9601"
+               }
+            },
+            {
+               "id":"4ci708s0p964a52082263bx3",
+               "name":"Otro Cine",
+               "contact":{
+                  "phone":"012222250081",
+                  "formattedPhone":"01 222 225 0081",
+                  "twitter":"cinepolis"
+               },
+               "location":{
+                  "address":"Centro Comercial Angelópolis",
+                  "crossStreet":"Blvd. del Niño Poblano 2510",
+                  "lat":19.032099226143384,
+                  "lng":-98.23300838470459,
+                  "postalCode":"72450",
+                  "cc":"MX",
+                  "city":"Puebla de Zaragoza",
+                  "state":"Puebla",
+                  "country":"México",
+                  "formattedAddress":[
+                     "Centro Comercial Angelópolis (Blvd. del Niño Poblano 2510)",
+                     "72450 Puebla de Zaragoza, Puebla"
+                  ]
+               },
+               "categories":[
+                  {
+                     "id":"4bf58dd8d48988d180941735",
+                     "name":"Multicine",
+                     "pluralName":"Multicines",
+                     "shortName":"Multicine",
+                     "icon":{
+                        "prefix":"https:\/\/ss3.4sqi.net\/img\/categories_v2\/arts_entertainment\/movietheater_",
+                        "suffix":".png"
+                     },
+                     "primary":true
+                  }
+               ],
+               "verified":true,
+               "stats":{
+                  "checkinsCount":39002,
+                  "usersCount":10678,
+                  "tipCount":181
+               },
+               "url":"http:\/\/www.cinepolis.com",
+               "reservations":{
+                  "url":"http:\/\/www.opentable.com\/single.aspx?rid=58000&ref=9601"
+               }
+            },
+            {
+               "id":"4c2b7f8257a9c9b6affff567",
+               "name":"Liverpool",
+               "contact":{
+                  "phone":"012222297500",
+                  "formattedPhone":"01 222 229 7500",
+                  "facebook":"140142041216",
+                  "facebookUsername":"liverpoolmexico",
+                  "facebookName":"Liverpool"
+               },
+               "location":{
+                  "address":"Centro Comercial Angelópolis",
+                  "crossStreet":"Blvd. del Niño Poblano 2510",
+                  "lat":19.03174044908608,
+                  "lng":-98.23100973086046,
+                  "postalCode":"72450",
+                  "cc":"MX",
+                  "city":"Puebla de Zaragoza",
+                  "state":"Puebla",
+                  "country":"México",
+                  "formattedAddress":[
+                     "Centro Comercial Angelópolis (Blvd. del Niño Poblano 2510)",
+                     "72450 Puebla de Zaragoza, Puebla"
+                  ]
+               },
+               "categories":[
+                  {
+                     "id":"4bf58dd8d48988d1f6941735",
+                     "name":"Gran tienda",
+                     "pluralName":"Tiendas por departamentos",
+                     "shortName":"Gran tienda",
+                     "icon":{
+                        "prefix":"https:\/\/ss3.4sqi.net\/img\/categories_v2\/shops\/departmentstore_",
+                        "suffix":".png"
+                     },
+                     "primary":true
+                  }
+               ],
+               "verified":true,
+               "stats":{
+                  "checkinsCount":13539,
+                  "usersCount":5071,
+                  "tipCount":59
+               },
+               "url":"http:\/\/www.liverpool.com.mx",
+               "storeId":"Puebla"
+            }
+         ]
+      }
+   }
+}
