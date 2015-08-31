@@ -41,19 +41,20 @@ public class Location implements Serializable {
     }
 
     public String stringValues() {
-        return new StringBuilder().append(latitude).append(',').append(longitude).toString();
+        return latitude + "," + longitude;
     }
 
     public static Location parse(String locationString) {
+        if (locationString == null) throw new IllegalArgumentException("Location string must not be null");
         String[] latLng = locationString.split(",");
-        if (latLng == null || latLng.length != 2) throw new IllegalArgumentException("Incorrect location format. It must be '##.##,##.##'"); 
+        if (latLng.length != 2) throw new IllegalArgumentException("Incorrect location format [" + locationString + "]. It must be '##.##,##.##'"); 
         try {
             Location location = new Location();
             location.setLatitude(Double.parseDouble(latLng[0]));
             location.setLongitude(Double.parseDouble(latLng[1]));
             return location;
         } catch (NumberFormatException ex) {
-            throw new IllegalArgumentException("Incorrect location format. It must be '##.##,##.##'");
+            throw new IllegalArgumentException("Incorrect location format [" + locationString + "]. It must be '##.##,##.##'");
         }
     }
 
