@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.grayfox.server.dao;
+package com.grayfox.server.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -30,7 +29,7 @@ import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
 import com.grayfox.server.test.config.TestConfig;
 
-import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -42,18 +41,40 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @TransactionConfiguration(defaultRollback = true)
-public class PoiDaoTest {
+public class PoiServiceTest {
 
-    @Inject private PoiDao poiDao;
-
-    @Before
-    public void setUp() {
-        assertThat(poiDao).isNotNull();
-    }
+    @Inject private PoiService poiService;
 
     @Test
     @Transactional
-    public void testFetchNext() {
+    public void testGetNearestPoisByCategory() {
+        Category category = new Category();
+        category.setFoursquareId("4bf58dd8d48988d151941735");
+        category.setName("Taco Place");
+        category.setIconUrl("https://ss3.4sqi.net/img/categories_v2/food/taco_88.png");
+
+        Poi p1 = new Poi();
+        p1.setFoursquareId("4cdd6a06930af04d92fb9597");
+        p1.setName("Taquería Los Ángeles");
+        p1.setLocation(Location.parse("19.04336700060403,-98.19716334342957"));
+        p1.setCategories(new HashSet<>(Arrays.asList(category)));
+
+        Poi p2 = new Poi();
+        p2.setFoursquareId("4c3ce8087c1ee21ebd388d71");
+        p2.setName("Antigua Taquería La Oriental");
+        p2.setLocation(Location.parse("19.044926274591635,-98.19751471281052"));
+        p2.setCategories(new HashSet<>(Arrays.asList(category)));
+
+        List<Poi> expectedPois = Arrays.asList(p1, p2);
+        List<Poi> actualPois = poiService.getNearestPoisByCategory(Location.parse("19.04365,-98.197968"), 800, category.getFoursquareId(), Locale.ROOT);
+
+        assertThat(actualPois).isNotNull().isNotEmpty().doesNotContainNull().hasSameSizeAs(expectedPois).containsOnlyElementsOf(expectedPois);
+    }
+
+    @Test
+    @Ignore
+    @Transactional
+    public void testBuildRoute() {
         Poi p1 = new Poi();
         p1.setFoursquareId("4bad0850f964a52082263be3");
         p1.setName("Cinépolis");
@@ -75,38 +96,26 @@ public class PoiDaoTest {
         p2.setCategories(new HashSet<>(Arrays.asList(category)));
 
         List<Poi> expectedPois = Arrays.asList(p1, p2);
-        List<Poi> actualPois = poiDao.fetchNext("4c09270ea1b32d7f172297f0", 3, Locale.ROOT);
+        List<Poi> actualPois = poiService.buildRoute("4c09270ea1b32d7f172297f0", Locale.ROOT);
 
-        assertThat(actualPois).isNotNull().isNotEmpty().doesNotContainNull().hasSameSizeAs(expectedPois).containsExactlyElementsOf(expectedPois);
-        assertThatThrownBy(() -> poiDao.fetchNext("invalidId", 3, Locale.ROOT))
-            .isInstanceOf(DaoException.class);
+        assertThat(actualPois).isNotNull().isNotEmpty().doesNotContainNull().hasSameSizeAs(expectedPois).containsExactlyElementsOf(expectedPois);;
     }
 
     @Test
     @Transactional
-    public void testFetchNearestByCategory() {
-        Category category = new Category();
-        category.setFoursquareId("4bf58dd8d48988d151941735");
-        category.setName("Taco Place");
-        category.setIconUrl("https://ss3.4sqi.net/img/categories_v2/food/taco_88.png");
+    public void testGetCategoriesLikeName() {
+        Category c1 = new Category();
+        c1.setFoursquareId("4bf58dd8d48988d188941735");
+        c1.setIconUrl("https://ss3.4sqi.net/img/categories_v2/arts_entertainment/default_88.png");
+        c1.setName("Estadio de fútbol");
+        
+        Category c2 = new Category();
+        c2.setFoursquareId("4bf58dd8d48988d18c941735");
+        c2.setIconUrl("https://ss3.4sqi.net/img/categories_v2/arts_entertainment/default_88.png");
+        c2.setName("Estadio de béisbol");
 
-        Poi p1 = new Poi();
-        p1.setFoursquareId("4cdd6a06930af04d92fb9597");
-        p1.setName("Taquería Los Ángeles");
-        p1.setLocation(Location.parse("19.04336700060403,-98.19716334342957"));
-        p1.setCategories(new HashSet<>(Arrays.asList(category)));
-
-        Poi p2 = new Poi();
-        p2.setFoursquareId("4c3ce8087c1ee21ebd388d71");
-        p2.setName("Antigua Taquería La Oriental");
-        p2.setLocation(Location.parse("19.044926274591635,-98.19751471281052"));
-        p2.setCategories(new HashSet<>(Arrays.asList(category)));
-
-        List<Poi> expectedPois = Arrays.asList(p1, p2);
-        List<Poi> actualPois = poiDao.fetchNearestByCategory(Location.parse("19.04365,-98.197968"), 800, category.getFoursquareId(), Locale.ROOT);
-
-        assertThat(actualPois).isNotNull().isNotEmpty().doesNotContainNull().hasSameSizeAs(expectedPois).containsOnlyElementsOf(expectedPois);
-        assertThatThrownBy(() -> poiDao.fetchNearestByCategory(Location.parse("19.04365,-98.197968"), 800, "invalidId", Locale.ROOT))
-            .isInstanceOf(DaoException.class);
+        List<Category> expectedCategories = Arrays.asList(c1, c2);
+        
+        assertThat(poiService.getCategoriesLikeName("estadio", Locale.ROOT)).isNotNull().isNotEmpty().containsOnlyElementsOf(expectedCategories);
     }
 }
