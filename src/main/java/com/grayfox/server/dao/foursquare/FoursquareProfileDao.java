@@ -44,9 +44,13 @@ public class FoursquareProfileDao implements SocialNetworkProfileDao {
 
     @Override
     public User collectUserData(String accessToken) {
-        LOGGER.trace("Collecting user data...");
         FoursquareApi foursquareApi = new FoursquareApi(clientId, clientSecret);
         foursquareApi.setAccessToken(accessToken);
+        return collectUserData(foursquareApi);
+    }
+
+    protected User collectUserData(FoursquareApi foursquareApi) {
+        LOGGER.trace("Collecting user data...");
         Result<com.foursquare4j.response.User> foursquareUser = foursquareApi.getUser("self");
         if (foursquareUser.getMeta().getCode() == 200) {
             User user = toUser(foursquareUser.getResponse());

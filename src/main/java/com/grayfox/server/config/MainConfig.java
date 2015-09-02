@@ -36,7 +36,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@PropertySource("/WEB-INF/resources/configs.properties")
+@PropertySource("/WEB-INF/resources/config.properties")
 @Import({MainConfig.DataConfig.class, MainConfig.BeanConfig.class})
 public class MainConfig {
 
