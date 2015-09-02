@@ -41,10 +41,10 @@ repositories {
 }
 
 ext {
-    jerseyVersion = '2.20'
-    neo4jVersion  = '2.2.4'
+    jerseyVersion = '2.21'
+    neo4jVersion  = '2.2.5'
     slf4jVersion  = '1.7.12'
-    springVersion = '4.1.7.RELEASE'
+    springVersion = '4.2.1.RELEASE'
 }
 
 dependencies {
@@ -94,7 +94,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.4'
+    gradleVersion = '2.6'
 }
 
 jettyEclipse {

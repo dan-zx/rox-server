@@ -19,20 +19,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.inject.Inject;
 
+import com.grayfox.server.domain.Credential;
 import com.grayfox.server.test.config.TestConfig;
 
-import com.grayfox.server.domain.Credential;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+@Rollback
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
-@TransactionConfiguration(defaultRollback = true)
 public class CredentialDaoTest {
 
     @Inject private CredentialDao credentialDao;
