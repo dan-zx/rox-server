@@ -49,6 +49,7 @@ public class UtilJdbcDao {
 
     public void savePoi(Poi poi) {
         jdbcTemplate.update("CREATE (:Poi {name:{1}, latitude:{2}, longitude:{3}, foursquareId:{4}, foursquareRating:{5}})", poi.getName(), poi.getLocation().getLatitude(), poi.getLocation().getLongitude(), poi.getFoursquareId(), poi.getFoursquareRating());
+        if (poi.getCategories() != null) poi.getCategories().forEach(category -> jdbcTemplate.update("MATCH (p:Poi {foursquareId:{1}}), (c:Category {foursquareId:{2}}) CREATE (p)-[:IS]->(c)", poi.getFoursquareId(), category.getFoursquareId()));
     }
 
     public void savePois(List<Poi> pois) {
