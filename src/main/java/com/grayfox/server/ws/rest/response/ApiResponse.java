@@ -17,13 +17,13 @@ package com.grayfox.server.ws.rest.response;
 
 import java.io.Serializable;
 
-public class Response<T> implements Serializable {
+public class ApiResponse<T> implements Serializable {
 
     private static final long serialVersionUID = -7239525962816927992L;
 
     private final T response;
 
-    public Response(T response) {
+    public ApiResponse(T response) {
         this.response = response;
     }
 
@@ -45,7 +45,7 @@ public class Response<T> implements Serializable {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        Response<T> other = (Response<T>) obj;
+        ApiResponse<T> other = (ApiResponse<T>) obj;
         if (response == null) {
             if (other.response != null) return false;
         } else if (!response.equals(other.response)) return false;
@@ -54,6 +54,6 @@ public class Response<T> implements Serializable {
 
     @Override
     public String toString() {
-        return "Response [response=" + response + "]";
+        return "ApiResponse [response=" + response + "]";
     }
 }
