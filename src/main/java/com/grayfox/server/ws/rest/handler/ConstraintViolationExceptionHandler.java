@@ -52,7 +52,7 @@ public class ConstraintViolationExceptionHandler extends BaseRestComponent imple
         LOGGER.error("Constraints violated in arguments: {}", logMessageBuilder);
         return Response.status(Response.Status.BAD_REQUEST)
                 .type(MediaType.APPLICATION_JSON)
-                .entity(new ErrorResponse("param.validation.error", messageBuilder.toString()))
+                .entity(new ErrorResponse("param.validation.error", messageBuilder.toString()).toJson())
                 .build();
     }
 }

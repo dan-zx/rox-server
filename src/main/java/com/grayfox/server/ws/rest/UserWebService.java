@@ -32,7 +32,7 @@ import com.grayfox.server.domain.Credential;
 import com.grayfox.server.domain.User;
 import com.grayfox.server.service.UserService;
 import com.grayfox.server.ws.rest.response.AccessTokenResponse;
-import com.grayfox.server.ws.rest.response.Response;
+import com.grayfox.server.ws.rest.response.ApiResponse;
 import com.grayfox.server.ws.rest.response.UpdateResponse;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -53,59 +53,59 @@ public class UserWebService extends BaseRestComponent {
     @GET
     @Path("register/foursquare")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response<AccessTokenResponse> registerUsingFoursquare(@NotBlank(message = "authorization_code.required.error") @QueryParam("authorization_code") String authorizationCode) {
+    public ApiResponse<AccessTokenResponse> registerUsingFoursquare(@NotBlank(message = "authorization_code.required.error") @QueryParam("authorization_code") String authorizationCode) {
         LOGGER.debug("registerUsingFoursquare({})", authorizationCode);
         Credential credential = userService.registerUsingFoursquare(authorizationCode);
         if (credential.isNew()) userService.generateProfileUsingFoursquare(credential);
-        return new Response<>(new AccessTokenResponse(credential.getAccessToken()));
+        return new ApiResponse<>(new AccessTokenResponse(credential.getAccessToken()));
     }
 
     @GET
     @Path("self")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response<User> self(@NotBlank(message = "access_token.required.error") @QueryParam("access_token") String accessToken) {
+    public ApiResponse<User> self(@NotBlank(message = "access_token.required.error") @QueryParam("access_token") String accessToken) {
         LOGGER.debug("getSelf({})", accessToken);
-        return new Response<>(userService.getCompactSelf(accessToken));
+        return new ApiResponse<>(userService.getCompactSelf(accessToken));
     }
 
     @GET
     @Path("self/friends")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response<List<User>> selfFriends(@NotBlank(message = "access_token.required.error") @QueryParam("access_token") String accessToken) {
+    public ApiResponse<List<User>> selfFriends(@NotBlank(message = "access_token.required.error") @QueryParam("access_token") String accessToken) {
         LOGGER.debug("getSelfFriends({})", accessToken);
-        return new Response<>(userService.getSelfCompactFriends(accessToken));
+        return new ApiResponse<>(userService.getSelfCompactFriends(accessToken));
     }
 
     @GET
     @Path("{user_foursquare_id}/likes")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response<List<Category>> userLikes(
+    public ApiResponse<List<Category>> userLikes(
             @NotBlank(message = "user_foursquare_id.required.error") @PathParam("user_foursquare_id") String userFoursquareId,
             @NotBlank(message = "access_token.required.error") @QueryParam("access_token") String accessToken) {
         LOGGER.debug("getUserLikes({}, {})", accessToken, userFoursquareId);
-        if (userFoursquareId.equals("self")) return new Response<>(userService.getSelfLikes(accessToken, getClientLocale()));
-        return new Response<>(userService.getUserLikes(accessToken, userFoursquareId, getClientLocale()));
+        if (userFoursquareId.equals("self")) return new ApiResponse<>(userService.getSelfLikes(accessToken, getClientLocale()));
+        return new ApiResponse<>(userService.getUserLikes(accessToken, userFoursquareId, getClientLocale()));
     }
 
     @PUT
     @Path("self/update/addlike")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response<UpdateResponse> addLike(
+    public ApiResponse<UpdateResponse> addLike(
             @NotBlank(message = "access_token.required.error") @QueryParam("access_token") String accessToken,
             @NotBlank(message = "category_foursquare_id.required.error") @QueryParam("category_foursquare_id") String categoryFoursquareId) {
         LOGGER.debug("addLike({}, {})", accessToken, categoryFoursquareId);
         userService.addLike(accessToken, categoryFoursquareId);
-        return new Response<>(new UpdateResponse(true));
+        return new ApiResponse<>(new UpdateResponse(true));
     }
 
     @DELETE
     @Path("self/update/removelike")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response<UpdateResponse> removeLike(
+    public ApiResponse<UpdateResponse> removeLike(
             @NotBlank(message = "access_token.required.error") @QueryParam("access_token") String accessToken,
             @NotBlank(message = "category_foursquare_id.required.error") @QueryParam("category_foursquare_id") String categoryFoursquareId) {
         LOGGER.debug("removeLike({}, {})", accessToken, categoryFoursquareId);
         userService.removeLike(accessToken, categoryFoursquareId);
-        return new Response<>(new UpdateResponse(true));
+        return new ApiResponse<>(new UpdateResponse(true));
     }
 }
