@@ -24,7 +24,7 @@ public abstract class BaseApplicationException extends RuntimeException {
 
     private static final long serialVersionUID = 4065199814273911926L;
 
-    private BaseBuilder<? extends BaseApplicationException> builder;
+    private final BaseBuilder<? extends BaseApplicationException> builder;
 
     protected BaseApplicationException(BaseBuilder<? extends BaseApplicationException> builder) {
         super(builder.messageKey != null ? Messages.get(builder.messageKey, builder.messageArguments.toArray()) : builder.message, builder.cause);
