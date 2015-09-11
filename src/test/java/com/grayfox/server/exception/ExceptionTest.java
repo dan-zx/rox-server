@@ -38,14 +38,14 @@ public class ExceptionTest {
         DaoException exception = new DaoException.Builder().build();
         assertThat(exception).hasNoCause().hasMessage(null);
         assertThat(exception.getMessageKey()).isNull();
-        assertThat(exception.getMessageArguments()).isNull();
+        assertThat(exception.getMessageArguments()).isNotNull().isEmpty();
         
         exception = new DaoException.Builder()
             .message(MESSAGE)
             .build();
         assertThat(exception).hasNoCause().hasMessage(MESSAGE);
         assertThat(exception.getMessageKey()).isNull();
-        assertThat(exception.getMessageArguments()).isNull();
+        assertThat(exception.getMessageArguments()).isNotNull().isEmpty();
 
         exception = new DaoException.Builder()
             .message(MESSAGE)
@@ -53,7 +53,7 @@ public class ExceptionTest {
             .build();
         assertThat(exception).hasCause(CAUSE).hasMessage(MESSAGE);
         assertThat(exception.getMessageKey()).isNull();
-        assertThat(exception.getMessageArguments()).isNull();
+        assertThat(exception.getMessageArguments()).isNotNull().isEmpty();
  
         exception = new DaoException.Builder()
             .messageKey(MESSAGE_KEY)
@@ -87,14 +87,14 @@ public class ExceptionTest {
         OAuthException exception = new OAuthException.Builder().build();
         assertThat(exception).hasNoCause().hasMessage(null);
         assertThat(exception.getMessageKey()).isNull();
-        assertThat(exception.getMessageArguments()).isNull();
+        assertThat(exception.getMessageArguments()).isNotNull().isEmpty();
         
         exception = new OAuthException.Builder()
             .message(MESSAGE)
             .build();
         assertThat(exception).hasNoCause().hasMessage(MESSAGE);
         assertThat(exception.getMessageKey()).isNull();
-        assertThat(exception.getMessageArguments()).isNull();
+        assertThat(exception.getMessageArguments()).isNotNull().isEmpty();
 
         exception = new OAuthException.Builder()
             .message(MESSAGE)
@@ -102,7 +102,7 @@ public class ExceptionTest {
             .build();
         assertThat(exception).hasCause(CAUSE).hasMessage(MESSAGE);
         assertThat(exception.getMessageKey()).isNull();
-        assertThat(exception.getMessageArguments()).isNull();
+        assertThat(exception.getMessageArguments()).isNotNull().isEmpty();
 
         exception = new OAuthException.Builder()
             .messageKey(MESSAGE_KEY)
@@ -136,14 +136,14 @@ public class ExceptionTest {
         ServiceException exception = new ServiceException.Builder().build();
         assertThat(exception).hasNoCause().hasMessage(null);
         assertThat(exception.getMessageKey()).isNull();
-        assertThat(exception.getMessageArguments()).isNull();
+        assertThat(exception.getMessageArguments()).isNotNull().isEmpty();
         
         exception = new ServiceException.Builder()
             .message(MESSAGE)
             .build();
         assertThat(exception).hasNoCause().hasMessage(MESSAGE);
         assertThat(exception.getMessageKey()).isNull();
-        assertThat(exception.getMessageArguments()).isNull();
+        assertThat(exception.getMessageArguments()).isNotNull().isEmpty();
 
         exception = new ServiceException.Builder()
             .message(MESSAGE)
@@ -151,7 +151,7 @@ public class ExceptionTest {
             .build();
         assertThat(exception).hasCause(CAUSE).hasMessage(MESSAGE);
         assertThat(exception.getMessageKey()).isNull();
-        assertThat(exception.getMessageArguments()).isNull();
+        assertThat(exception.getMessageArguments()).isNotNull().isEmpty();
 
         exception = new ServiceException.Builder()
             .messageKey(MESSAGE_KEY)

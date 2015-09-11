@@ -24,41 +24,19 @@ public abstract class BaseApplicationException extends RuntimeException {
 
     private static final long serialVersionUID = 4065199814273911926L;
 
-    private String messageKey;
-    private Object[] messageArguments;
+    private BaseBuilder<? extends BaseApplicationException> builder;
 
-    protected BaseApplicationException() { }
-
-    protected BaseApplicationException(String messageKey, Object[] messageArguments, Throwable cause) {
-        super(Messages.get(messageKey, messageArguments), cause);
-        this.messageKey = messageKey;
-        this.messageArguments = messageArguments;
-    }
-
-    protected BaseApplicationException(String messageKey, Object[] messageArguments) {
-        super(Messages.get(messageKey, messageArguments));
-        this.messageKey = messageKey;
-        this.messageArguments = messageArguments;
-    }
-
-    protected BaseApplicationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    protected BaseApplicationException(String message) {
-        super(message);
-    }
-
-    protected BaseApplicationException(Throwable cause) {
-        super(cause);
+    protected BaseApplicationException(BaseBuilder<? extends BaseApplicationException> builder) {
+        super(builder.messageKey != null ? Messages.get(builder.messageKey, builder.messageArguments.toArray()) : builder.message, builder.cause);
+        this.builder = builder;
     }
 
     public String getMessageKey() {
-        return messageKey;
+        return builder.messageKey;
     }
 
     public Object[] getMessageArguments() {
-        return messageArguments;
+        return builder.messageArguments.toArray();
     }
 
     public static abstract class BaseBuilder<T extends BaseApplicationException> {
@@ -90,22 +68,6 @@ public abstract class BaseApplicationException extends RuntimeException {
         public BaseBuilder<T> cause(Throwable cause) {
             this.cause = cause;
             return this;
-        }
-
-        protected String getMessage() {
-            return message;
-        }
-
-        protected String getMessageKey() {
-            return messageKey;
-        }
-
-        protected Object[] getMessageArguments() {
-            return messageArguments.toArray();
-        }
-
-        protected Throwable getCause() {
-            return cause;
         }
 
         public abstract T build();
