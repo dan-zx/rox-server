@@ -16,6 +16,7 @@
 package com.grayfox.server.domain;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 public class User implements Serializable {
@@ -88,16 +89,7 @@ public class User implements Serializable {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((credential == null) ? 0 : credential.hashCode());
-        result = prime * result + ((foursquareId == null) ? 0 : foursquareId.hashCode());
-        result = prime * result + ((friends == null) ? 0 : friends.hashCode());
-        result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-        result = prime * result + ((likes == null) ? 0 : likes.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((photoUrl == null) ? 0 : photoUrl.hashCode());
-        return result;
+        return Objects.hash(name, lastName, photoUrl, foursquareId, credential, likes, friends);
     }
 
     @Override
@@ -106,28 +98,13 @@ public class User implements Serializable {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         User other = (User) obj;
-        if (credential == null) {
-            if (other.credential != null) return false;
-        } else if (!credential.equals(other.credential)) return false;
-        if (foursquareId == null) {
-            if (other.foursquareId != null) return false;
-        } else if (!foursquareId.equals(other.foursquareId)) return false;
-        if (friends == null) {
-            if (other.friends != null) return false;
-        } else if (!friends.equals(other.friends)) return false;
-        if (lastName == null) {
-            if (other.lastName != null) return false;
-        } else if (!lastName.equals(other.lastName)) return false;
-        if (likes == null) {
-            if (other.likes != null) return false;
-        } else if (!likes.equals(other.likes)) return false;
-        if (name == null) {
-            if (other.name != null) return false;
-        } else if (!name.equals(other.name)) return false;
-        if (photoUrl == null) {
-            if (other.photoUrl != null) return false;
-        } else if (!photoUrl.equals(other.photoUrl)) return false;
-        return true;
+        return Objects.equals(name, other.name) &&
+               Objects.equals(lastName, other.lastName) &&
+               Objects.equals(photoUrl, other.photoUrl) &&
+               Objects.equals(foursquareId, other.foursquareId) &&
+               Objects.equals(credential, other.credential) &&
+               Objects.equals(likes, other.likes) &&
+               Objects.equals(friends, other.friends);
     }
 
     @Override

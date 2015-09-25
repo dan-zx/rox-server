@@ -16,6 +16,7 @@
 package com.grayfox.server.domain;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Location implements Serializable {
 
@@ -60,14 +61,7 @@ public class Location implements Serializable {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        long temp;
-        temp = Double.doubleToLongBits(latitude);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(longitude);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        return result;
+        return Objects.hash(latitude, longitude);
     }
 
     @Override
@@ -76,9 +70,8 @@ public class Location implements Serializable {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         Location other = (Location) obj;
-        if (Double.doubleToLongBits(latitude) != Double.doubleToLongBits(other.latitude)) return false;
-        if (Double.doubleToLongBits(longitude) != Double.doubleToLongBits(other.longitude)) return false;
-        return true;
+        return Objects.equals(latitude, other.latitude) &&
+               Objects.equals(longitude, other.longitude);
     }
 
     @Override

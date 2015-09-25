@@ -16,6 +16,7 @@
 package com.grayfox.server.domain;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Credential implements Serializable {
 
@@ -51,12 +52,7 @@ public class Credential implements Serializable {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((accessToken == null) ? 0 : accessToken.hashCode());
-        result = prime * result + ((foursquareAccessToken == null) ? 0 : foursquareAccessToken.hashCode());
-        result = prime * result + (isNew ? 1231 : 1237);
-        return result;
+        return Objects.hash(accessToken, foursquareAccessToken, isNew);
     }
 
     @Override
@@ -65,14 +61,9 @@ public class Credential implements Serializable {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         Credential other = (Credential) obj;
-        if (accessToken == null) {
-            if (other.accessToken != null) return false;
-        } else if (!accessToken.equals(other.accessToken)) return false;
-        if (foursquareAccessToken == null) {
-            if (other.foursquareAccessToken != null) return false;
-        } else if (!foursquareAccessToken.equals(other.foursquareAccessToken)) return false;
-        if (isNew != other.isNew) return false;
-        return true;
+        return Objects.equals(accessToken, other.accessToken) &&
+               Objects.equals(foursquareAccessToken, other.foursquareAccessToken) &&
+               Objects.equals(isNew, other.isNew);
     }
 
     @Override

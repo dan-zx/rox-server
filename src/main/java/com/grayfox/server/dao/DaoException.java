@@ -15,7 +15,7 @@
  */
 package com.grayfox.server.dao;
 
-import com.grayfox.server.BaseApplicationException;
+import com.grayfox.server.exception.BaseApplicationException;
 
 public class DaoException extends BaseApplicationException {
 

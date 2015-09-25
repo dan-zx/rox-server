@@ -15,7 +15,7 @@
  */
 package com.grayfox.server.service;
 
-import com.grayfox.server.BaseApplicationException;
+import com.grayfox.server.exception.BaseApplicationException;
 
 public class ServiceException extends BaseApplicationException {
 
