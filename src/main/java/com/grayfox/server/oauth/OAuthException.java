@@ -15,7 +15,7 @@
  */
 package com.grayfox.server.oauth;
 
-import com.grayfox.server.BaseApplicationException;
+import com.grayfox.server.exception.BaseApplicationException;
 
 public class OAuthException extends BaseApplicationException {
 
