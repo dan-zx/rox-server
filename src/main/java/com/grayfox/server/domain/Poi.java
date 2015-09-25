@@ -16,6 +16,7 @@
 package com.grayfox.server.domain;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 public class Poi implements Serializable {
@@ -70,14 +71,7 @@ public class Poi implements Serializable {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((categories == null) ? 0 : categories.hashCode());
-        result = prime * result + ((foursquareId == null) ? 0 : foursquareId.hashCode());
-        result = prime * result + ((foursquareRating == null) ? 0 : foursquareRating.hashCode());
-        result = prime * result + ((location == null) ? 0 : location.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        return result;
+        return Objects.hash(name, location, location, foursquareId, foursquareRating, categories);
     }
 
     @Override
@@ -86,22 +80,11 @@ public class Poi implements Serializable {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         Poi other = (Poi) obj;
-        if (categories == null) {
-            if (other.categories != null) return false;
-        } else if (!categories.equals(other.categories)) return false;
-        if (foursquareId == null) {
-            if (other.foursquareId != null) return false;
-        } else if (!foursquareId.equals(other.foursquareId)) return false;
-        if (foursquareRating == null) {
-            if (other.foursquareRating != null) return false;
-        } else if (!foursquareRating.equals(other.foursquareRating)) return false;
-        if (location == null) {
-            if (other.location != null) return false;
-        } else if (!location.equals(other.location)) return false;
-        if (name == null) {
-            if (other.name != null) return false;
-        } else if (!name.equals(other.name)) return false;
-        return true;
+        return Objects.equals(name, other.name) &&
+               Objects.equals(location, other.location) &&
+               Objects.equals(foursquareId, other.foursquareId) &&
+               Objects.equals(foursquareRating, other.foursquareRating) &&
+               Objects.equals(categories, other.categories);
     }
 
     @Override

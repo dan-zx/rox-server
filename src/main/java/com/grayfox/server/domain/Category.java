@@ -16,6 +16,7 @@
 package com.grayfox.server.domain;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Category implements Serializable {
 
@@ -51,12 +52,7 @@ public class Category implements Serializable {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((foursquareId == null) ? 0 : foursquareId.hashCode());
-        result = prime * result + ((iconUrl == null) ? 0 : iconUrl.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        return result;
+        return Objects.hash(name, iconUrl, foursquareId);
     }
 
     @Override
@@ -65,16 +61,9 @@ public class Category implements Serializable {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         Category other = (Category) obj;
-        if (foursquareId == null) {
-            if (other.foursquareId != null) return false;
-        } else if (!foursquareId.equals(other.foursquareId)) return false;
-        if (iconUrl == null) {
-            if (other.iconUrl != null) return false;
-        } else if (!iconUrl.equals(other.iconUrl)) return false;
-        if (name == null) {
-            if (other.name != null) return false;
-        } else if (!name.equals(other.name)) return false;
-        return true;
+        return Objects.equals(name, other.name) &&
+               Objects.equals(iconUrl, other.iconUrl) &&
+               Objects.equals(foursquareId, other.foursquareId);
     }
 
     @Override
