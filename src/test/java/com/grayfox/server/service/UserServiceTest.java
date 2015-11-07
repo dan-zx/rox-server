@@ -68,7 +68,7 @@ public class UserServiceTest {
 
         Credential credential = userService.registerUsingFoursquare("fakeCode");
 
-        assertThat(credential).isNotNull().isEqualToIgnoringGivenFields(expectedCredential, "accessToken");
+        assertThat(credential).isNotNull().isEqualToIgnoringGivenFields(expectedCredential, "accessToken", "id");
         assertThat(credential.getAccessToken()).isNotNull().isNotEmpty();
         assertThatThrownBy(() -> userService.getCompactSelf(credential.getAccessToken())).isInstanceOf(ServiceException.class);
         assertThatThrownBy(() -> userService.getSelfLikes(credential.getAccessToken(), Locale.ROOT)).isInstanceOf(ServiceException.class);
@@ -88,7 +88,7 @@ public class UserServiceTest {
         expectedUser.setPhotoUrl("https://irs3.4sqi.net/img/user/300x300/photo.jpg");
         expectedUser.setFoursquareId("34468234");
 
-        assertThat(userService.getCompactSelf(credential.getAccessToken())).isNotNull().isEqualTo(expectedUser);
+        assertThat(userService.getCompactSelf(credential.getAccessToken())).isNotNull().isEqualToIgnoringGivenFields(expectedUser, "id");
         
         Category selfLike = new Category();
         selfLike.setFoursquareId("4bf58dd8d48988d190941735");
@@ -96,8 +96,8 @@ public class UserServiceTest {
         selfLike.setIconUrl("https://ss3.4sqi.net/img/categories_v2/arts_entertainment/museum_history_88.png");
         List<Category> expectedSelfLikes = new ArrayList<>(Arrays.asList(selfLike));
 
-        assertThat(userService.getSelfLikes(credential.getAccessToken(), Locale.ROOT)).isNotNull().isNotEmpty().hasSameSizeAs(expectedSelfLikes).containsExactlyElementsOf(expectedSelfLikes);
-        assertThat(userService.getUserLikes(credential.getAccessToken(), expectedUser.getFoursquareId(), Locale.ROOT)).isNotNull().isNotEmpty().hasSameSizeAs(expectedSelfLikes).containsExactlyElementsOf(expectedSelfLikes);
+        assertThat(userService.getSelfLikes(credential.getAccessToken(), Locale.ROOT)).isNotNull().isNotEmpty().hasSameSizeAs(expectedSelfLikes).usingElementComparatorIgnoringFields("id").containsExactlyElementsOf(expectedSelfLikes);
+        assertThat(userService.getUserLikes(credential.getAccessToken(), expectedUser.getFoursquareId(), Locale.ROOT)).isNotNull().isNotEmpty().hasSameSizeAs(expectedSelfLikes).usingElementComparatorIgnoringFields("id").containsExactlyElementsOf(expectedSelfLikes);
 
         User friend = new User();
         friend.setName("Jane");
@@ -106,7 +106,7 @@ public class UserServiceTest {
         friend.setFoursquareId("94578235");
         List<User> expectedFriends = Arrays.asList(friend);
 
-        assertThat(userService.getSelfCompactFriends(credential.getAccessToken())).isNotNull().isNotEmpty().hasSameSizeAs(expectedFriends).containsExactlyElementsOf(expectedFriends);
+        assertThat(userService.getSelfCompactFriends(credential.getAccessToken())).isNotNull().isNotEmpty().hasSameSizeAs(expectedFriends).usingElementComparatorIgnoringFields("id").containsExactlyElementsOf(expectedFriends);
 
         Category friendLike = new Category();
         friendLike.setFoursquareId("4bf58dd8d48988d175941735");
@@ -116,7 +116,7 @@ public class UserServiceTest {
 
         assertThatThrownBy(() -> userService.getUserLikes(credential.getAccessToken(), "invalidId", Locale.ROOT)).isInstanceOf(ServiceException.class);
         assertThatThrownBy(() -> userService.getUserLikes(credential.getAccessToken(), "46jk35", Locale.ROOT)).isInstanceOf(ServiceException.class);
-        assertThat(userService.getUserLikes(credential.getAccessToken(), friend.getFoursquareId(), Locale.ROOT)).isNotNull().isNotEmpty().hasSameSizeAs(expectedFriendLikes).containsExactlyElementsOf(expectedFriendLikes);
+        assertThat(userService.getUserLikes(credential.getAccessToken(), friend.getFoursquareId(), Locale.ROOT)).isNotNull().isNotEmpty().hasSameSizeAs(expectedFriendLikes).usingElementComparatorIgnoringFields("id").containsExactlyElementsOf(expectedFriendLikes);
 
         Category newSelfLike = new Category();
         newSelfLike.setFoursquareId("4bf58dd8d48988d151941735");
@@ -128,7 +128,7 @@ public class UserServiceTest {
         expectedSelfLikes.add(newSelfLike);
         expectedSelfLikes.remove(selfLike);
 
-        assertThat(userService.getSelfLikes(credential.getAccessToken(), Locale.ROOT)).isNotNull().isNotEmpty().hasSameSizeAs(expectedSelfLikes).containsExactlyElementsOf(expectedSelfLikes);
+        assertThat(userService.getSelfLikes(credential.getAccessToken(), Locale.ROOT)).isNotNull().isNotEmpty().hasSameSizeAs(expectedSelfLikes).usingElementComparatorIgnoringFields("id").containsExactlyElementsOf(expectedSelfLikes);
     }
 
     private void loadMockdata() {

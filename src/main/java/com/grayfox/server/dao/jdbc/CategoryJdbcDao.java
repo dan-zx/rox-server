@@ -33,9 +33,11 @@ public class CategoryJdbcDao extends JdbcDao implements CategoryDao {
         return getJdbcTemplate().query(query, 
                 (ResultSet rs, int i) -> {
                     Category category = new Category();
-                    category.setName(rs.getString(1));
-                    category.setIconUrl(rs.getString(2));
-                    category.setFoursquareId(rs.getString(3));
+                    int columnIndex = 1;
+                    category.setId(rs.getLong(columnIndex++));
+                    category.setName(rs.getString(columnIndex++));
+                    category.setIconUrl(rs.getString(columnIndex++));
+                    category.setFoursquareId(rs.getString(columnIndex++));
                     return category;
                 });
     }

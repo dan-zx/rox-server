@@ -116,6 +116,6 @@ public class PoiServiceTest {
 
         List<Category> expectedCategories = Arrays.asList(c1, c2);
         
-        assertThat(poiService.getCategoriesLikeName("estadio", Locale.ROOT)).isNotNull().isNotEmpty().containsOnlyElementsOf(expectedCategories);
+        assertThat(poiService.getCategoriesLikeName("estadio", Locale.ROOT)).isNotNull().isNotEmpty().usingElementComparatorIgnoringFields("id").containsOnlyElementsOf(expectedCategories);
     }
 }

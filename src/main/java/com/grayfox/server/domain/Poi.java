@@ -15,13 +15,10 @@
  */
 package com.grayfox.server.domain;
 
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 
-public class Poi implements Serializable {
-
-    private static final long serialVersionUID = 7058036287180141517L;
+public class Poi extends Entity<Long> {
 
     private String name;
     private Location location;
@@ -77,7 +74,7 @@ public class Poi implements Serializable {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null) return false;
+        if (!super.equals(obj)) return false;
         if (getClass() != obj.getClass()) return false;
         Poi other = (Poi) obj;
         return Objects.equals(name, other.name) &&
@@ -89,6 +86,6 @@ public class Poi implements Serializable {
 
     @Override
     public String toString() {
-        return "Poi [name=" + name + ", location=" + location + ", foursquareId=" + foursquareId + ", foursquareRating=" + foursquareRating + ", categories=" + categories + "]";
+        return "Poi [id=" + getId() + ", name=" + name + ", location=" + location + ", foursquareId=" + foursquareId + ", foursquareRating=" + foursquareRating + ", categories=" + categories + "]";
     }
 }

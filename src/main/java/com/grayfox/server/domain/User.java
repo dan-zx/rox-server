@@ -15,13 +15,10 @@
  */
 package com.grayfox.server.domain;
 
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 
-public class User implements Serializable {
-
-    private static final long serialVersionUID = -8778694523067866298L;
+public class User extends Entity<Long> {
 
     private String name;
     private String lastName;
@@ -95,7 +92,7 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null) return false;
+        if (!super.equals(obj)) return false;
         if (getClass() != obj.getClass()) return false;
         User other = (User) obj;
         return Objects.equals(name, other.name) &&
@@ -109,6 +106,6 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User [name=" + name + ", lastName=" + lastName + ", photoUrl=" + photoUrl + ", foursquareId=" + foursquareId + ", credential=" + credential + ", likes=" + likes + ", friends=" + friends + "]";
+        return "User [id=" + getId() + ", name=" + name + ", lastName=" + lastName + ", photoUrl=" + photoUrl + ", foursquareId=" + foursquareId + ", credential=" + credential + ", likes=" + likes + ", friends=" + friends + "]";
     }
 }

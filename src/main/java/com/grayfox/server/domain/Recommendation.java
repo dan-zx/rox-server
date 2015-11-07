@@ -15,14 +15,11 @@
  */
 package com.grayfox.server.domain;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-public class Recommendation implements Serializable {
+public class Recommendation {
 
     public enum Type { GLOBAL, SELF, SOCIAL }
-
-    private static final long serialVersionUID = -5900961085377923024L;
 
     private Type type;
     private String reason;

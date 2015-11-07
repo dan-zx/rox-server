@@ -15,12 +15,9 @@
  */
 package com.grayfox.server.domain;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-public class Category implements Serializable {
-
-    private static final long serialVersionUID = -8204143874909029069L;
+public class Category extends Entity<Long> {
 
     private String name;
     private String iconUrl;
@@ -58,7 +55,7 @@ public class Category implements Serializable {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null) return false;
+        if (!super.equals(obj)) return false;
         if (getClass() != obj.getClass()) return false;
         Category other = (Category) obj;
         return Objects.equals(name, other.name) &&
@@ -68,6 +65,6 @@ public class Category implements Serializable {
 
     @Override
     public String toString() {
-        return "Category [name=" + name + ", iconUrl=" + iconUrl + ", foursquareId=" + foursquareId + "]";
+        return "Category [id=" + getId() + ", name=" + name + ", iconUrl=" + iconUrl + ", foursquareId=" + foursquareId + "]";
     }
 }

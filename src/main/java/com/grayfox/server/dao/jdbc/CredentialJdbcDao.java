@@ -32,7 +32,9 @@ public class CredentialJdbcDao extends JdbcDao implements CredentialDao {
         List<Credential> credentials = getJdbcTemplate().query(getQuery("credentialByFoursquareAccessToken"), 
                 (ResultSet rs, int i) -> {
                     Credential credential = new Credential();
-                    credential.setAccessToken(rs.getString(1));
+                    int columnIndex = 1;
+                    credential.setId(rs.getLong(columnIndex++));
+                    credential.setAccessToken(rs.getString(columnIndex++));
                     credential.setFoursquareAccessToken(foursquareAccessToken);
                     return credential;
                 }, 
@@ -54,5 +56,6 @@ public class CredentialJdbcDao extends JdbcDao implements CredentialDao {
     @Override
     public void save(Credential credential) {
         getJdbcTemplate().update(getQuery("createCredential"), credential.getAccessToken(), credential.getFoursquareAccessToken());
+        credential.setId(getJdbcTemplate().queryForObject(getQuery("Credential.findIdByAccessToken"), Long.class, credential.getAccessToken()));
     }
 }

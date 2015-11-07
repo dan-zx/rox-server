@@ -15,12 +15,9 @@
  */
 package com.grayfox.server.domain;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-public class Credential implements Serializable {
-
-    private static final long serialVersionUID = 6767036404149116196L;
+public class Credential extends Entity<Long> {
 
     private String accessToken;
     private String foursquareAccessToken;
@@ -58,7 +55,7 @@ public class Credential implements Serializable {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null) return false;
+        if (!super.equals(obj)) return false;
         if (getClass() != obj.getClass()) return false;
         Credential other = (Credential) obj;
         return Objects.equals(accessToken, other.accessToken) &&
@@ -68,6 +65,6 @@ public class Credential implements Serializable {
 
     @Override
     public String toString() {
-        return "Credential [accessToken=" + accessToken + ", foursquareAccessToken=" + foursquareAccessToken + ", isNew=" + isNew + "]";
+        return "Credential [id=" + getId() + ", accessToken=" + accessToken + ", foursquareAccessToken=" + foursquareAccessToken + ", isNew=" + isNew + "]";
     }
 }

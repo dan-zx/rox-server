@@ -35,10 +35,12 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
         List<User> users = getJdbcTemplate().query(getQuery("userByAccessToken"), 
                 (ResultSet rs, int i) -> {
                     User user = new User();
-                    user.setName(rs.getString(1));
-                    user.setLastName(rs.getString(2));
-                    user.setPhotoUrl(rs.getString(3));
-                    user.setFoursquareId(rs.getString(4));
+                    int columnIndex = 1;
+                    user.setId(rs.getLong(columnIndex++));
+                    user.setName(rs.getString(columnIndex++));
+                    user.setLastName(rs.getString(columnIndex++));
+                    user.setPhotoUrl(rs.getString(columnIndex++));
+                    user.setFoursquareId(rs.getString(columnIndex++));
                     return user;
                 },
                 accessToken);
@@ -66,10 +68,12 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
         return getJdbcTemplate().query(getQuery("friendsByUserFoursquareId"), 
                 (ResultSet rs, int i) -> {
                     User user = new User();
-                    user.setName(rs.getString(1));
-                    user.setLastName(rs.getString(2));
-                    user.setPhotoUrl(rs.getString(3));
-                    user.setFoursquareId(rs.getString(4));
+                    int columnIndex = 1;
+                    user.setId(rs.getLong(columnIndex++));
+                    user.setName(rs.getString(columnIndex++));
+                    user.setLastName(rs.getString(columnIndex++));
+                    user.setPhotoUrl(rs.getString(columnIndex++));
+                    user.setFoursquareId(rs.getString(columnIndex++));
                     return user;
                 }, foursquareId);
     }
@@ -79,9 +83,11 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
         return getJdbcTemplate().query(getQuery("likesByUserFoursquareId", locale), 
                 (ResultSet rs, int i) -> {
                     Category category = new Category();
-                    category.setName(rs.getString(1));
-                    category.setIconUrl(rs.getString(2));
-                    category.setFoursquareId(rs.getString(3));
+                    int columnIndex = 1;
+                    category.setId(rs.getLong(columnIndex++));
+                    category.setName(rs.getString(columnIndex++));
+                    category.setIconUrl(rs.getString(columnIndex++));
+                    category.setFoursquareId(rs.getString(columnIndex++));
                     return category;
                 }, foursquareId);
     }
@@ -109,9 +115,11 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
                     getJdbcTemplate().update(getQuery("createUser"), friend.getName(), friend.getLastName(), friend.getPhotoUrl(), friend.getFoursquareId());
                     getJdbcTemplate().update(getQuery("createFriendsLink"), user.getFoursquareId(), friend.getFoursquareId());
                     if (friend.getLikes() != null) friend.getLikes().forEach(like -> saveLike(friend.getFoursquareId(), like.getFoursquareId()));
+                    friend.setId(findIdByFoursquareId(friend.getFoursquareId()));
                 } else getJdbcTemplate().update(getQuery("createFriendsLink"), user.getFoursquareId(), friend.getFoursquareId());
             });
         }
+        user.setId(findIdByFoursquareId(user.getFoursquareId()));
     }
 
     @Override
@@ -132,6 +140,7 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
                     getJdbcTemplate().update(getQuery("createUser"), friend.getName(), friend.getLastName(), friend.getPhotoUrl(), friend.getFoursquareId());
                     getJdbcTemplate().update(getQuery("createFriendsLink"), user.getFoursquareId(), friend.getFoursquareId());
                     if (friend.getLikes() != null) friend.getLikes().forEach(like -> saveLike(friend.getFoursquareId(), like.getFoursquareId()));
+                    friend.setId(findIdByFoursquareId(friend.getFoursquareId()));
                 } else getJdbcTemplate().update(getQuery("createFriendsLink"), user.getFoursquareId(), friend.getFoursquareId());
             });
         }
@@ -161,5 +170,9 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
 
     private List<String> fetchLikesIds(String foursquareId) {
         return getJdbcTemplate().queryForList(getQuery("likesFoursquareIdsByUserFoursquareId"), String.class, foursquareId);
+    }
+
+    private Long findIdByFoursquareId (String foursquareId) {
+        return getJdbcTemplate().queryForObject(getQuery("User.findIdByFoursquareId"), Long.class, foursquareId);
     }
 }

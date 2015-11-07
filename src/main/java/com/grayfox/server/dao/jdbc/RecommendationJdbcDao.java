@@ -41,12 +41,14 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                 (ResultSet rs, int i) -> {
                         Recommendation recommendation = new Recommendation();
                         Poi poi = new Poi();
-                        poi.setName(rs.getString(1));
+                        int columnIndex = 1;
+                        poi.setId(rs.getLong(columnIndex++));
+                        poi.setName(rs.getString(columnIndex++));
                         poi.setLocation(new Location());
-                        poi.getLocation().setLatitude(rs.getDouble(2));
-                        poi.getLocation().setLongitude(rs.getDouble(3));
-                        poi.setFoursquareId(rs.getString(4));
-                        poi.setFoursquareRating(rs.getDouble(5));
+                        poi.getLocation().setLatitude(rs.getDouble(columnIndex++));
+                        poi.getLocation().setLongitude(rs.getDouble(columnIndex++));
+                        poi.setFoursquareId(rs.getString(columnIndex++));
+                        poi.setFoursquareRating(rs.getDouble(columnIndex++));
                         recommendation.setType(Recommendation.Type.GLOBAL);
                         recommendation.setReason(Messages.get("recommendation.global.reason", locale));
                         recommendation.setPoi(poi);
@@ -61,16 +63,18 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
         Set<String> categoryNames = new HashSet<>();
         List<Recommendation> recommendations = getJdbcTemplate().query(getQuery("nearestRecommendationsByCategoriesLiked", locale), 
                 (ResultSet rs, int i) -> {
-                    String categoryName = rs.getString(6);
+                    String categoryName = rs.getString(7);
                     if (categoryNames.add(categoryName)) {
                         Recommendation recommendation = new Recommendation();
                         Poi poi = new Poi();
-                        poi.setName(rs.getString(1));
+                        int columnIndex = 1;
+                        poi.setId(rs.getLong(columnIndex++));
+                        poi.setName(rs.getString(columnIndex++));
                         poi.setLocation(new Location());
-                        poi.getLocation().setLatitude(rs.getDouble(2));
-                        poi.getLocation().setLongitude(rs.getDouble(3));
-                        poi.setFoursquareId(rs.getString(4));
-                        poi.setFoursquareRating(rs.getDouble(5));
+                        poi.getLocation().setLatitude(rs.getDouble(columnIndex++));
+                        poi.getLocation().setLongitude(rs.getDouble(columnIndex++));
+                        poi.setFoursquareId(rs.getString(columnIndex++));
+                        poi.setFoursquareRating(rs.getDouble(columnIndex++));
                         recommendation.setType(Recommendation.Type.SELF);
                         recommendation.setReason(Messages.get("recommendation.self.reason", locale, categoryName));
                         recommendation.setPoi(poi);
@@ -87,20 +91,23 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
         Set<String> categoryNames = new HashSet<>();
         List<Recommendation> recommendations = getJdbcTemplate().query(getQuery("nearestRecommendationsByCategoriesLikedByFriends", locale), 
                 (ResultSet rs, int i) -> {
-                    String categoryName = rs.getString(8);
+                    String categoryName = rs.getString(9);
                     if (categoryNames.add(categoryName)) {
                         Recommendation recommendation = new Recommendation();
                         Poi poi = new Poi();
-                        poi.setName(rs.getString(1));
+                        int columnIndex = 1;
+                        poi.setId(rs.getLong(columnIndex++));
+                        poi.setName(rs.getString(columnIndex++));
                         poi.setLocation(new Location());
-                        poi.getLocation().setLatitude(rs.getDouble(2));
-                        poi.getLocation().setLongitude(rs.getDouble(3));
-                        poi.setFoursquareId(rs.getString(4));
-                        poi.setFoursquareRating(rs.getDouble(5));
+                        poi.getLocation().setLatitude(rs.getDouble(columnIndex++));
+                        poi.getLocation().setLongitude(rs.getDouble(columnIndex++));
+                        poi.setFoursquareId(rs.getString(columnIndex++));
+                        poi.setFoursquareRating(rs.getDouble(columnIndex++));
                         recommendation.setType(Recommendation.Type.SOCIAL);
-                        String lastName = rs.getString(7);
-                        String friendName = lastName == null || lastName.trim().isEmpty() ? rs.getString(6) : rs.getString(6) + ' ' + lastName;
-                        recommendation.setReason(Messages.get("recommendation.social.reason", locale, friendName, categoryName));
+                        String friendFirstName = rs.getString(columnIndex++);
+                        String friendLastName = rs.getString(columnIndex++);
+                        String friendFullName = friendLastName == null || friendLastName.trim().isEmpty() ? friendFirstName : friendFirstName + " " +  friendLastName;
+                        recommendation.setReason(Messages.get("recommendation.social.reason", locale, friendFullName, categoryName));
                         recommendation.setPoi(poi);
                         return recommendation;
                     } else return null;
@@ -114,9 +121,11 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
         return getJdbcTemplate().query(getQuery("categoriesByPoiFoursquareId", locale), 
                 (ResultSet rs, int i) -> {
                     Category category = new Category();
-                    category.setName(rs.getString(1));
-                    category.setIconUrl(rs.getString(2));
-                    category.setFoursquareId(rs.getString(3));
+                    int columnIndex = 1;
+                    category.setId(rs.getLong(columnIndex++));
+                    category.setName(rs.getString(columnIndex++));
+                    category.setIconUrl(rs.getString(columnIndex++));
+                    category.setFoursquareId(rs.getString(columnIndex++));
                     return category;
                 }, foursquareId);
     }

@@ -23,6 +23,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import com.grayfox.server.dao.CategoryDao;
 import com.grayfox.server.dao.CredentialDao;
@@ -33,10 +34,8 @@ import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
 import com.grayfox.server.domain.Recommendation;
 import com.grayfox.server.util.Constants;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,16 +48,17 @@ public class PoiService {
     @Inject private CredentialDao credentialDao;
     @Inject private CategoryDao categoryDao;
     @Inject private RecommendationDao recommendationDao;
-    @Inject private PoiDao poiDao;
+    @Inject @Named("poiFoursquareDao") private PoiDao poiFoursquareDao;
+    @Inject @Named("poiLocalDbDao")    private PoiDao poiLocalDbDao;
 
     @Transactional(readOnly = true)
     public List<Poi> getNearestPoisByCategory(Location location, int radius, String categoryFoursquareId, Locale locale) {
-        return poiDao.fetchNearestByCategory(location, radius, categoryFoursquareId, locale);
+        return poiFoursquareDao.fetchNearestByCategory(location, radius, categoryFoursquareId, locale);
     }
 
     @Transactional(readOnly = true)
     public List<Poi> buildRoute(String poiFoursquareId, Locale locale) {
-        return poiDao.fetchNext(poiFoursquareId, MAX_POIS_PER_ROUTE, locale);
+        return poiFoursquareDao.fetchNext(poiFoursquareId, MAX_POIS_PER_ROUTE, locale);
     }
 
     @Transactional(readOnly = true)

@@ -20,7 +20,7 @@
     <entry key="likesByUserFoursquareId">
         <![CDATA[
             MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category)
-            RETURN c.spanishName, c.iconUrl, c.foursquareId 
+            RETURN ID(c), c.spanishName, c.iconUrl, c.foursquareId 
         ]]>
     </entry>
 
@@ -28,13 +28,19 @@
     <entry key="categoriesByPoiFoursquareId">
         <![CDATA[
              MATCH (c:Category)<-[:IS]-(:Poi {foursquareId:{1}})
-             RETURN c.spanishName, c.iconUrl, c.foursquareId
+             RETURN ID(c), c.spanishName, c.iconUrl, c.foursquareId
         ]]>
     </entry>
     <entry key="categoriesByPartialName">
         <![CDATA[
              MATCH (c:Category) WHERE c.spanishName =~ '(?i).*%s.*'
-             RETURN c.spanishName, c.iconUrl, c.foursquareId LIMIT 5
+             RETURN ID(c), c.spanishName, c.iconUrl, c.foursquareId LIMIT 5
+        ]]>
+    </entry>
+    <entry key="Category.findByFoursquareId">
+        <![CDATA[
+             MATCH (c:Category {foursquareId:{1}})
+             RETURN ID(c), c.spanishName, c.iconUrl
         ]]>
     </entry>
 
@@ -43,14 +49,14 @@
         <![CDATA[
              MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi)
              WHERE (ACOS( SIN(RADIANS(p.latitude))*SIN(RADIANS({2})) + COS(RADIANS(p.latitude))*COS(RADIANS({2}))*COS(RADIANS(p.longitude-{3})) ) * 6371000) <= {4}
-             RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, p.foursquareRating, c.spanishName
+             RETURN DISTINCT ID(p), p.name, p.latitude, p.longitude, p.foursquareId, p.foursquareRating, c.spanishName
         ]]>
     </entry>
     <entry key="nearestRecommendationsByCategoriesLikedByFriends">
         <![CDATA[
              MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:FRIENDS]-(u:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi)
              WHERE (ACOS( SIN(RADIANS(p.latitude))*SIN(RADIANS({2})) + COS(RADIANS(p.latitude))*COS(RADIANS({2}))*COS(RADIANS(p.longitude-{3})) ) * 6371000) <= {4}
-             RETURN DISTINCT p.name, p.latitude, p.longitude, p.foursquareId, p.foursquareRating, u.name, u.lastName, c.spanishName
+             RETURN DISTINCT ID(p), p.name, p.latitude, p.longitude, p.foursquareId, p.foursquareRating, u.name, u.lastName, c.spanishName
         ]]>
     </entry>
 </properties>
