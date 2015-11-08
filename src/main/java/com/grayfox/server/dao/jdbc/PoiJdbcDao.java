@@ -24,7 +24,7 @@ public class PoiJdbcDao extends JdbcDao implements PoiDao {
     @Override
     public List<Poi> findNext(String poiFoursquareId, int limit, Locale locale) {
         throw new DaoException.Builder()
-            .messageKey("unsuported.operation.error")
+            .messageKey("unsupported.operation.error")
             .build();
     }
 
