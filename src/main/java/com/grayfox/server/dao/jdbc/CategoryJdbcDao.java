@@ -21,11 +21,23 @@ import java.util.Locale;
 
 import com.grayfox.server.dao.CategoryDao;
 import com.grayfox.server.domain.Category;
-
 import org.springframework.stereotype.Repository;
 
 @Repository("categoryLocalDao")
 public class CategoryJdbcDao extends JdbcDao implements CategoryDao {
+
+    protected Category findByFoursquareId(String foursquareId, Locale locale) {
+        return getJdbcTemplate().queryForObject(getQuery("Category.findByFoursquareId", locale), 
+                (ResultSet rs, int i) -> {
+                    Category category = new Category();
+                    int columnIndex = 1;
+                    category.setId(rs.getLong(columnIndex++));
+                    category.setName(rs.getString(columnIndex++));
+                    category.setIconUrl(rs.getString(columnIndex++));
+                    category.setFoursquareId(foursquareId);
+                    return category;
+                }, foursquareId);
+    }
 
     @Override
     public List<Category> findByPartialName(String partialName, Locale locale) {
@@ -40,5 +52,18 @@ public class CategoryJdbcDao extends JdbcDao implements CategoryDao {
                     category.setFoursquareId(rs.getString(columnIndex++));
                     return category;
                 });
+    }
+
+    protected List<Category> findByPoiFoursquareId(String foursquareId, Locale locale) {
+        return getJdbcTemplate().query(getQuery("Category.findByPoiFoursquareId", locale), 
+                (ResultSet rs, int i) -> {
+                    Category category = new Category();
+                    int columnIndex = 1;
+                    category.setId(rs.getLong(columnIndex++));
+                    category.setName(rs.getString(columnIndex++));
+                    category.setIconUrl(rs.getString(columnIndex++));
+                    category.setFoursquareId(rs.getString(columnIndex++));
+                    return category;
+                }, foursquareId);
     }
 }

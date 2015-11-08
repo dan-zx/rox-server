@@ -23,8 +23,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import com.grayfox.server.dao.RecommendationDao;
-import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
 import com.grayfox.server.domain.Recommendation;
@@ -34,6 +35,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository("recommendationLocalDao")
 public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao {
+
+    @Inject private CategoryJdbcDao categoryDao;
 
     @Override
     public List<Recommendation> findNearestWithHighRating(Location location, Integer radius, Locale locale) {
@@ -54,7 +57,7 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                         recommendation.setPoi(poi);
                         return recommendation;
                 }, location.getLatitude(), location.getLongitude(), radius);
-        recommendations.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(findCategoriesByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
+        recommendations.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(categoryDao.findByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
         return recommendations;
     }
 
@@ -82,7 +85,7 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                     } else return null;
                 }, accessToken, location.getLatitude(), location.getLongitude(), radius);
         recommendations = recommendations.stream().filter(Objects::nonNull).collect(Collectors.toList());
-        recommendations.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(findCategoriesByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
+        recommendations.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(categoryDao.findByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
         return recommendations;
     }
 
@@ -113,20 +116,7 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                     } else return null;
                 }, accessToken, location.getLatitude(), location.getLongitude(), radius);
         recommendations = recommendations.stream().filter(Objects::nonNull).collect(Collectors.toList());
-        recommendations.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(findCategoriesByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
+        recommendations.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(categoryDao.findByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
         return recommendations;
-    }
-
-    private List<Category> findCategoriesByPoiFoursquareId(String foursquareId, Locale locale) {
-        return getJdbcTemplate().query(getQuery("Category.findByPoi", locale), 
-                (ResultSet rs, int i) -> {
-                    Category category = new Category();
-                    int columnIndex = 1;
-                    category.setId(rs.getLong(columnIndex++));
-                    category.setName(rs.getString(columnIndex++));
-                    category.setIconUrl(rs.getString(columnIndex++));
-                    category.setFoursquareId(rs.getString(columnIndex++));
-                    return category;
-                }, foursquareId);
     }
 }

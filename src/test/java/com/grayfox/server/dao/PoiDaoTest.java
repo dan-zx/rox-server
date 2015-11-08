@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Location;
@@ -44,7 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration(classes = TestConfig.class)
 public class PoiDaoTest {
 
-    @Inject private PoiDao poiDao;
+    @Inject @Named("poiFoursquareDao") private PoiDao poiDao;
 
     @Before
     public void setUp() {

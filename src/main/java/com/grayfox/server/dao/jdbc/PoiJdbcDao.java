@@ -6,15 +6,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import com.grayfox.server.dao.DaoException;
 import com.grayfox.server.dao.PoiDao;
 import com.grayfox.server.domain.Category;
 import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
+
 import org.springframework.stereotype.Repository;
 
 @Repository("poiLocalDao")
 public class PoiJdbcDao extends JdbcDao implements PoiDao {
+
+    @Inject private CategoryJdbcDao categoryDao;
 
     @Override
     public List<Poi> findNext(String poiFoursquareId, int limit, Locale locale) {
@@ -38,21 +43,8 @@ public class PoiJdbcDao extends JdbcDao implements PoiDao {
                     poi.setFoursquareRating(rs.getDouble(columnIndex++));
                     return poi;
                 }, location.getLatitude(), location.getLongitude(), radius, categoryFoursquareId);
-        Category category = findCategoryByFoursquareId(categoryFoursquareId, locale);
+        Category category = categoryDao.findByFoursquareId(categoryFoursquareId, locale);
         pois.forEach(poi -> poi.setCategories(new HashSet<>(Arrays.asList(category))));
         return pois;
-    }
-
-    private Category findCategoryByFoursquareId(String foursquareId, Locale locale) {
-        return getJdbcTemplate().queryForObject(getQuery("Category.findByFoursquareId", locale), 
-                (ResultSet rs, int i) -> {
-                    Category category = new Category();
-                    int columnIndex = 1;
-                    category.setId(rs.getLong(columnIndex++));
-                    category.setName(rs.getString(columnIndex++));
-                    category.setIconUrl(rs.getString(columnIndex++));
-                    category.setFoursquareId(foursquareId);
-                    return category;
-                }, foursquareId);
     }
 }

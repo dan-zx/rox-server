@@ -34,8 +34,10 @@ import com.grayfox.server.domain.Location;
 import com.grayfox.server.domain.Poi;
 import com.grayfox.server.domain.Recommendation;
 import com.grayfox.server.util.Constants;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +51,7 @@ public class PoiService {
     @Inject private CategoryDao categoryDao;
     @Inject private RecommendationDao recommendationDao;
     @Inject @Named("poiFoursquareDao") private PoiDao poiFoursquareDao;
-    @Inject @Named("poiLocalDao")      private PoiDao poiLocalDbDao;
+    @Inject @Named("poiLocalDao")      private PoiDao poiLocalDao;
 
     @Transactional(readOnly = true)
     public List<Poi> getNearestPoisByCategory(Location location, int radius, String categoryFoursquareId, Locale locale) {
