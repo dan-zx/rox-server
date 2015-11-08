@@ -28,8 +28,8 @@ import org.springframework.stereotype.Repository;
 public class CategoryJdbcDao extends JdbcDao implements CategoryDao {
 
     @Override
-    public List<Category> fetchLikeName(String partialName, Locale locale) {
-        String query = String.format(getQuery("categoriesByPartialName", locale), partialName);
+    public List<Category> findByPartialName(String partialName, Locale locale) {
+        String query = String.format(getQuery("Category.findByPartialName", locale), partialName);
         return getJdbcTemplate().query(query, 
                 (ResultSet rs, int i) -> {
                     Category category = new Category();

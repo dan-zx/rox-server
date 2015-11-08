@@ -75,10 +75,10 @@ public class PoiDaoTest {
         p2.setCategories(new HashSet<>(Arrays.asList(category)));
 
         List<Poi> expectedPois = Arrays.asList(p1, p2);
-        List<Poi> actualPois = poiDao.fetchNext("4c09270ea1b32d7f172297f0", 3, Locale.ROOT);
+        List<Poi> actualPois = poiDao.findNext("4c09270ea1b32d7f172297f0", 3, Locale.ROOT);
 
         assertThat(actualPois).isNotNull().isNotEmpty().doesNotContainNull().hasSameSizeAs(expectedPois).containsExactlyElementsOf(expectedPois);
-        assertThatThrownBy(() -> poiDao.fetchNext("invalidId", 3, Locale.ROOT))
+        assertThatThrownBy(() -> poiDao.findNext("invalidId", 3, Locale.ROOT))
             .isInstanceOf(DaoException.class);
     }
 
@@ -103,10 +103,10 @@ public class PoiDaoTest {
         p2.setCategories(new HashSet<>(Arrays.asList(category)));
 
         List<Poi> expectedPois = Arrays.asList(p1, p2);
-        List<Poi> actualPois = poiDao.fetchNearestByCategory(Location.parse("19.04365,-98.197968"), 800, category.getFoursquareId(), Locale.ROOT);
+        List<Poi> actualPois = poiDao.findNearestByCategory(Location.parse("19.04365,-98.197968"), 800, category.getFoursquareId(), Locale.ROOT);
 
         assertThat(actualPois).isNotNull().isNotEmpty().doesNotContainNull().hasSameSizeAs(expectedPois).containsOnlyElementsOf(expectedPois);
-        assertThatThrownBy(() -> poiDao.fetchNearestByCategory(Location.parse("19.04365,-98.197968"), 800, "invalidId", Locale.ROOT))
+        assertThatThrownBy(() -> poiDao.findNearestByCategory(Location.parse("19.04365,-98.197968"), 800, "invalidId", Locale.ROOT))
             .isInstanceOf(DaoException.class);
     }
 }

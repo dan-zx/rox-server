@@ -28,8 +28,8 @@ import org.springframework.stereotype.Repository;
 public class CredentialJdbcDao extends JdbcDao implements CredentialDao {
 
     @Override
-    public Credential fetchByFoursquareAccessToken(String foursquareAccessToken) {
-        List<Credential> credentials = getJdbcTemplate().query(getQuery("credentialByFoursquareAccessToken"), 
+    public Credential findByFoursquareAccessToken(String foursquareAccessToken) {
+        List<Credential> credentials = getJdbcTemplate().query(getQuery("Credential.findByFoursquareAccessToken"), 
                 (ResultSet rs, int i) -> {
                     Credential credential = new Credential();
                     int columnIndex = 1;
@@ -48,14 +48,14 @@ public class CredentialJdbcDao extends JdbcDao implements CredentialDao {
     }
 
     @Override
-    public boolean existsAccessToken(String accessToken) {
-        List<Boolean> exists = getJdbcTemplate().queryForList(getQuery("existsAccessToken"), Boolean.class, accessToken);
+    public boolean exists(String accessToken) {
+        List<Boolean> exists = getJdbcTemplate().queryForList(getQuery("Credential.exists"), Boolean.class, accessToken);
         return !exists.isEmpty();
     }
 
     @Override
     public void save(Credential credential) {
-        getJdbcTemplate().update(getQuery("createCredential"), credential.getAccessToken(), credential.getFoursquareAccessToken());
+        getJdbcTemplate().update(getQuery("Credential.create"), credential.getAccessToken(), credential.getFoursquareAccessToken());
         credential.setId(getJdbcTemplate().queryForObject(getQuery("Credential.findIdByAccessToken"), Long.class, credential.getAccessToken()));
     }
 }

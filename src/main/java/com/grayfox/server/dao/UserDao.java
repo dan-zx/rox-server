@@ -23,12 +23,12 @@ import com.grayfox.server.domain.User;
 
 public interface UserDao {
 
-    User fetchCompactByAccessToken(String accessToken);
-    String fetchFoursquareIdByAccessToken(String accessToken);
-    List<User> fetchCompactFriendsByFoursquareId(String foursquareId);
-    List<Category> fetchLikesByFoursquareId(String foursquareId, Locale locale);
+    User findCompactByAccessToken(String accessToken);
+    String findFoursquareIdByAccessToken(String accessToken);
+    List<User> findCompactFriendsByFoursquareId(String foursquareId);
+    List<Category> findLikesByFoursquareId(String foursquareId, Locale locale);
     boolean areFriends(String foursquareId1, String foursquareId2);
-    boolean existsUser(String foursquareId);
+    boolean exists(String foursquareId);
     void save(User user);
     void update(User user);
     void saveLike(String foursquareId, String categoryFoursquareI);

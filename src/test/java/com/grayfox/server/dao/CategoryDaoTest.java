@@ -62,6 +62,6 @@ public class CategoryDaoTest {
 
         List<Category> expectedCategories = Arrays.asList(c1, c2);
         
-        assertThat(categoryDao.fetchLikeName("estadio", Locale.ROOT)).isNotNull().isNotEmpty().usingElementComparatorIgnoringFields("id").containsOnlyElementsOf(expectedCategories);
+        assertThat(categoryDao.findByPartialName("estadio", Locale.ROOT)).isNotNull().isNotEmpty().usingElementComparatorIgnoringFields("id").containsOnlyElementsOf(expectedCategories);
     }
 }

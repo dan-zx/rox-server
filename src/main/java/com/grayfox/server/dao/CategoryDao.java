@@ -22,5 +22,5 @@ import com.grayfox.server.domain.Category;
 
 public interface CategoryDao {
 
-    List<Category> fetchLikeName(String partialName, Locale locale);
+    List<Category> findByPartialName(String partialName, Locale locale);
 }

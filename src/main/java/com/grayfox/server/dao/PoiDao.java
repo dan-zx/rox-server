@@ -23,6 +23,6 @@ import com.grayfox.server.domain.Poi;
 
 public interface PoiDao {
 
-    List<Poi> fetchNext(String poiFoursquareId, int limit, Locale locale);
-    List<Poi> fetchNearestByCategory(Location location, Integer radius, String categoryFoursquareId, Locale locale);
+    List<Poi> findNext(String poiFoursquareId, int limit, Locale locale);
+    List<Poi> findNearestByCategory(Location location, Integer radius, String categoryFoursquareId, Locale locale);
 }

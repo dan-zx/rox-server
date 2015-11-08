@@ -36,8 +36,8 @@ import org.springframework.stereotype.Repository;
 public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao {
 
     @Override
-    public List<Recommendation> fetchNearestByRating(Location location, Integer radius, Locale locale) {
-        List<Recommendation> recommendations = getJdbcTemplate().query(getQuery("nearestRecommendationsByRating"), 
+    public List<Recommendation> findNearestWithHighRating(Location location, Integer radius, Locale locale) {
+        List<Recommendation> recommendations = getJdbcTemplate().query(getQuery("Poi.findNearestWithHighRating"), 
                 (ResultSet rs, int i) -> {
                         Recommendation recommendation = new Recommendation();
                         Poi poi = new Poi();
@@ -54,14 +54,14 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                         recommendation.setPoi(poi);
                         return recommendation;
                 }, location.getLatitude(), location.getLongitude(), radius);
-        recommendations.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(fetchCategoriesByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
+        recommendations.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(findCategoriesByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
         return recommendations;
     }
 
     @Override
-    public List<Recommendation> fetchNearestByCategoriesLiked(String accessToken, Location location, Integer radius, Locale locale) {
+    public List<Recommendation> findNearestByCategoriesLiked(String accessToken, Location location, Integer radius, Locale locale) {
         Set<String> categoryNames = new HashSet<>();
-        List<Recommendation> recommendations = getJdbcTemplate().query(getQuery("nearestRecommendationsByCategoriesLiked", locale), 
+        List<Recommendation> recommendations = getJdbcTemplate().query(getQuery("Recommendation.findNearestByCategoriesLiked", locale), 
                 (ResultSet rs, int i) -> {
                     String categoryName = rs.getString(7);
                     if (categoryNames.add(categoryName)) {
@@ -82,14 +82,14 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                     } else return null;
                 }, accessToken, location.getLatitude(), location.getLongitude(), radius);
         recommendations = recommendations.stream().filter(Objects::nonNull).collect(Collectors.toList());
-        recommendations.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(fetchCategoriesByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
+        recommendations.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(findCategoriesByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
         return recommendations;
     }
 
     @Override
-    public List<Recommendation> fetchNearestByCategoriesLikedByFriends(String accessToken, Location location, Integer radius, Locale locale) {
+    public List<Recommendation> findNearestByCategoriesLikedByFriends(String accessToken, Location location, Integer radius, Locale locale) {
         Set<String> categoryNames = new HashSet<>();
-        List<Recommendation> recommendations = getJdbcTemplate().query(getQuery("nearestRecommendationsByCategoriesLikedByFriends", locale), 
+        List<Recommendation> recommendations = getJdbcTemplate().query(getQuery("Recommendation.findNearestByCategoriesLikedByFriends", locale), 
                 (ResultSet rs, int i) -> {
                     String categoryName = rs.getString(9);
                     if (categoryNames.add(categoryName)) {
@@ -113,12 +113,12 @@ public class RecommendationJdbcDao extends JdbcDao implements RecommendationDao 
                     } else return null;
                 }, accessToken, location.getLatitude(), location.getLongitude(), radius);
         recommendations = recommendations.stream().filter(Objects::nonNull).collect(Collectors.toList());
-        recommendations.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(fetchCategoriesByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
+        recommendations.forEach(recommendation -> recommendation.getPoi().setCategories(new HashSet<>(findCategoriesByPoiFoursquareId(recommendation.getPoi().getFoursquareId(), locale))));
         return recommendations;
     }
 
-    private List<Category> fetchCategoriesByPoiFoursquareId(String foursquareId, Locale locale) {
-        return getJdbcTemplate().query(getQuery("categoriesByPoiFoursquareId", locale), 
+    private List<Category> findCategoriesByPoiFoursquareId(String foursquareId, Locale locale) {
+        return getJdbcTemplate().query(getQuery("Category.findByPoi", locale), 
                 (ResultSet rs, int i) -> {
                     Category category = new Category();
                     int columnIndex = 1;

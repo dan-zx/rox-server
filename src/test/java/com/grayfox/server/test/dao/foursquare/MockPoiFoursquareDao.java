@@ -40,7 +40,7 @@ public class MockPoiFoursquareDao extends PoiFoursquareDao {
     @Inject private FoursquareApi foursquareApi;
 
     @Override
-    public List<Poi> fetchNext(String poiFoursquareId, int limit, Locale locale) {
+    public List<Poi> findNext(String poiFoursquareId, int limit, Locale locale) {
         if ("4c09270ea1b32d7f172297f0".equals(poiFoursquareId)) {
             mockWebServer.enqueue(new MockResponse()
                 .setStatus(HttpStatus.OK.toString())
@@ -60,7 +60,7 @@ public class MockPoiFoursquareDao extends PoiFoursquareDao {
     }
 
     @Override
-    public List<Poi> fetchNearestByCategory(Location location, Integer radius, String categoryFoursquareId, Locale locale) {
+    public List<Poi> findNearestByCategory(Location location, Integer radius, String categoryFoursquareId, Locale locale) {
         if (Location.parse("19.04365,-98.197968").equals(location) && "4bf58dd8d48988d151941735".equals(categoryFoursquareId)) {
             mockWebServer.enqueue(new MockResponse()
                 .setStatus(HttpStatus.OK.toString())

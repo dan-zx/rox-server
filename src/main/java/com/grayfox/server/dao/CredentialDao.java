@@ -19,7 +19,7 @@ import com.grayfox.server.domain.Credential;
 
 public interface CredentialDao {
 
-    Credential fetchByFoursquareAccessToken(String foursquareAccessToken);
-    boolean existsAccessToken(String accessToken);
+    Credential findByFoursquareAccessToken(String foursquareAccessToken);
+    boolean exists(String accessToken);
     void save(Credential credential);
 }

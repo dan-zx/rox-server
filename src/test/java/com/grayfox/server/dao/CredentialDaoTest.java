@@ -50,12 +50,12 @@ public class CredentialDaoTest {
         expectedCredential.setAccessToken("fakeAccessToken");
         expectedCredential.setFoursquareAccessToken("fakeFoursquareAccessToken");
         
-        assertThat(credentialDao.existsAccessToken(expectedCredential.getAccessToken())).isFalse();
-        assertThat(credentialDao.fetchByFoursquareAccessToken(expectedCredential.getFoursquareAccessToken())).isNull();
+        assertThat(credentialDao.exists(expectedCredential.getAccessToken())).isFalse();
+        assertThat(credentialDao.findByFoursquareAccessToken(expectedCredential.getFoursquareAccessToken())).isNull();
 
         credentialDao.save(expectedCredential);
 
-        assertThat(credentialDao.existsAccessToken(expectedCredential.getAccessToken())).isTrue();
-        assertThat(credentialDao.fetchByFoursquareAccessToken(expectedCredential.getFoursquareAccessToken())).isNotNull().isEqualTo(expectedCredential);
+        assertThat(credentialDao.exists(expectedCredential.getAccessToken())).isTrue();
+        assertThat(credentialDao.findByFoursquareAccessToken(expectedCredential.getFoursquareAccessToken())).isNotNull().isEqualTo(expectedCredential);
     }
 }

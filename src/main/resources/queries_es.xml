@@ -16,24 +16,22 @@
   ~ limitations under the License.
   -->
 <properties>
-    <!-- //////////////////////////////////////// User ///////////////////////////////////////// -->
-    <entry key="likesByUserFoursquareId">
+    <entry key="User.findLikesByUserFoursquareId">
         <![CDATA[
             MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category)
             RETURN ID(c), c.spanishName, c.iconUrl, c.foursquareId 
         ]]>
     </entry>
-
-    <!-- ////////////////////////////////////// Category /////////////////////////////////////// -->
-    <entry key="categoriesByPoiFoursquareId">
+    <entry key="Category.findByPoi">
         <![CDATA[
              MATCH (c:Category)<-[:IS]-(:Poi {foursquareId:{1}})
              RETURN ID(c), c.spanishName, c.iconUrl, c.foursquareId
         ]]>
     </entry>
-    <entry key="categoriesByPartialName">
+    <entry key="Category.findByPartialName">
         <![CDATA[
-             MATCH (c:Category) WHERE c.spanishName =~ '(?i).*%s.*'
+             MATCH (c:Category)
+             WHERE c.spanishName =~ '(?i).*%s.*'
              RETURN ID(c), c.spanishName, c.iconUrl, c.foursquareId LIMIT 5
         ]]>
     </entry>
@@ -43,16 +41,14 @@
              RETURN ID(c), c.spanishName, c.iconUrl
         ]]>
     </entry>
-
-    <!-- /////////////////////////////////// Recommendation //////////////////////////////////// -->
-    <entry key="nearestRecommendationsByCategoriesLiked">
+    <entry key="Recommendation.findNearestByCategoriesLiked">
         <![CDATA[
              MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi)
              WHERE (ACOS( SIN(RADIANS(p.latitude))*SIN(RADIANS({2})) + COS(RADIANS(p.latitude))*COS(RADIANS({2}))*COS(RADIANS(p.longitude-{3})) ) * 6371000) <= {4}
              RETURN DISTINCT ID(p), p.name, p.latitude, p.longitude, p.foursquareId, p.foursquareRating, c.spanishName
         ]]>
     </entry>
-    <entry key="nearestRecommendationsByCategoriesLikedByFriends">
+    <entry key="Recommendation.findNearestByCategoriesLikedByFriends">
         <![CDATA[
              MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:FRIENDS]-(u:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi)
              WHERE (ACOS( SIN(RADIANS(p.latitude))*SIN(RADIANS({2})) + COS(RADIANS(p.latitude))*COS(RADIANS({2}))*COS(RADIANS(p.longitude-{3})) ) * 6371000) <= {4}

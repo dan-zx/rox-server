@@ -84,7 +84,7 @@ public class RecommendationDaoTest {
         r1.setReason(Messages.get("recommendation.global.reason"));
 
         List<Recommendation> expectedRecommendations = Arrays.asList(r1);
-        List<Recommendation> actualRecommendations = recommendationDao.fetchNearestByRating(Location.parse("19.043635,-98.197947"), 100, Locale.ROOT);
+        List<Recommendation> actualRecommendations = recommendationDao.findNearestWithHighRating(Location.parse("19.043635,-98.197947"), 100, Locale.ROOT);
 
         assertThat(actualRecommendations).isNotNull().isNotEmpty().doesNotContainNull().hasSameSizeAs(expectedRecommendations).containsExactlyElementsOf(expectedRecommendations);
     }
@@ -129,7 +129,7 @@ public class RecommendationDaoTest {
         r2.setReason(Messages.get("recommendation.self.reason", c3.getName()));
 
         List<Recommendation> expectedRecommendations = Arrays.asList(r1, r2);
-        List<Recommendation> actualRecommendations = recommendationDao.fetchNearestByCategoriesLiked("fakeToken", Location.parse("19.043635,-98.197947"), 100, Locale.ROOT);
+        List<Recommendation> actualRecommendations = recommendationDao.findNearestByCategoriesLiked("fakeToken", Location.parse("19.043635,-98.197947"), 100, Locale.ROOT);
 
         assertThat(actualRecommendations).isNotNull().isNotEmpty().doesNotContainNull().hasSameSizeAs(expectedRecommendations).containsExactlyElementsOf(expectedRecommendations);
     }
@@ -174,7 +174,7 @@ public class RecommendationDaoTest {
         r2.setReason(Messages.get("recommendation.social.reason", "John3 Doe3", c2.getName()));
 
         List<Recommendation> expectedRecommendations = Arrays.asList(r1, r2);
-        List<Recommendation> actualRecommendations = recommendationDao.fetchNearestByCategoriesLikedByFriends("fakeToken", Location.parse("19.043635,-98.197947"), 100, Locale.ROOT);
+        List<Recommendation> actualRecommendations = recommendationDao.findNearestByCategoriesLikedByFriends("fakeToken", Location.parse("19.043635,-98.197947"), 100, Locale.ROOT);
 
         assertThat(actualRecommendations).isNotNull().isNotEmpty().doesNotContainNull().hasSameSizeAs(expectedRecommendations).containsExactlyElementsOf(expectedRecommendations);
     }

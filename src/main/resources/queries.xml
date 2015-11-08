@@ -16,32 +16,31 @@
   ~ limitations under the License.
   -->
 <properties>
-    <!-- //////////////////////////////////////// User ///////////////////////////////////////// -->
-    <entry key="userByAccessToken">
+    <entry key="User.findByAccessToken">
         <![CDATA[
             MATCH (:Credential {accessToken:{1}})<-[:HAS]-(u:User)
             RETURN ID(u), u.name, u.lastName, u.photoUrl, u.foursquareId
         ]]>
     </entry>
-    <entry key="userFoursquareIdByAccessToken">
+    <entry key="User.findFoursquareIdByAccessToken">
         <![CDATA[
              MATCH (:Credential {accessToken:{1}})<-[:HAS]-(u:User) 
              RETURN u.foursquareId
         ]]>
     </entry>
-    <entry key="friendsByUserFoursquareId">
+    <entry key="User.findFriendsByUserFoursquareId">
         <![CDATA[
              MATCH (:User {foursquareId:{1}})-[:FRIENDS]-(friends:User)
              RETURN ID(friends), friends.name, friends.lastName, friends.photoUrl, friends.foursquareId
         ]]>
     </entry>
-    <entry key="friendsFoursquareIdsByUserFoursquareId">
+    <entry key="User.findFriendsFoursquareIdsByUserFoursquareId">
         <![CDATA[
              MATCH (:User {foursquareId:{1}})-[:FRIENDS]-(friends:User)
              RETURN friends.foursquareId
         ]]>
     </entry>
-    <entry key="likesByUserFoursquareId">
+    <entry key="User.findLikesByUserFoursquareId">
         <![CDATA[
             MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category)
             RETURN ID(c), c.defaultName, c.iconUrl, c.foursquareId 
@@ -53,68 +52,66 @@
              RETURN ID(u)
         ]]>
     </entry>
-    <entry key="likesFoursquareIdsByUserFoursquareId">
+    <entry key="User.findLikesFoursquareIdsByUserFoursquareId">
         <![CDATA[
              MATCH (:User {foursquareId:{1}})-[:LIKES]->(c:Category)
              RETURN c.foursquareId
         ]]>
     </entry>
-    <entry key="areFriends">
+    <entry key="User.areFriends">
         <![CDATA[
              MATCH (:User {foursquareId:{1}})-[:FRIENDS]-(:User {foursquareId:{2}})
              RETURN true
         ]]>
     </entry>
-    <entry key="existsUser">
+    <entry key="User.exists">
         <![CDATA[
             MATCH (:User {foursquareId:{1}})
             RETURN true 
         ]]>
     </entry>
-    <entry key="createUser">
+    <entry key="User.create">
         <![CDATA[
              CREATE (:User {name:{1}, lastName:{2}, photoUrl:{3}, foursquareId:{4}})
         ]]>
     </entry>
-    <entry key="createCredentialLink">
+    <entry key="User.createHasRelationship">
         <![CDATA[
              MATCH (u:User {foursquareId:{1}}), (c:Credential {accessToken:{2}})
              CREATE (u)-[:HAS]->(c)
         ]]>
     </entry>
-    <entry key="createLikesLink">
+    <entry key="User.createLikesRelationship">
         <![CDATA[
              MATCH (u:User {foursquareId:{1}}), (c:Category {foursquareId:{2}})
              CREATE (u)-[:LIKES]->(c)
         ]]>
     </entry>
-    <entry key="createFriendsLink">
+    <entry key="User.createFriendsRelationship">
         <![CDATA[
              MATCH (me:User {foursquareId:{1}}), (friend:User {foursquareId:{2}})
              CREATE (me)-[:FRIENDS]->(friend)
         ]]>
     </entry>
-    <entry key="updateUser">
+    <entry key="User.update">
         <![CDATA[
              MATCH (u:User {foursquareId:{1}})
              SET u.name = {2}, u.lastName = {3}, u.photoUrl = {4}
         ]]>
     </entry>
-    <entry key="deleteLikesLink">
+    <entry key="User.deleteLikesRelationship">
         <![CDATA[
              MATCH (:User {foursquareId:{1}})-[r:LIKES]->(:Category {foursquareId:{2}})
              DELETE r
         ]]>
     </entry>
-    <entry key="deleteFriendsLink">
+    <entry key="User.deleteFriendsRelationship">
         <![CDATA[
              MATCH (:User {foursquareId:{1}})-[r:FRIENDS]-(:User {foursquareId:{2}})
              DELETE r
         ]]>
     </entry>
-
-    <!-- ///////////////////////////////////// Credential ////////////////////////////////////// -->
-    <entry key="credentialByFoursquareAccessToken">
+    <entry key="Credential.findByFoursquareAccessToken">
         <![CDATA[
              MATCH (c:Credential {foursquareAccessToken:{1}})
              RETURN ID(c), c.accessToken
@@ -126,32 +123,46 @@
              RETURN ID(c)
         ]]>
     </entry>
-    <entry key="existsAccessToken">
+    <entry key="Credential.exists">
         <![CDATA[
              MATCH (:Credential {accessToken:{1}})
              RETURN true
         ]]>
     </entry>
-    <entry key="createCredential">
+    <entry key="Credential.create">
         <![CDATA[
              CREATE (:Credential {accessToken:{1}, foursquareAccessToken:{2}})
         ]]>
     </entry>
-    <entry key="deleteUserCredential">
+    <entry key="Credential.delete">
         <![CDATA[
              MATCH (:User {foursquareId:{1}})-[r:HAS]->(c:Credential)
              DELETE r, c
         ]]>
     </entry>
-
-    <!-- ////////////////////////////////////// Category /////////////////////////////////////// -->
-    <entry key="categoriesByPoiFoursquareId">
+    <entry key="Poi.findNearestByCategoryFoursquareId">
+        <![CDATA[
+             MATCH (c:Category)<-[:IS]-(p:Poi)
+             WHERE (ACOS( SIN(RADIANS(p.latitude))*SIN(RADIANS({1})) + COS(RADIANS(p.latitude))*COS(RADIANS({1}))*COS(RADIANS(p.longitude-{2})) ) * 6371000) <= {3}
+                AND c.foursquareId = {4}
+             RETURN DISTINCT ID(p), p.name, p.latitude, p.longitude, p.foursquareId, p.foursquareRating
+        ]]>
+    </entry>
+    <entry key="Poi.findNearestWithHighRating">
+        <![CDATA[
+             MATCH (p:Poi)
+             WHERE (ACOS( SIN(RADIANS(p.latitude))*SIN(RADIANS({1})) + COS(RADIANS(p.latitude))*COS(RADIANS({1}))*COS(RADIANS(p.longitude-{2})) ) * 6371000) <= {3}
+                AND p.foursquareRating >= 9
+             RETURN DISTINCT ID(p), p.name, p.latitude, p.longitude, p.foursquareId, p.foursquareRating
+        ]]>
+    </entry>
+    <entry key="Category.findByPoiFoursquareId">
         <![CDATA[
              MATCH (c:Category)<-[:IS]-(:Poi {foursquareId:{1}})
              RETURN ID(c), c.defaultName, c.iconUrl, c.foursquareId
         ]]>
     </entry>
-    <entry key="categoriesByPartialName">
+    <entry key="Category.findByPartialName">
         <![CDATA[
              MATCH (c:Category)
              WHERE c.defaultName =~ '(?i).*%s.*'
@@ -164,34 +175,14 @@
              RETURN ID(c), c.defaultName, c.iconUrl
         ]]>
     </entry>
-
-    <!-- //////////////////////////////////////// Poi ////////////////////////////////////////// -->
-    <entry key="Poi.findNearestByCategory">
-        <![CDATA[
-             MATCH (c:Category)<-[:IS]-(p:Poi)
-             WHERE (ACOS( SIN(RADIANS(p.latitude))*SIN(RADIANS({1})) + COS(RADIANS(p.latitude))*COS(RADIANS({1}))*COS(RADIANS(p.longitude-{2})) ) * 6371000) <= {3}
-                AND c.foursquareId = {4}
-             RETURN DISTINCT ID(p), p.name, p.latitude, p.longitude, p.foursquareId, p.foursquareRating
-        ]]>
-    </entry>
-
-    <!-- /////////////////////////////////// Recommendation //////////////////////////////////// -->
-    <entry key="nearestRecommendationsByRating">
-        <![CDATA[
-             MATCH (p:Poi)
-             WHERE (ACOS( SIN(RADIANS(p.latitude))*SIN(RADIANS({1})) + COS(RADIANS(p.latitude))*COS(RADIANS({1}))*COS(RADIANS(p.longitude-{2})) ) * 6371000) <= {3}
-                AND p.foursquareRating >= 9
-             RETURN DISTINCT ID(p), p.name, p.latitude, p.longitude, p.foursquareId, p.foursquareRating
-        ]]>
-    </entry>
-    <entry key="nearestRecommendationsByCategoriesLiked">
+    <entry key="Recommendation.findNearestByCategoriesLiked">
         <![CDATA[
              MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi)
              WHERE (ACOS( SIN(RADIANS(p.latitude))*SIN(RADIANS({2})) + COS(RADIANS(p.latitude))*COS(RADIANS({2}))*COS(RADIANS(p.longitude-{3})) ) * 6371000) <= {4}
              RETURN DISTINCT ID(p), p.name, p.latitude, p.longitude, p.foursquareId, p.foursquareRating, c.defaultName
         ]]>
     </entry>
-    <entry key="nearestRecommendationsByCategoriesLikedByFriends">
+    <entry key="Recommendation.findNearestByCategoriesLikedByFriends">
         <![CDATA[
              MATCH (:Credential {accessToken:{1}})<-[:HAS]-(:User)-[:FRIENDS]-(u:User)-[:LIKES]->(c:Category)<-[:IS]-(p:Poi)
              WHERE (ACOS( SIN(RADIANS(p.latitude))*SIN(RADIANS({2})) + COS(RADIANS(p.latitude))*COS(RADIANS({2}))*COS(RADIANS(p.longitude-{3})) ) * 6371000) <= {4}

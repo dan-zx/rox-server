@@ -49,21 +49,21 @@ public class PoiService {
     @Inject private CategoryDao categoryDao;
     @Inject private RecommendationDao recommendationDao;
     @Inject @Named("poiFoursquareDao") private PoiDao poiFoursquareDao;
-    @Inject @Named("poiLocalDbDao")    private PoiDao poiLocalDbDao;
+    @Inject @Named("poiLocalDao")      private PoiDao poiLocalDbDao;
 
     @Transactional(readOnly = true)
     public List<Poi> getNearestPoisByCategory(Location location, int radius, String categoryFoursquareId, Locale locale) {
-        return poiFoursquareDao.fetchNearestByCategory(location, radius, categoryFoursquareId, locale);
+        return poiFoursquareDao.findNearestByCategory(location, radius, categoryFoursquareId, locale);
     }
 
     @Transactional(readOnly = true)
     public List<Poi> buildRoute(String poiFoursquareId, Locale locale) {
-        return poiFoursquareDao.fetchNext(poiFoursquareId, MAX_POIS_PER_ROUTE, locale);
+        return poiFoursquareDao.findNext(poiFoursquareId, MAX_POIS_PER_ROUTE, locale);
     }
 
     @Transactional(readOnly = true)
     public List<Category> getCategoriesLikeName(String partialName, Locale locale) {
-        return categoryDao.fetchLikeName(partialName, locale);
+        return categoryDao.findByPartialName(partialName, locale);
     }
 
     @Transactional(readOnly = true)
@@ -72,18 +72,18 @@ public class PoiService {
         List<Recommendation> recommendations = new ArrayList<>();
         if (accessToken != null) {
             LOGGER.debug("Adding personalized recommendations...");
-            if (!credentialDao.existsAccessToken(accessToken)) {
+            if (!credentialDao.exists(accessToken)) {
                 LOGGER.warn("Not existing user attempting to retrive information");
                 throw new ServiceException.Builder()
                     .messageKey("user.invalid.error")
                     .build();
             }
-            List<Recommendation> recommendationsByCategoriesLiked = recommendationDao.fetchNearestByCategoriesLiked(accessToken, location, radius, locale);
-            List<Recommendation> recommendationsByCategoriesLikedByFriends = recommendationDao.fetchNearestByCategoriesLikedByFriends(accessToken, location, radius, locale);
+            List<Recommendation> recommendationsByCategoriesLiked = recommendationDao.findNearestByCategoriesLiked(accessToken, location, radius, locale);
+            List<Recommendation> recommendationsByCategoriesLikedByFriends = recommendationDao.findNearestByCategoriesLikedByFriends(accessToken, location, radius, locale);
             recommendations.addAll(recommendationsByCategoriesLiked);
             recommendations.addAll(recommendationsByCategoriesLikedByFriends);
         } else LOGGER.debug("Only global recommendations...");
-        List<Recommendation> recommendationsByRating = recommendationDao.fetchNearestByRating(location, radius, locale);
+        List<Recommendation> recommendationsByRating = recommendationDao.findNearestWithHighRating(location, radius, locale);
         recommendations.addAll(recommendationsByRating);
         for (Iterator<Recommendation> iterator = recommendations.iterator(); iterator.hasNext();) {
             Recommendation recommendation = iterator.next();

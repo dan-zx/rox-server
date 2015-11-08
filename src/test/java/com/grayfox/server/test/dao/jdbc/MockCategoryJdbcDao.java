@@ -29,9 +29,9 @@ import org.springframework.stereotype.Repository;
 public class MockCategoryJdbcDao extends CategoryJdbcDao {
 
     @Override
-    public List<Category> fetchLikeName(String partialName, Locale locale) {
+    public List<Category> findByPartialName(String partialName, Locale locale) {
         insertMockData();
-        return super.fetchLikeName(partialName, locale);
+        return super.findByPartialName(partialName, locale);
     }
 
     private void insertMockData() {

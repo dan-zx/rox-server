@@ -31,8 +31,8 @@ import org.springframework.stereotype.Repository;
 public class UserJdbcDao extends JdbcDao implements UserDao {
 
     @Override
-    public User fetchCompactByAccessToken(String accessToken) {
-        List<User> users = getJdbcTemplate().query(getQuery("userByAccessToken"), 
+    public User findCompactByAccessToken(String accessToken) {
+        List<User> users = getJdbcTemplate().query(getQuery("User.findByAccessToken"), 
                 (ResultSet rs, int i) -> {
                     User user = new User();
                     int columnIndex = 1;
@@ -53,8 +53,8 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
     }
 
     @Override
-    public String fetchFoursquareIdByAccessToken(String accessToken) {
-        List<String> foursquareIds = getJdbcTemplate().queryForList(getQuery("userFoursquareIdByAccessToken"), String.class, accessToken);
+    public String findFoursquareIdByAccessToken(String accessToken) {
+        List<String> foursquareIds = getJdbcTemplate().queryForList(getQuery("User.findFoursquareIdByAccessToken"), String.class, accessToken);
         if (foursquareIds.size() > 1) {
             throw new DaoException.Builder()
                 .messageKey("data.integrity.error")
@@ -64,8 +64,8 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
     }
 
     @Override
-    public List<User> fetchCompactFriendsByFoursquareId(String foursquareId) {
-        return getJdbcTemplate().query(getQuery("friendsByUserFoursquareId"), 
+    public List<User> findCompactFriendsByFoursquareId(String foursquareId) {
+        return getJdbcTemplate().query(getQuery("User.findFriendsByUserFoursquareId"), 
                 (ResultSet rs, int i) -> {
                     User user = new User();
                     int columnIndex = 1;
@@ -79,8 +79,8 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
     }
 
     @Override
-    public List<Category> fetchLikesByFoursquareId(String foursquareId, Locale locale) {
-        return getJdbcTemplate().query(getQuery("likesByUserFoursquareId", locale), 
+    public List<Category> findLikesByFoursquareId(String foursquareId, Locale locale) {
+        return getJdbcTemplate().query(getQuery("User.findLikesByUserFoursquareId", locale), 
                 (ResultSet rs, int i) -> {
                     Category category = new Category();
                     int columnIndex = 1;
@@ -94,29 +94,29 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
 
     @Override
     public boolean areFriends(String foursquareId1, String foursquareId2) {
-        List<Boolean> exists = getJdbcTemplate().queryForList(getQuery("areFriends"), Boolean.class, foursquareId1, foursquareId2);
+        List<Boolean> exists = getJdbcTemplate().queryForList(getQuery("User.areFriends"), Boolean.class, foursquareId1, foursquareId2);
         return !exists.isEmpty();
     }
 
     @Override
-    public boolean existsUser(String foursquareId) {
-        List<Boolean> exists = getJdbcTemplate().queryForList(getQuery("existsUser"), Boolean.class, foursquareId);
+    public boolean exists(String foursquareId) {
+        List<Boolean> exists = getJdbcTemplate().queryForList(getQuery("User.exists"), Boolean.class, foursquareId);
         return !exists.isEmpty();
     }
 
     @Override
     public void save(User user) {
-        getJdbcTemplate().update(getQuery("createUser"), user.getName(), user.getLastName(), user.getPhotoUrl(), user.getFoursquareId());
-        if (user.getCredential() != null) getJdbcTemplate().update(getQuery("createCredentialLink"), user.getFoursquareId(), user.getCredential().getAccessToken());
+        getJdbcTemplate().update(getQuery("User.create"), user.getName(), user.getLastName(), user.getPhotoUrl(), user.getFoursquareId());
+        if (user.getCredential() != null) getJdbcTemplate().update(getQuery("User.createHasRelationship"), user.getFoursquareId(), user.getCredential().getAccessToken());
         if (user.getLikes() != null) user.getLikes().forEach(like -> saveLike(user.getFoursquareId(), like.getFoursquareId()));
         if (user.getFriends() != null) {
             user.getFriends().forEach(friend -> {
-                if (!existsUser(friend.getFoursquareId())) {
-                    getJdbcTemplate().update(getQuery("createUser"), friend.getName(), friend.getLastName(), friend.getPhotoUrl(), friend.getFoursquareId());
-                    getJdbcTemplate().update(getQuery("createFriendsLink"), user.getFoursquareId(), friend.getFoursquareId());
+                if (!exists(friend.getFoursquareId())) {
+                    getJdbcTemplate().update(getQuery("User.create"), friend.getName(), friend.getLastName(), friend.getPhotoUrl(), friend.getFoursquareId());
+                    getJdbcTemplate().update(getQuery("User.createFriendsRelationship"), user.getFoursquareId(), friend.getFoursquareId());
                     if (friend.getLikes() != null) friend.getLikes().forEach(like -> saveLike(friend.getFoursquareId(), like.getFoursquareId()));
                     friend.setId(findIdByFoursquareId(friend.getFoursquareId()));
-                } else getJdbcTemplate().update(getQuery("createFriendsLink"), user.getFoursquareId(), friend.getFoursquareId());
+                } else getJdbcTemplate().update(getQuery("User.createFriendsRelationship"), user.getFoursquareId(), friend.getFoursquareId());
             });
         }
         user.setId(findIdByFoursquareId(user.getFoursquareId()));
@@ -124,24 +124,24 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
 
     @Override
     public void update(User user) {
-        getJdbcTemplate().update(getQuery("updateUser"), user.getFoursquareId(), user.getName(), user.getLastName(), user.getPhotoUrl());
+        getJdbcTemplate().update(getQuery("User.update"), user.getFoursquareId(), user.getName(), user.getLastName(), user.getPhotoUrl());
         if (user.getCredential() != null) {
-            getJdbcTemplate().update(getQuery("deleteUserCredential"), user.getFoursquareId());
-            getJdbcTemplate().update(getQuery("createCredentialLink"), user.getFoursquareId(), user.getCredential().getAccessToken());
+            getJdbcTemplate().update(getQuery("Credential.delete"), user.getFoursquareId());
+            getJdbcTemplate().update(getQuery("User.createHasRelationship"), user.getFoursquareId(), user.getCredential().getAccessToken());
         }
         if (user.getFriends() != null) {
             List<String> oldFriendsIds = fetchFriendsIds(user.getFoursquareId());
             List<String> intersection = user.getFriends().stream().filter(friend -> oldFriendsIds.contains(friend.getFoursquareId())).map(User::getFoursquareId).collect(Collectors.toList());
             List<User> newFriends = user.getFriends().stream().filter(friend -> !intersection.contains(friend.getFoursquareId())).collect(Collectors.toList());
             oldFriendsIds.removeAll(intersection);
-            oldFriendsIds.forEach(friendFoursquareId -> getJdbcTemplate().update(getQuery("deleteFriendsLink"), user.getFoursquareId(), friendFoursquareId));
+            oldFriendsIds.forEach(friendFoursquareId -> getJdbcTemplate().update(getQuery("User.deleteFriendsRelationship"), user.getFoursquareId(), friendFoursquareId));
             newFriends.forEach(friend -> {
-                if (!existsUser(friend.getFoursquareId())) {
-                    getJdbcTemplate().update(getQuery("createUser"), friend.getName(), friend.getLastName(), friend.getPhotoUrl(), friend.getFoursquareId());
-                    getJdbcTemplate().update(getQuery("createFriendsLink"), user.getFoursquareId(), friend.getFoursquareId());
+                if (!exists(friend.getFoursquareId())) {
+                    getJdbcTemplate().update(getQuery("User.create"), friend.getName(), friend.getLastName(), friend.getPhotoUrl(), friend.getFoursquareId());
+                    getJdbcTemplate().update(getQuery("User.createFriendsRelationship"), user.getFoursquareId(), friend.getFoursquareId());
                     if (friend.getLikes() != null) friend.getLikes().forEach(like -> saveLike(friend.getFoursquareId(), like.getFoursquareId()));
                     friend.setId(findIdByFoursquareId(friend.getFoursquareId()));
-                } else getJdbcTemplate().update(getQuery("createFriendsLink"), user.getFoursquareId(), friend.getFoursquareId());
+                } else getJdbcTemplate().update(getQuery("User.createFriendsRelationship"), user.getFoursquareId(), friend.getFoursquareId());
             });
         }
         if (user.getLikes() != null) {
@@ -149,27 +149,27 @@ public class UserJdbcDao extends JdbcDao implements UserDao {
             List<String> intersection = user.getLikes().stream().filter(like -> oldLikesIds.contains(like.getFoursquareId())).map(Category::getFoursquareId).collect(Collectors.toList());
             List<Category> newLikes = user.getLikes().stream().filter(like -> !intersection.contains(like.getFoursquareId())).collect(Collectors.toList());
             oldLikesIds.removeAll(intersection);
-            oldLikesIds.forEach(likeFoursquareId -> getJdbcTemplate().update(getQuery("deleteLikesLink"), user.getFoursquareId(), likeFoursquareId));
+            oldLikesIds.forEach(likeFoursquareId -> getJdbcTemplate().update(getQuery("User.deleteLikesRelationship"), user.getFoursquareId(), likeFoursquareId));
             newLikes.forEach(like -> saveLike(user.getFoursquareId(), like.getFoursquareId()));
         }
     }
 
     @Override
     public void saveLike(String foursquareId, String categoryFoursquareI) {
-        getJdbcTemplate().update(getQuery("createLikesLink"), foursquareId, categoryFoursquareI);
+        getJdbcTemplate().update(getQuery("User.createLikesRelationship"), foursquareId, categoryFoursquareI);
     }
 
     @Override
     public void deleteLike(String foursquareId, String categoryFoursquareI) {
-        getJdbcTemplate().update(getQuery("deleteLikesLink"), foursquareId, categoryFoursquareI);
+        getJdbcTemplate().update(getQuery("User.deleteLikesRelationship"), foursquareId, categoryFoursquareI);
     }
 
     private List<String> fetchFriendsIds(String foursquareId) {
-        return getJdbcTemplate().queryForList(getQuery("friendsFoursquareIdsByUserFoursquareId"), String.class, foursquareId);
+        return getJdbcTemplate().queryForList(getQuery("User.findFriendsFoursquareIdsByUserFoursquareId"), String.class, foursquareId);
     }
 
     private List<String> fetchLikesIds(String foursquareId) {
-        return getJdbcTemplate().queryForList(getQuery("likesFoursquareIdsByUserFoursquareId"), String.class, foursquareId);
+        return getJdbcTemplate().queryForList(getQuery("User.findLikesFoursquareIdsByUserFoursquareId"), String.class, foursquareId);
     }
 
     private Long findIdByFoursquareId (String foursquareId) {

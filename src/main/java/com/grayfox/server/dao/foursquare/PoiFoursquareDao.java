@@ -49,7 +49,7 @@ public class PoiFoursquareDao implements PoiDao {
     @Value("${foursquare.app.client.secret}") private String clientSecret;
 
     @Override
-    public List<Poi> fetchNext(String poiFoursquareId, int limit, Locale locale) {
+    public List<Poi> findNext(String poiFoursquareId, int limit, Locale locale) {
         FoursquareApi foursquareApi = new FoursquareApi(clientId, clientSecret);
         foursquareApi.setLocale(locale);
         return fetchNext(foursquareApi, poiFoursquareId, limit);
@@ -103,7 +103,7 @@ public class PoiFoursquareDao implements PoiDao {
     }
 
     @Override
-    public List<Poi> fetchNearestByCategory(Location location, Integer radius, String categoryFoursquareId, Locale locale) {
+    public List<Poi> findNearestByCategory(Location location, Integer radius, String categoryFoursquareId, Locale locale) {
         FoursquareApi foursquareApi = new FoursquareApi(clientId, clientSecret);
         foursquareApi.setLocale(locale);
         return fetchNearestByCategory(foursquareApi, location, radius, categoryFoursquareId);
