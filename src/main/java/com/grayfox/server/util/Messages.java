@@ -30,7 +30,6 @@ public final class Messages {
 
     private static final Collection<Locale> SUPPORTED_LOCALES = Collections.singletonList(Constants.Locales.SPANISH);
     private static final String RESOURCE_BUNDLE_BASE_NAME = "com.grayfox.server.messages";
-    private static final String MISSING_RESOURCE_KEY_FORMAT = "???%s???";
     private static final Logger LOGGER = LoggerFactory.getLogger(Messages.class);
 
     private Messages() {
@@ -43,7 +42,7 @@ public final class Messages {
             unformattedMessage = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME, Locale.ROOT).getString(key);
         } catch (MissingResourceException ex) {
             LOGGER.warn("Can't find message for key: [{}]", key, ex);
-            return String.format(MISSING_RESOURCE_KEY_FORMAT, key);
+            return String.format(Constants.Strings.MISSING_RESOURCE_KEY_FORMAT, key);
         }
         if (messageArguments.length > 0) {
             try {
@@ -62,7 +61,7 @@ public final class Messages {
             unformattedMessage = bundle.getString(key);
         } catch (MissingResourceException ex) {
             LOGGER.warn("Can't find message for key: [{}]", key, ex);
-            return String.format(MISSING_RESOURCE_KEY_FORMAT, key);
+            return String.format(Constants.Strings.MISSING_RESOURCE_KEY_FORMAT, key);
         }
         if (messageArguments.length > 0) {
             try {
