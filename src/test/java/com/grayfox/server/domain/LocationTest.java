@@ -36,15 +36,15 @@ public class LocationTest {
     @Test
     public void testParseError() {
         assertThatThrownBy(() -> Location.parse(null))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Location string must not be null");
+            .isInstanceOf(DomainException.class)
+            .hasMessage("Location must not be null");
 
         assertThatThrownBy(() -> Location.parse("xx,xx"))
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(DomainException.class)
             .hasMessageContaining("Incorrect location format");
 
         assertThatThrownBy(() -> Location.parse("a string"))
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(DomainException.class)
             .hasMessageContaining("Incorrect location format");
     }
 }

@@ -46,16 +46,29 @@ public class Location implements Serializable {
     }
 
     public static Location parse(String locationString) {
-        if (locationString == null) throw new IllegalArgumentException("Location string must not be null");
+        if (locationString == null) {
+            throw new DomainException.Builder()
+                .messageKey("location.is_null.error")
+                .build();
+        }
         String[] latLng = locationString.split(",");
-        if (latLng.length != 2) throw new IllegalArgumentException("Incorrect location format [" + locationString + "]. It must be '##.##,##.##'"); 
+        if (latLng.length != 2) { 
+            throw new DomainException.Builder()
+                .messageKey("location.format.error")
+                .addMessageArgument(locationString)
+                .build();
+        }
         try {
             Location location = new Location();
             location.setLatitude(Double.parseDouble(latLng[0]));
             location.setLongitude(Double.parseDouble(latLng[1]));
             return location;
         } catch (NumberFormatException ex) {
-            throw new IllegalArgumentException("Incorrect location format [" + locationString + "]. It must be '##.##,##.##'");
+            throw new DomainException.Builder()
+                .messageKey("location.format.error")
+                .addMessageArgument(locationString)
+                .cause(ex)
+                .build();
         }
     }
 

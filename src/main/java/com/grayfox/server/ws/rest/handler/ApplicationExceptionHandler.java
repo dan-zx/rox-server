@@ -43,6 +43,12 @@ public class ApplicationExceptionHandler extends BaseRestComponent implements Ex
                         .type(MediaType.APPLICATION_JSON)
                         .entity(new ErrorResponse(exception.getMessageKey(), message).toJson())
                         .build();
+            case "location.is_null.error":
+            case "location.format.error":
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .type(MediaType.APPLICATION_JSON)
+                        .entity(new ErrorResponse("param.validation.error", message).toJson())
+                        .build();
             default: 
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                         .type(MediaType.APPLICATION_JSON)
