@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.6" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="true" nesting-relationships="true">  
-  <interface id="1" language="java" name="com.grayfox.server.oauth.SocialNetworkAuthenticator" project="grayfox-server" 
-    file="/grayfox-server/src/main/java/com/grayfox/server/oauth/SocialNetworkAuthenticator.java" binary="false" 
+  <interface id="1" language="java" name="com.grayfox.server.oauth.SocialNetworkAuthenticator" project="rox-server" 
+    file="/rox-server/src/main/java/com/grayfox/server/oauth/SocialNetworkAuthenticator.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="79" width="201" x="41" y="169"/>    
+    <position height="-1" width="-1" x="120" y="57"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="2" language="java" name="com.grayfox.server.oauth.foursquare.FoursquareAuthenticator" 
-    project="grayfox-server" 
-    file="/grayfox-server/src/main/java/com/grayfox/server/oauth/foursquare/FoursquareAuthenticator.java" binary="false" 
+  <class id="2" language="java" name="com.grayfox.server.oauth.foursquare.FoursquareAuthenticator" project="rox-server" 
+    file="/rox-server/src/main/java/com/grayfox/server/oauth/foursquare/FoursquareAuthenticator.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="92" width="201" x="41" y="37"/>    
+    <position height="-1" width="-1" x="120" y="186"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      

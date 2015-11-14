@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.6" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="true" nesting-relationships="true">  
-  <class id="1" language="java" name="com.grayfox.server.service.UserService" project="grayfox-server" 
-    file="/grayfox-server/src/main/java/com/grayfox/server/service/UserService.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
+  <class id="1" language="java" name="com.grayfox.server.service.UserService" project="rox-server" 
+    file="/rox-server/src/main/java/com/grayfox/server/service/UserService.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="218" width="264" x="41" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
@@ -11,8 +10,8 @@
       <operations public="true" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="com.grayfox.server.service.PoiService" project="grayfox-server" 
-    file="/grayfox-server/src/main/java/com/grayfox/server/service/PoiService.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="2" language="java" name="com.grayfox.server.service.PoiService" project="rox-server" 
+    file="/rox-server/src/main/java/com/grayfox/server/service/PoiService.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="146" width="328" x="345" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      

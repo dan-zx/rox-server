@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.6" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="true" nesting-relationships="true">  
-  <package id="1" language="java" name="com.grayfox.server.dao" project="grayfox-server" 
-    file="/grayfox-server/src/main/java/com/grayfox/server/dao" binary="false" corner="BOTTOM_RIGHT">    
+  <package id="1" language="java" name="com.grayfox.server.dao" project="rox-server" 
+    file="/rox-server/src/main/java/com/grayfox/server/dao" binary="false" corner="BOTTOM_RIGHT">    
     <position height="48" width="160" x="252" y="213"/>    
     <display autosize="true" stereotype="true" accessors="true"/>  
   </package>  
-  <package id="2" language="java" name="com.grayfox.server.oauth" project="grayfox-server" 
-    file="/grayfox-server/src/main/java/com/grayfox/server/oauth" binary="false" corner="BOTTOM_RIGHT">    
+  <package id="2" language="java" name="com.grayfox.server.oauth" project="rox-server" 
+    file="/rox-server/src/main/java/com/grayfox/server/oauth" binary="false" corner="BOTTOM_RIGHT">    
     <position height="48" width="171" x="41" y="213"/>    
     <display autosize="true" stereotype="true" accessors="true"/>  
   </package>  
-  <package id="3" language="java" name="com.grayfox.server.service" project="grayfox-server" 
-    file="/grayfox-server/src/main/java/com/grayfox/server/service" binary="false" corner="BOTTOM_RIGHT">    
+  <package id="3" language="java" name="com.grayfox.server.service" project="rox-server" 
+    file="/rox-server/src/main/java/com/grayfox/server/service" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="242" y="144"/>    
     <display autosize="true" stereotype="true" accessors="true"/>  
   </package>  
-  <package id="4" language="java" name="com.grayfox.server.domain" project="grayfox-server" 
-    file="/grayfox-server/src/main/java/com/grayfox/server/domain" binary="false" corner="BOTTOM_RIGHT">    
+  <package id="4" language="java" name="com.grayfox.server.domain" project="rox-server" 
+    file="/rox-server/src/main/java/com/grayfox/server/domain" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="231" y="340"/>    
     <display autosize="true" stereotype="true" accessors="true"/>  
   </package>  
-  <package id="5" language="java" name="com.grayfox.server.ws.rest" project="grayfox-server" 
-    file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest" binary="false" corner="BOTTOM_RIGHT">    
+  <package id="5" language="java" name="com.grayfox.server.ws.rest" project="rox-server" 
+    file="/rox-server/src/main/java/com/grayfox/server/ws/rest" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="243" y="53"/>    
     <display autosize="true" stereotype="true" accessors="true"/>  
   </package>  

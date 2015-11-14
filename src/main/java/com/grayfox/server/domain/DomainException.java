@@ -19,7 +19,7 @@ import com.grayfox.server.exception.BaseApplicationException;
 
 public class DomainException extends BaseApplicationException {
 
-    private static final long serialVersionUID = 6442324698959192799L;
+    private static final long serialVersionUID = 8752604076326015752L;
 
     private DomainException(Builder builder) {
         super(builder);

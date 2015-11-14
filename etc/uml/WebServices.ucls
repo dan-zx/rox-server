@@ -1,26 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.6" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="true" nesting-relationships="true">  
-  <class id="1" language="java" name="com.grayfox.server.ws.rest.UserWebService" project="grayfox-server" 
-    file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest/UserWebService.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="182" width="354" x="41" y="37"/>    
+  <class id="1" language="java" name="com.grayfox.server.ws.rest.PoiWebService" project="rox-server" 
+    file="/rox-server/src/main/java/com/grayfox/server/ws/rest/PoiWebService.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="146" width="371" x="41" y="151"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="false"/>      
       <operations public="true" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="com.grayfox.server.ws.rest.PoiWebService" project="grayfox-server" 
-    file="/grayfox-server/src/main/java/com/grayfox/server/ws/rest/PoiWebService.java" binary="false" 
+  <class id="2" language="java" name="com.grayfox.server.ws.rest.UserWebService" project="rox-server" 
+    file="/rox-server/src/main/java/com/grayfox/server/ws/rest/UserWebService.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="612" y="241"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="true" package="true" protected="true" private="true" static="false"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="com.grayfox.server.ws.rest.BaseRestComponent" project="rox-server" 
+    file="/rox-server/src/main/java/com/grayfox/server/ws/rest/BaseRestComponent.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="146" width="356" x="435" y="37"/>    
+    <position height="-1" width="-1" x="414" y="54"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="false"/>      
       <operations public="true" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
+  <generalization id="4">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <generalization id="5">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
     accessors="true" visibility="true">    
     <attributes public="true" package="false" protected="false" private="false" static="false"/>    
